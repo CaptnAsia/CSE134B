@@ -47,14 +47,6 @@
         #right {
             float: right;
         }
-
-        #signup:active {
-            background-color: black;
-        }
-
-        #login:active {
-            background-color: black;
-        }
     </style>
 </head>
 <body>
@@ -65,7 +57,9 @@
         <p style="font-size: 10pt;">Manage your bullion stacks with one simple app</p>
         <br>
         <button id="signup" style="background-color: #666666;">Sign Up</button>
-        <button id="login" style="background-color: #cccccc;">Log In</button>
+        <form action="profile.html">
+            <button id="login" style="background-color: #cccccc;" href="profile.html">Log In</button>
+        </form>
     </section>
     <section id="right">
         <img src="media/iphone.png" alt="test"/>
