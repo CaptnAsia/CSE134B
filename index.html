@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="author" content="Michael Lu">
+    <title>My Stack App</title>
+    <style>
+        * {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+        header, footer{
+            text-align: center;
+            background-color: #f2f2f2;
+            min-height: 18px;
+            padding-top: 10px;
+            padding-bottom: 10px;
+        }
+
+        article {
+            width: 800px;
+            margin: 0 auto;
+            color: #666666;
+            padding-top: 70px;
+            padding-bottom: 70px;
+        }
+
+        button {
+            height: 40px;
+            margin: 5px 0;
+            width: 100%;
+            border-radius: 5px;
+            border: 0;
+            color: white;
+            cursor: pointer;
+        }
+        
+        h1 {
+            font-size: 24pt;
+            margin-bottom: 0px;
+        }
+
+        #left{
+            padding-top: 100px;
+            width: 350px;
+            float: left;
+        }
+        #right {
+            float: right;
+        }
+
+        #signup:active {
+            background-color: black;
+        }
+
+        #login:active {
+            background-color: black;
+        }
+    </style>
+</head>
+<body>
+<header></header>
+<article>
+    <section id="left">
+    <h1>MyStackApp</h1>
+        <p style="font-size: 10pt;">Manage your bullion stacks with one simple app</p>
+        <br>
+        <button id="signup" style="background-color: #666666;">Sign Up</button>
+        <button id="login" style="background-color: #cccccc;">Log In</button>
+    </section>
+    <section id="right">
+        <img src="media/iphone.png" alt="test"/>
+    </section>
+    <div style="clear: both;"></div>
+</article>
+<footer style="font-size: 10pt;">&copy; 2015 MyStackApp</footer>
+</body>
+</html>
