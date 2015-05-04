@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Add New Item</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <style>
+        table{
+            position: absolute;
+            left:165px;
+            top:50px; 
+            font-size:12px;
+        }
+        td{
+            padding-left:6px;
+            padding-right:6px;
+            padding-top:4px;
+            padding-bottom:4px;
+        }
+        td:first-child{
+            text-align: right;
+        }
+        #cancel{
+            position: absolute;
+            left:160px;
+            top:416px;
+            font-size:13px;
+            text-decoration: none;
+            color:#b6b6b6;
+        }
+        #submit{
+            position: absolute;
+            left:235px;
+            top:400px;
+            width:230px;
+            font-size:15px;
+            background-color: #a6a6a6;
+        }
+    </style>
+</head>
+
+<body>
+    <div id="main_content" style="width:1100px;height:500px;">
+        <div style="width:100%;height:25px;font-size:16px;">Item Detail</div>
+        <div style="position:absolute;left:0px;top:50px;width:150px;height:150px;border:1px dashed #d0d0d0;">
+            <img src="media/bullion.png" alt="bullion" width="150" height="150" >
+        </div>
+        <form action="gold.html">
+            <table>
+                <col width="150px">
+                <col width="150px">
+                <tr>
+                    <td>Metal</td>
+                    <td>
+                        <select name="metal">
+                            <option value="gold">Gold</option>
+                            <option value="silver">Silver</option>
+                            <option value="platinum">Platinum</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Type</td>
+                    <td>
+                        <select name="type">
+                            <option value="useagle">US Eagle</option>
+                            <option value="canadian">Royal Canadian</option>
+                            <option value="china">China Gold Panda</option>
+                        </select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Purchase Date</td>
+                    <td><input type="text" name="date"></td>
+                </tr>
+                <tr>
+                    <td>Qty.</td>
+                    <td><input type="text" name="quantity"></td>
+                </tr>
+                <tr>
+                    <td>Premium</td>
+                    <td><input type="text" name="premium"></td>
+                </tr>
+                <tr>
+                    <td>Unit Price</td>
+                    <td><input type="text" name="price"></td>
+                </tr>
+                <tr>
+                    <td>Gold %</td>
+                    <td name="percent">0.917</td>
+                </tr>
+                <tr>
+                    <td>Weight/unit (g)</td>
+                    <td name="totalWeight">1.244</td>
+                </tr>
+                <tr>
+                    <td>Gold g/u</td>
+                    <td name="goldWeight">1.244</td>
+                </tr>
+                <tr>
+                    <td>Gold ozt/u</td>
+                    <td name="ozt">0.0400</td>
+                </tr>
+                <tr>
+                    <td>Total au (ozt)</td>
+                    <td name="totalAu">0.0400</td>
+                </tr>
+                <tr>
+                    <td><b>TOTAL</b></td>
+                    <td name="total">1199.10</td>
+                </tr>
+            </table>
+            <a id="cancel" href="gold.html">Cancel</a>
+            <button id="submit">Save to My Stack</button>
+        </form>
+    </div> <!-- home_content -->
+</body>
+</html>

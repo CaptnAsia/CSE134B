@@ -18,6 +18,21 @@
         }
     </style>
 
+    <script src="script/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+        function adjustIframe(){
+            $("#content").load(function(){
+                var target = $("#content").contents().find("#main_content");
+                $("#content").css("height",(target.height()+20)+"px");
+                $("#content").css("width",(target.width()+20)+"px");
+            });
+        }
+
+        $(document).ready(function(){
+            $("#home_btn").find("div").trigger("click");
+        });
+
+    </script>
 </head>
 
 <body>
@@ -30,33 +45,33 @@
 
 <div id="main_frame">
 	<nav id="nav">
-	    <a href="home.html" target="main_content">
-        <div class="nav_block" id="home_btn">
-            <img src="media/home.png" alt="refresh symbol" width="35" height="35" >
-	          <p>Home</p>
-        </div>
-      </a>
-	    <a href="gold.html" target="main_content" >
-        <div class="nav_block" id="gold_btn">
-	        <img src="media/gold.jpg" alt="refresh symbol" >
-	        <p>My Gold</p>
-        </div>
-      </a>
-	    <a href="silver.html" target="main_content">
-        <div class="nav_block" id="silver_btn">
-	        <img src="media/silver.png" alt="refresh symbol" >
-	        <p>My Silver</p>
-        </div>
-      </a>
-	    <a href="platinum.html" target="main_content">
-        <div class="nav_block" id="platinum_btn">
-	        <img src="media/platinum.png" alt="refresh symbol" >
-	        <p>My Platinum</p>
+	    <a href="home.html" id="home_btn" target="content" onclick="adjustIframe()">
+            <div class="nav_block" >
+                <img src="media/home.png" alt="refresh symbol" width="35" height="35" >
+    	          <p>Home</p>
+            </div>
+        </a>
+	    <a href="gold.html" target="content" onclick="adjustIframe()">
+            <div class="nav_block" >
+    	        <img src="media/gold.jpg" alt="refresh symbol" >
+    	        <p>My Gold</p>
+            </div>
+        </a>
+	    <a href="silver.html" target="content" onclick="adjustIframe()">
+            <div class="nav_block" id="silver_btn">
+    	        <img src="media/silver.png" alt="refresh symbol" >
+    	        <p>My Silver</p>
+            </div>
+        </a>
+	    <a href="platinum.html" target="content" onclick="adjustIframe()">
+            <div class="nav_block" id="platinum_btn">
+    	        <img src="media/platinum.png" alt="refresh symbol" >
+    	        <p>My Platinum</p>
 	      </div>
-      </a>
+        </a>
 	</nav>
 
-	<iframe src="home.html" name="main_content" seamless="seamless" frameborder="0"></iframe>
+	<iframe name="content" id="content" seamless="seamless" frameborder="0" scrolling="no"></iframe>
 </div>
 
 
