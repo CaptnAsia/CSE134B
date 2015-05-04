@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="css/home.css" type="text/css"/>
+    <link rel="stylesheet" href="css/stone.css" type="text/css"/>
+</head>
+
+<body>
+    <div style="width:100%;height:500px;">
+        <!-- Total Stack Value Block -->
+        <div id="total_stone_block">
+            <div style="font-size:24px;color:#101010;">$24,495.23<span style="margin-left:5px;font-size:12px;color:#a0a0a0;">+3.5%</span></div>
+            <div style="font-size:13px;margin:2px;">My Total Stack Value</div>
+        </div>
+
+        <!-- Price Table Block -->
+        <div id="stone_price_block">
+            <div class="price_block_title">Current Spot</div>
+            <table class="price_block_table">
+                <tr>
+                    <td name="price_bid">1206.10</td>
+                    <td name="price_ask">1207.10</td>
+                    <td name="price_change">+23.40</td>
+                </tr>
+                <tr>
+                    <td>Bid</td>
+                    <td>Ask</td>
+                    <td>Change</td>
+                </tr>
+            </table>
+        </div>
+
+        <!-- Chart Block -->
+        <div id="chart_area" >
+            <!-- Replace with real chart later (google chart or jQuery) -->
+            <img src="media/stone_chart.png" alt="chart" />
+        </div>
+
+        <!-- Stone Stock Chart-->
+        <div id="stock_area">
+            <!-- Header banner -->
+            <div id="header_bar">
+                <div style="width:300px;position:absolute;left:0px;top:0px;line-height:30px;font-size:18px;">My Stack</div>
+                <div style="width:260px;height:18px;position:absolute;right:0px;top:4px;">
+                    <img src="media/search.png" style="position:absolute;left:5px;top:2px;" width="20px" height="20px" >
+                    <form action="gold.html" method="GET">
+                        <input type="text" name="search" style="width:120px;padding-left:25px;height:16px;margin-right:5px;border-radius:5px;">
+                        <input type="submit" value="Submit">
+                    </form>
+                    <img style="position:absolute;right:10px;top:1px;" src="media/add_button.png" width="20px" height="20px" >
+                </div>
+            </div>
+
+            <!-- Table -->
+            <table id="stone_stock_table">
+                <col width="100">
+                <col width="100">
+                <col width="100">
+                <col width="100">
+                <col width="100">
+                <col width="100">
+                <tr style="">
+                    <th align="center">Image</th>
+                    <th align="left">Item</th>
+                    <th align="left">Qty.</th>
+                    <th align="left">Weight/unit (g)</th>
+                    <th align="left">% au</th>
+                    <th align="left">Value</th>
+                </tr>
+                <tr>
+                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td name="item" align="left">US Eagle</td>
+                    <td name="quantity" align="left">1</td>
+                    <td name="weight" align="left">12.45</td>
+                    <td name="au" align="left">91.7%</td>
+                    <td name="value" align="left">1199.0</td>
+                </tr>
+
+                <tr>
+                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td name="item" align="left">US Eagle</td>
+                    <td name="quantity" align="left">1</td>
+                    <td name="weight" align="left">12.45</td>
+                    <td name="au" align="left">91.7%</td>
+                    <td name="value" align="left">1199.0</td>
+                </tr>
+
+                <tr>
+                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td name="item" align="left">US Eagle</td>
+                    <td name="quantity" align="left">1</td>
+                    <td name="weight" align="left">12.45</td>
+                    <td name="au" align="left">91.7%</td>
+                    <td name="value" align="left">1199.0</td>
+                </tr>
+            </table>
+        </div>
+
+
+    </div> <!-- home_main_frame -->
+</body>
+</html>
