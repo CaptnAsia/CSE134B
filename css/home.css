@@ -49,12 +49,13 @@
 }
 
 .price_block_table{
-  width:90%;
+  width:100%;
   padding:5px;
   font-size:12px;
 }
 
 .price_block_table td{
+  width: 33%;
   text-align: center;
 }
 
