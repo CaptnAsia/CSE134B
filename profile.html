@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="css/home.css" type="text/css"/>
     <style>
 
-        @media (min-width: 1109px) {
+        @media (min-width: 1126px) {
             #content {
                 margin-left: 88px;
             }
@@ -18,7 +18,7 @@
             }
         }
 
-        @media (max-width: 1108px) {
+        @media (max-width: 1125px) {
             #content {
                 margin: 0;
             }
@@ -29,9 +29,15 @@
                 margin-left: 0;
             }
             #stock_area {
-                margin-left: 10px
+                margin-left: 10px;
             }
 
+        }
+
+        @media (max-width: 931px) {
+            #stock_area {
+                width: 100%;
+            }
         }
 
         @media (max-width: 1027px) {
@@ -46,16 +52,24 @@
             footer {
                 visibility: hidden;
             }
-        #chart_area {
-            display: none;
+            #chart_area {
+                display: none;
+            }
+            #value_and_price {
+                width: 100%;
+            }
+            #header_title {
+                width: 85%;
+            }
+            #stock_area {
+                display: none;
+            }
+
+            #showbar {
+                display: block;
+            }
         }
-        #value_and_price {
-            width: 100%;
-        }
-        #header_title {
-            width: 85%;
-        }
-        }
+
         #mainBody {
             margin-top: 18px;
             margin-left: 120px;
@@ -102,6 +116,17 @@
             return false;
         }
     </script>
+    <script src="script/jquery-2.1.3.min.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function(){
+            $("#stone_stock_table tr").click(function(){
+                if($(this).attr("data-name") != "heading"){
+                    window.location = "item.html?item=" + $(this).find("td[data-name=item]").text();
+                }
+            });
+
+        });
+    </script>
     <!--
     <script src="script/jquery-2.1.3.min.js"></script>
     <script type="text/javascript">
@@ -123,9 +148,9 @@
 <body>
 
 <header>
-    <img src="media/refresh.png" alt="refresh symbol" height="20" width="20" style="margin:6px;" />
+    <a href="javascript:window.location.href=window.location.href;"><img src="media/refresh.png" href="" alt="refresh symbol" height="20" width="20" style="margin:6px; float:left;" /></a>
     <div id="header_title">MyStackApp</div>
-    <img src="media/settings.png" alt="refresh symbol" height="32" width="32"/>
+    <img src="media/settings.png" alt="refresh symbol" height="32" width="32" style="float:right;"/>
 </header>
 
 <div id="main_frame">
@@ -169,6 +194,9 @@
             <div id="bull_val" style="font-size:13px;margin:2px; position: relative; top: -56px;padding: 0 15px 13px 15px;">My Total Stack Value</div>
 
         </div>
+            <div id="showbar">
+                testing
+            </div>
 
         <!-- Price Table Block -->
         <div id="price_table">
@@ -254,7 +282,7 @@
             <!-- Table -->
             <table id="stone_stock_table">
                 <tr>
-                    <th style="width: 100%; margin: auto;">Image</th>
+                    <th style="width: 15%; margin: auto;">Image</th>
                     <th style="text-align: left;">Item</th>
                     <th style="text-align: left;">Qty.</th>
                     <th style="text-align: left;">Weight/unit (g)</th>
@@ -262,7 +290,7 @@
                     <th style="text-align: left;">Value</th>
                 </tr>
                 <tr data-metalType="Gold">
-                    <td style="width: 100%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Eagle</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -271,7 +299,7 @@
                 </tr>
 
                 <tr data-metalType="Gold">
-                    <td style="width: 100%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Eagle</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -280,7 +308,7 @@
                 </tr>
 
                 <tr data-metalType="Gold">
-                    <td style="width: 100%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/bullion.png" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Eagle</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -289,7 +317,7 @@
                 </tr>
                 <!-- Silver -->
                 <tr data-metalType="Silver">
-                    <td style="width: 100%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -298,7 +326,7 @@
                 </tr>
 
                 <tr data-metalType="Silver">
-                    <td style="width: 100%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -307,7 +335,7 @@
                 </tr>
 
                 <tr data-metalType="Silver">
-                    <td style="width: 100%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/silver.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -317,7 +345,7 @@
 
                 <!-- Platinum -->
                 <tr data-metalType="Platinum">
-                    <td style="width: 100%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -326,7 +354,7 @@
                 </tr>
 
                 <tr data-metalType="Platinum">
-                    <td style="width: 100%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>
@@ -335,7 +363,7 @@
                 </tr>
 
                 <tr data-metalType="Platinum">
-                    <td style="width: 100%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
+                    <td style="width: 15%; margin: auto;"><img src="media/platinum.jpeg" alt="bullion" width="40" height="40"></td>
                     <td style="text-align: left;">US Silver</td>
                     <td style="text-align: left;">1</td>
                     <td style="text-align: left;">12.45</td>

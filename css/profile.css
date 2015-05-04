@@ -1,3 +1,13 @@
+nav {
+    height:400px;
+    float:left;
+    margin-left:10px;
+}
+
+nav > a{
+    text-decoration: none;
+}
+
 #header_title{
     float:left;
     font-weight:bold;
@@ -14,14 +24,8 @@
     margin-top:20px;
 }
 
-nav {
-    height:400px;
-    float:left;
-    margin-left:10px;
-}
-
-nav > a{
-    text-decoration: none;
+#showbar {
+    display: none;
 }
 
 .nav_block{
