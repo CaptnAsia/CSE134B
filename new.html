@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <title>Add New Item</title>
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
+    <link rel="stylesheet" href="css/profile.css" type="text/css"/>
+    <link rel="stylesheet" href="css/stone.css" type="text/css"/>
+    <link rel="stylesheet" href="css/home.css" type="text/css"/>
     <style>
         table{
             position: absolute;
@@ -21,17 +24,23 @@
             text-align: right;
         }
         #cancel{
+            /*
             position: absolute;
             left:160px;
             top:416px;
+            */
             font-size:13px;
             text-decoration: none;
             color:#b6b6b6;
         }
         #submit{
+            /*
             position: absolute;
             left:235px;
             top:400px;
+            */
+            position: relative;
+            left: 20px;
             width:230px;
             font-size:15px;
             background-color: #a6a6a6;
@@ -40,13 +49,50 @@
 </head>
 
 <body>
+
+<header>
+    <img src="media/refresh.png" alt="refresh symbol" height="20" width="20" align="left" style="margin:6px;" />
+    <div id="header_title">MyStackApp</div>
+    <img src="media/settings.png" alt="refresh symbol" height="32" width="32" align="right" />
+</header>
+
+<div id="main_frame">
+    <nav id="nav">
+        <a href="profile.html"><!--javascript:;" id="home_btn" target="content" onclick="changeBullion('Total Stack')">-->
+            <div class="nav_block" >
+                <img src="media/home.png" alt="refresh symbol" width="35" height="35" >
+                <p>Home</p>
+            </div>
+        </a>
+        <a href="profile.html"><!--javascript:;" target="content" onclick="changeBullion('Gold')">-->
+            <div class="nav_block" >
+                <img src="media/gold.jpg" alt="refresh symbol" >
+                <p>My Gold</p>
+            </div>
+        </a>
+        <a href="profile.html"><!--"javascript:;" target="content" onclick="changeBullion('Silver')">-->
+            <div class="nav_block" id="silver_btn">
+                <img src="media/silver.png" alt="refresh symbol" >
+                <p>My Silver</p>
+            </div>
+        </a>
+        <a href="profile.html"><!--"javascript:;" target="content" onclick="changeBullion('Platinum')">-->
+            <div class="nav_block" id="platinum_btn">
+                <img src="media/platinum.png" alt="refresh symbol" >
+                <p>My Platinum</p>
+          </div>
+        </a>
+    </nav>
+    <div class="content">
     <div id="main_content" style="width:1100px;height:500px;">
-        <div style="width:100%;height:25px;font-size:16px;">Item Detail</div>
-        <div style="position:absolute;left:0px;top:50px;width:150px;height:150px;border:1px dashed #d0d0d0;">
+        <div style="position:absolute;left:110px;height:25px;font-size:16px;">
+            <a id="back" href="profile.html"><img src="media/back.png" alt="back" width="17" height="16" ></a> Add Item
+        </div>
+        <div style="position:absolute;left:110px;top:100px;width:150px;height:150px;border:1px dashed #d0d0d0;">
             <img src="media/bullion.png" alt="bullion" width="150" height="150" >
         </div>
-        <form action="gold.html">
-            <table>
+        <form action="profile.html">
+            <table style="left:250px;top:100px;" role="presentation">
                 <col width="150px">
                 <col width="150px">
                 <tr>
@@ -109,10 +155,18 @@
                     <td><b>TOTAL</b></td>
                     <td name="total">1199.10</td>
                 </tr>
+                <tr>
+                    <td colspan="2">
+                        <a id="cancel" href="profile.html">Cancel</a>
+                        <button id="submit">Save to My Stack</button>
+                    </td>
+                </tr>
             </table>
-            <a id="cancel" href="gold.html">Cancel</a>
-            <button id="submit">Save to My Stack</button>
         </form>
     </div> <!-- home_content -->
+</div>
+</div>
+
+<footer>&copy; 2015 Team Bread</footer>
 </body>
 </html>
