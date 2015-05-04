@@ -8,15 +8,14 @@
         nav {
             padding: 10px;
             height: 400px;
-            vertical-align: left;
+            text-align: center;
             width: 100px;
         }
         #mainBody {
             margin-top: 18px;
-            margin-left: 100px;
+            margin-left: 120px;
             width: 100%;
             position: fixed;
-            background-color: #00FF00;
             top: 5%;
         }
         #bodyImg{
@@ -25,19 +24,21 @@
     </style>
 </head>
 <body>
-<header><img src="media/refresh.png" alt="refresh symbol" height="30" width="30" align="left"><!--<span style="float: left">refresh symbol</span>--><b style="float: left;">MyStackApp</b><!--<span style="float: right">settings</span>--><img src="media/settings.png" alt="refresh symbol" height="30" width="30" align="right"></header>
+<header><img src="media/refresh.png" alt="refresh symbol" height="30px" width="30px" align="left"><!--<span style="float: left">refresh symbol</span>--><b style="float: left;">MyStackApp</b><!--<span style="float: right">settings</span>--><img src="media/settings.png" alt="refresh symbol" height="30" width="30" align="right"></header>
 <nav>
-    <img src="media/home.png" alt="refresh symbol" height="30" width="30">
-    <p >Home</p>
-    <img src="media/gold.jpg" alt="refresh symbol" height="30" width="30">
-    <p>My Gold</p>
-    <img src="media/silver.png" alt="refresh symbol" height="30" width="30">
-    <p>My Silver</p>
-    <img src="media/platinum.png" alt="refresh symbol" height="30" width="30">
-    <p>My Platinum</p>
+    <a href="#">
+    <img src="media/home.png" alt="refresh symbol" height="50px" width="50px">
+    <br>Home<br></a>
+    <img src="media/gold.jpg" alt="refresh symbol" height="50px" width="50px">
+    <br>My Gold<br>
+    <img src="media/silver.png" alt="refresh symbol" height="50px" width="50px">
+    <br>My Silver<br>
+    <img src="media/platinum.png" alt="refresh symbol" height="50px" width="50px">
+    <br>My Platinum<br>
 </nav>
 <div id="mainBody">
-    <img id="bodyImg" src="media/page1.png" alt="page1">
+    <div style="float: left;">Info stuff here</div>
+    <div style="float: left;">Graph stuff here</div>
 </div>
 <footer>help</footer>
 </body>
