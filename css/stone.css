@@ -30,6 +30,18 @@
   border-collapse: collapse;
 }
 
+#stone_stock_table col{
+	width:100px;
+}
+
+#stone_stock_table th ~ th {
+	text-align:left;
+}
+
+#stone_stock_table tr td:first-child {
+	text-align:center;
+}
+
 #stone_stock_table th{
   font-weight: normal;
   height:30px;
