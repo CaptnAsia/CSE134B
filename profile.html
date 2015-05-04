@@ -25,6 +25,13 @@
             #nav {
                 display: none;
             }
+            #value_and_price{
+                margin-left: 0;
+            }
+            #stock_area {
+                margin-left: 10px
+            }
+
         }
 
         @media (max-width: 1027px) {
@@ -32,7 +39,6 @@
             #chart_area img{
                 width: 100%;
             }
-
 
         }
 
@@ -44,7 +50,6 @@
             display: none;
         }
         #value_and_price {
-            margin-left: 0;
             width: 100%;
         }
         #header_title {
@@ -66,6 +71,34 @@
     <script type="text/javascript">
         function changeBullion(id) {
             document.getElementById("bull_val").innerHTML = "My "+id+" Value";
+
+            if (id == "Total Stack") {
+                document.getElementById("totVal").innerHTML = "$24.495.23";
+                document.getElementById("chart").setAttribute("src", "media/stock_chart.png");
+                document.getElementById("total").style.removeProperty('visibility');
+                document.getElementById("specificBull").style.visibility = "hidden";
+            } else {
+                document.getElementById("chart").setAttribute("src", "media/stone_chart.png");
+                document.getElementById("specificBull").style.removeProperty('visibility');
+                document.getElementById("total").style.visibility = "hidden";
+                if (id == "Gold") {
+                    document.getElementById("totVal").innerHTML = "$18,235.27";
+                } else if (id == "Silver") {
+                    document.getElementById("totVal").innerHTML = "$7,345.39";
+                } else {
+                    document.getElementById("totVal").innerHTML = "$335.56";
+                }
+            }
+            var table = document.getElementById("stone_stock_table");
+
+            for (var i = 1, row; row = table.rows[i]; i++) {
+                if (row.getAttribute("data-metalType") == id || id == "Total Stack") {
+                    console.log("true");
+                    row.style.removeProperty('display');
+                } else {
+                    row.style.display = "none";
+                }
+            }
             return false;
         }
     </script>
@@ -115,7 +148,7 @@
     	        <p>My Silver</p>
             </div>
         </a>
-	    <a href="pjavascript:;" target="content" onclick="changeBullion('Platinum')">
+	    <a href="javascript:;" target="content" onclick="changeBullion('Platinum')">
             <div class="nav_block" id="platinum_btn">
     	        <img src="media/platinum.png" alt="refresh symbol" >
     	        <p>My Platinum</p>
@@ -127,8 +160,14 @@
         <div id="value_and_price">
         <!-- Total Stack Value Block -->
         <div id="total_value_block">
-            <div style="font-size:24px;color:#101010; padding: 15px 15px 0 15px;">$24,495.23<span style="margin-left:5px;font-size:12px;color:#a0a0a0;">+3.5%</span></div>
-            <div id="bull_val" style="font-size:13px;margin:2px; padding: 0 15px 13px 15px;">My Total Stack Value</div>
+            <div style="font-size:24px;color:#101010; padding: 15px 15px 0 15px;"><span id="totVal">$24,495.23</span>
+                <span id="total" style="margin-left:5px;font-size:12px;color:#a0a0a0;">+3.5%</span>
+                <div id="specificBull" style="visibility: hidden; position:relative;top: -38px;">
+                    <p style="font-size:13px;color:grey;text-align:right;">Daily +3.5%<br>Overall +1.2%</p>
+                </div>
+            </div>
+            <div id="bull_val" style="font-size:13px;margin:2px; position: relative; top: -56px;padding: 0 15px 13px 15px;">My Total Stack Value</div>
+
         </div>
 
         <!-- Price Table Block -->
@@ -143,9 +182,9 @@
                 <div class="price_block_title">Gold<a href="javascript:;" onclick="changeBullion('Gold');" style="float: right;">></a></div>
                 <table class="price_block_table">
                     <tr>
-                        <td name="price_bid">1206.10</td>
-                        <td name="price_ask">1207.10</td>
-                        <td name="price_change">+23.40</td>
+                        <td>1206.10</td>
+                        <td>1207.10</td>
+                        <td>+23.40</td>
                     </tr>
                     <tr>
                         <td>Bid</td>
@@ -160,9 +199,9 @@
                 <div class="price_block_title">Silver<a href="javascript:;" onclick="changeBullion('Silver');" style="float: right;">></a></div>
                 <table class="price_block_table">
                     <tr>
-                        <td name="price_bid">16.10</td>
-                        <td name="price_ask">16.50</td>
-                        <td name="price_change">-.36</td>
+                        <td>16.10</td>
+                        <td>16.50</td>
+                        <td>-.36</td>
                     </tr>
                     <tr>
                         <td>Bid</td>
@@ -177,9 +216,9 @@
                 <div class="price_block_title">Platinum<a href="javascript:;" onclick="changeBullion('Platinum');" style="float: right;">></a></div>
                 <table class="price_block_table">
                     <tr>
-                        <td name="price_bid">1206.10</td>
-                        <td name="price_ask">1207.10</td>
-                        <td name="price_change">+23.40</td>
+                        <td>1206.10</td>
+                        <td>1207.10</td>
+                        <td>+23.40</td>
                     </tr>
                     <tr>
                         <td>Bid</td>
@@ -194,7 +233,7 @@
         <!-- Chart Block -->
         <div id="chart_area" style="">
             <!-- Replace with real chart later (google chart or jQuery) -->
-            <img src="media/stock_chart.png" alt="chart" />
+            <img id="chart" src="media/stock_chart.png" alt="chart" />
         </div>
     </div> <!-- home_content -->
         <!-- Stone Stock Chart-->
@@ -214,13 +253,7 @@
 
             <!-- Table -->
             <table id="stone_stock_table">
-                <col width="100">
-                <col width="100">
-                <col width="100">
-                <col width="100">
-                <col width="100">
-                <col width="100">
-                <tr name="heading">
+                <tr>
                     <th align="center">Image</th>
                     <th align="left">Item</th>
                     <th align="left">Qty.</th>
@@ -228,31 +261,86 @@
                     <th align="left">% au</th>
                     <th align="left">Value</th>
                 </tr>
-                <tr>
-                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
-                    <td name="item" align="left">US Eagle</td>
-                    <td name="quantity" align="left">1</td>
-                    <td name="weight" align="left">12.45</td>
-                    <td name="au" align="left">91.7%</td>
-                    <td name="value" align="left">1199.0</td>
+                <tr data-metalType="Gold">
+                    <td align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Eagle</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">1199.0</td>
                 </tr>
 
-                <tr>
-                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
-                    <td name="item" align="left">US Eagle</td>
-                    <td name="quantity" align="left">1</td>
-                    <td name="weight" align="left">12.45</td>
-                    <td name="au" align="left">91.7%</td>
-                    <td name="value" align="left">1199.0</td>
+                <tr data-metalType="Gold">
+                    <td align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Eagle</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">1199.0</td>
                 </tr>
 
-                <tr>
-                    <td name="icon" align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
-                    <td name="item" align="left">US Eagle</td>
-                    <td name="quantity" align="left">1</td>
-                    <td name="weight" align="left">12.45</td>
-                    <td name="au" align="left">91.7%</td>
-                    <td name="value" align="left">1199.0</td>
+                <tr data-metalType="Gold">
+                    <td align="center"><img src="media/bullion.png" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Eagle</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">1199.0</td>
+                </tr>
+                <!-- Silver -->
+                <tr data-metalType="Silver">
+                    <td align="center"><img src="media/silver.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">800.0</td>
+                </tr>
+
+                <tr data-metalType="Silver">
+                    <td align="center"><img src="media/silver.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">800.0</td>
+                </tr>
+
+                <tr data-metalType="Silver">
+                    <td align="center"><img src="media/silver.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">800.0</td>
+                </tr>
+
+                <!-- Platinum -->
+                <tr data-metalType="Platinum">
+                    <td align="center"><img src="media/platinum.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">205.0</td>
+                </tr>
+
+                <tr data-metalType="Platinum">
+                    <td align="center"><img src="media/platinum.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">205.0</td>
+                </tr>
+
+                <tr data-metalType="Platinum">
+                    <td align="center"><img src="media/platinum.jpeg" alt="bullion" width="40px" height="40px"></td>
+                    <td align="left">US Silver</td>
+                    <td align="left">1</td>
+                    <td align="left">12.45</td>
+                    <td align="left">91.7%</td>
+                    <td align="left">205.0</td>
                 </tr>
 
             </table>
@@ -261,7 +349,7 @@
     </div>
 
 
- <footer>help</footer>
+ <footer>&copy; 2015 Team Bread</footer>
 </body>
 </html>
 
