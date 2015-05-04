@@ -43,3 +43,5 @@ provided "Home" doesn't say too much on its own, and much of "My Stack"
 overlaps with other essential wireframes. Merging "Home" and "My Stack" saves 
 one click without really cluttering up or losing any provided information.
 
+3. We did not finish implementing the mobile browser views for item.html ("Item Detail) and new.html ("Add Item"); we ran out of time
+
