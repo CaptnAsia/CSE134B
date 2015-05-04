@@ -5,13 +5,13 @@
     <title>Item Detail</title>
     <link rel="stylesheet" href="css/style.css" type="text/css"/>
     <style>
-        table{
+        #item_detail_table{
             position: absolute;
             left:155px;
             top:50px; 
             font-size:12px;
         }
-        td{
+        td {
             padding-left:6px;
             padding-right:6px;
             padding-top:4px;
@@ -20,6 +20,9 @@
         td:first-child{
             text-align: right;
         }
+		col {
+			width:150px;
+		}
     </style>
 </head>
 
@@ -29,56 +32,56 @@
         <div style="position:absolute;left:0px;top:50px;width:150px;height:150px;border:1px dashed #d0d0d0;">
             <img src="media/bullion.png" alt="bullion" width="150" height="150" >
         </div>
-        <table>
-            <col width="150px">
-            <col width="150px">
+        <table id="item_detail_table">
+            <col>
+            <col>
             <tr>
                 <td>Metal</td>
-                <td name="metal">Gold</td>
+                <td data-name="metal">Gold</td>
             </tr>
             <tr>
                 <td>Type</td>
-                <td name="type">US Eagle</td>
+                <td data-name="type">US Eagle</td>
             </tr>
             <tr>
                 <td>Purchase Date</td>
-                <td name="date">04 March 2015</td>
+                <td data-name="date">04 March 2015</td>
             </tr>
             <tr>
                 <td>Qty.</td>
-                <td name="quantity">1</td>
+                <td data-name="quantity">1</td>
             </tr>
             <tr>
                 <td>Premium</td>
-                <td name="premium">47.00</td>
+                <td data-name="premium">47.00</td>
             </tr>
             <tr>
                 <td>Unit Price</td>
-                <td name="price">1250.60</td>
+                <td data-name="price">1250.60</td>
             </tr>
             <tr>
                 <td>Gold %</td>
-                <td name="percent">0.917</td>
+                <td data-name="percent">0.917</td>
             </tr>
             <tr>
                 <td>Weight/unit (g)</td>
-                <td name="totalWeight">1.244</td>
+                <td data-name="totalWeight">1.244</td>
             </tr>
             <tr>
                 <td>Gold g/u</td>
-                <td name="goldWeight">1.244</td>
+                <td data-name="goldWeight">1.244</td>
             </tr>
             <tr>
                 <td>Gold ozt/u</td>
-                <td name="ozt">0.0400</td>
+                <td data-name="ozt">0.0400</td>
             </tr>
             <tr>
                 <td>Total au (ozt)</td>
-                <td name="totalAu">0.0400</td>
+                <td data-name="totalAu">0.0400</td>
             </tr>
             <tr>
                 <td><b>TOTAL</b></td>
-                <td name="total">1199.10</td>
+                <td data-name="total">1199.10</td>
             </tr>
         </table>
     </div> <!-- home_content -->
