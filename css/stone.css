@@ -15,6 +15,7 @@
 
 
 #stock_area{
+  clear: both;
   width:900px;
   margin-left: 118px;
 }

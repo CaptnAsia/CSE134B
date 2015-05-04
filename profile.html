@@ -70,6 +70,10 @@
             #showbar {
                 display: block;
             }
+
+            #header_bar {
+                display: none;
+            }
         }
 
         .notHidden {
@@ -88,6 +92,7 @@
     </style>
 
     <script type="text/javascript">
+        var filtered = false;
         function changeBullion(id) {
             document.getElementById("bull_val").innerHTML = "My "+id+" Value";
 
@@ -118,18 +123,33 @@
                     row.style.display = "none";
                 }
             }
+
+            if (document.body.clientWidth < 700) {
+                filtered = true;
+                document.getElementById("price_table").style.display = "none";
+                document.getElementById("stock_area").className = "notHidden";
+            }
             return false;
         }
 
         function mobileShow(id) {
             if (id == "bar") {
                 document.getElementById("smallbuttons").setAttribute("src", "media/bar.png");
-                document.getElementById("price_table").style.removeProperty("display");
+                if (filtered) {
+                    document.getElementById("stock_area").className = "notHidden";
+                } else {
+                    document.getElementById("price_table").style.removeProperty("display");
+                }
+
                 document.getElementById("chart_area").className = "";
             } else {
                 document.getElementById("smallbuttons").setAttribute("src", "media/graph.png");
                 document.getElementById("chart_area").className = "notHidden";
-                document.getElementById("price_table").style.display = "none";
+                if (filtered) {
+                    document.getElementById("stock_area").className = "";
+                } else {
+                    document.getElementById("price_table").style.display = "none";
+                }
             }
         }
     </script>
@@ -198,7 +218,7 @@
         </a>
 	</nav>
     <div class="content">
-    <div id="main_content" style="min-height:500px;">
+    <div id="main_content">
         <div id="value_and_price">
         <!-- Total Stack Value Block -->
         <div id="total_value_block">
