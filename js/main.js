@@ -95,12 +95,10 @@ function loadFooter(){
 }
 
 
-
 $(window).load(function() {
 
 	var path = window.location.pathname;
 	var page = path.split("/").pop();
-
 
 
 	/* * * * * * * * * * * * * *
@@ -108,6 +106,14 @@ $(window).load(function() {
 	 *        GENERAL          *
 	 *                         *
 	 * * * * * * * * * * * * * */
+
+	/* MIKE LU CODE HERE: Adding eventListeners to sign-up and login buttons */
+	if (document.getElementById('sign-up-button')) {
+		document.getElementById("sign-up-button").addEventListener("click", signupPressed, false);
+		document.getElementById("log-in-button").addEventListener("click", loginPressed, false);
+	}
+
+	/* MIKE LU CODE END */
 
 	 $('.icon-spinner2').click(function(){
 	 	location.reload();	

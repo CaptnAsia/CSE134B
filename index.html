@@ -9,9 +9,14 @@
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="./js/parse-1.4.2.js"></script>
     <script src="./js/jquery-1.11.2.min.js"></script>
     <script src="./js/velocity.min.js"></script>
+    <script src="./js/backend.js"></script>
     <script src="./js/main.js"></script>
+    <script>
+
+    </script>
     <title>Login - CoinFlip</title>
 </head>
 
@@ -27,8 +32,22 @@
         <section id="w1-left">
             <h1>COINFLIP</h1>
             <h3>Manage your coin collection with a simple app.</h3>
-            <a href="wire2.html"><span id="sign-up-button">Sign up</span></a>
-            <a href="wire2.html"><span id="log-in-button">Log in</span></a>
+            <div id="sign-up-form">
+                <form name="sign-up-form" style="display:none;">
+                    <input name="email" type="text" placeholder="email" style="width:99%; padding: 0 0 0 1%; margin-top: 30px; line-height:40px; height: 40px; font-size: large;">
+                    <input name="password" type="password" placeholder="password" style="width:99%; padding: 0 0 0 1%; margin-top: 30px; line-height:40px; height: 40px; font-size: large;">
+                </form>
+                <span id="sign-up-button">Sign up</span>
+            </div>
+            <div id="log-in-form">
+                <form name="log-in-form" style="display:none;">
+                <input name="email" type="text" placeholder="email" style="width:99%; padding: 0 0 0 1%; margin-top: 30px; line-height:40px; height: 40px; font-size: large;">
+                <input name="password" type="password" placeholder="password" style="width:99%; padding: 0 0 0 1%; margin-top: 30px; line-height:40px; height: 40px; font-size: large;">
+                </form>
+                <span id="log-in-button">Log in</span>
+            </div>
+
+
         </section>
 
         <section id="w1-right">
