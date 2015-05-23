@@ -41,3 +41,30 @@ function loginPressed() {
         });
     }
 }
+
+function getData(metal) {
+    var xmlhttp;
+    if (window.XMLHttpRequest) {
+        xmlhttp= new XMLHttpRequest();
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+    }
+    if (metal == 'gold') {
+        xmlhttp.onreadystatechange = function () {
+            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+                var myData = JSON.parse(xmlhttp.responseText);
+                var xAxis = new Array(myData.data.length);
+                var yAxis = new Array(myData.data.length);
+                for (var i = (myData.data.length-1); i >= 0; i--) {
+                    xAxis[myData.data.length - i - 1] = myData.data[i][0];
+                    yAxis[myData.data.length - i - 1] = myData.data[i][1];
+                }
+                finishGraph(xAxis, yAxis);
+            }
+        }
+    }
+    xmlhttp.open("GET","https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json?trim_start=2015-04-23&trim_end=2015-05-23");
+    xmlhttp.send();
+        /*
+        */
+}
