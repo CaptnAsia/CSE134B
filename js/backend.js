@@ -1,10 +1,14 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
-function signupPressed() {
-    if (!event.target.getAttribute('data-pressed')) {
+function signupPressed(event) {
+    if (window.event) {
+        event = window.event;
+    }
+    var target = event.target ? event.target : event.srcElement;
+    if (!target.getAttribute('data-pressed')) {
         document.getElementById('log-in-button').style.display = "none";
-        event.target.previousElementSibling.style.display = "block";
-        event.target.setAttribute('data-pressed', '1');
+        target.previousElementSibling.style.display = "block";
+        target.setAttribute('data-pressed', '1');
     } else {
         var newUser = document.forms['sign-up-form'];
         var user = new Parse.User();
@@ -24,11 +28,16 @@ function signupPressed() {
 
 }
 
-function loginPressed() {
-    if (!event.target.getAttribute('data-pressed')) {
+function loginPressed(event) {
+    if (window.event) {
+        event = window.event;
+    }
+
+    var target = event.target ? event.target : event.srcElement;
+    if (!target.getAttribute('data-pressed')) {
         document.getElementById('sign-up-button').style.display = "none";
-        event.target.previousElementSibling.style.display = "block";
-        event.target.setAttribute('data-pressed', '1');
+        target.previousElementSibling.style.display = "block";
+        target.setAttribute('data-pressed', '1');
     } else {
         var login = document.forms['log-in-form'];
         Parse.User.logIn(login['email'].value, login['password'].value, {
@@ -63,7 +72,12 @@ function getData(metal) {
             }
         }
     }
-    xmlhttp.open("GET","https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json?trim_start=2015-04-23&trim_end=2015-05-23");
+    var today = new Date();
+    2015-05-23
+    var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    today.setMonth(today.getMonth()-1);
+    var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    xmlhttp.open("GET","https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json?trim_start="+startDate+"&trim_end="+endDate);
     xmlhttp.send();
         /*
         */
