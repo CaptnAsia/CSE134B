@@ -42,7 +42,7 @@ function loginPressed(event) {
         var login = document.forms['log-in-form'];
         Parse.User.logIn(login['email'].value, login['password'].value, {
             success: function(user) {
-                window.location.href = "../home.html";
+                window.location.href = "./home.html";
             },
             error: function(user, error) {
                 alert("Error: " + error.code + " " + error.message);
@@ -52,32 +52,41 @@ function loginPressed(event) {
 }
 
 function getData(metal) {
+    var authtoken = 'C5xqJubuHk82paW6ryzH';
     var xmlhttp;
+    var dbLink;
     if (window.XMLHttpRequest) {
         xmlhttp= new XMLHttpRequest();
     } else {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    if (metal == 'gold') {
-        xmlhttp.onreadystatechange = function () {
-            if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-                var myData = JSON.parse(xmlhttp.responseText);
-                var xAxis = new Array(myData.data.length);
-                var yAxis = new Array(myData.data.length);
-                for (var i = (myData.data.length-1); i >= 0; i--) {
-                    xAxis[myData.data.length - i - 1] = myData.data[i][0];
-                    yAxis[myData.data.length - i - 1] = myData.data[i][1];
-                }
-                finishGraph(xAxis, yAxis);
-            }
-        }
     }
     var today = new Date();
     2015-05-23
     var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     today.setMonth(today.getMonth()-1);
     var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    xmlhttp.open("GET","https://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json?trim_start="+startDate+"&trim_end="+endDate);
+    if (metal == 'gold') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    } else if (metal == 'silver') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+    } else {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+    }
+
+    dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var myData = JSON.parse(xmlhttp.responseText);
+            var xAxis = new Array(myData.data.length);
+            var yAxis = new Array(myData.data.length);
+            for (var i = (myData.data.length-1); i >= 0; i--) {
+                xAxis[myData.data.length - i - 1] = myData.data[i][0];
+                yAxis[myData.data.length - i - 1] = myData.data[i][1];
+            }
+            finishGraph(xAxis, yAxis, metal);
+        }
+    }
+    xmlhttp.open("GET",dbLink);
     xmlhttp.send();
         /*
         */

@@ -39,6 +39,7 @@ function loadTopNavPersist(){
 }
 
 function loadSideNav(selected){
+	var metal = getParameter('metal');
 	document.write("    <aside>");
 	document.write("        <a href=\"home.html\">");
 	if(selected == 0)
@@ -57,8 +58,8 @@ function loadSideNav(selected){
 	document.write("            <figcaption>Home<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html\">");
-	if(selected == 1)
+	document.write("        <a href=\"inventory.html?metal=gold\">");
+	if(metal == 'gold')
 		document.write("        <figure class='nav-selected'>");
 	else
 		document.write("        <figure>");
@@ -66,8 +67,8 @@ function loadSideNav(selected){
 	document.write("            <figcaption>My Gold<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html\">");
-	if(selected == 2)
+	document.write("        <a href=\"inventory.html?metal=silver\">");
+	if(metal == 'silver')
 		document.write("        <figure class='nav-selected'>");
 	else
 		document.write("        <figure>");
@@ -75,8 +76,8 @@ function loadSideNav(selected){
 	document.write("            <figcaption>My Silver<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html\">");
-	if(selected == 3)
+	document.write("        <a href=\"inventory.html?metal=platinum\">");
+	if(metal == 'platinum')
 		document.write("        <figure class='nav-selected'>");
 	else
 		document.write("        <figure>");
@@ -93,14 +94,17 @@ function loadFooter(){
 	document.write("    <\/footer> ");
 
 }
-
+var data;
 /* MIKE LU CODE START */
-var finishGraph = function (xAxis, yAxis) {
+var finishGraph = function (xAxis, yAxis, metal) {
 	var pointStroke = "rgba(255,255,255,0.6)";
 	var pointHighlightFill = "#fff";
 	var pointHighlightStroke = "#fff";
-
-	var data = {
+	var graphColor;
+	if (metal == 'gold') graphColor = '#9FFF98';
+	else if (metal == 'silver') graphColor = '#F3FF88';
+	else graphColor = '#BBF5FF';
+	data = {
 		labels: xAxis,
 		datasets: [
 			/*{
@@ -114,10 +118,10 @@ var finishGraph = function (xAxis, yAxis) {
 				data: yAxis
 			},*/
 			 {
-			 label: "1oz Gold",
+			 label: "1ozt "+ metal,
 			 fillColor: "rgba(104, 206, 222, 0.05)",
-			 strokeColor: "#9FFF98",
-			 pointColor: "#9FFF98",
+			 strokeColor: graphColor,
+			 pointColor: graphColor,
 			 pointStrokeColor: pointStroke,
 			 pointHighlightFill: pointHighlightFill,
 			 pointHighlightStroke: pointHighlightStroke,
@@ -142,6 +146,8 @@ var finishGraph = function (xAxis, yAxis) {
 
 		//Boolean - Whether to show vertical lines (except Y axis)
 		scaleShowVerticalLines: true,
+
+		scaleLabel: function(label){return '$' + label.value},
 
 		//Boolean - Whether the line is curved between points
 		bezierCurve : true,
@@ -185,7 +191,12 @@ var finishGraph = function (xAxis, yAxis) {
 	coinChart.update();
 }
 /* MIKE LU CODE END */
-
+function getParameter(name) {
+	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
+	var regex = new RegExp("[\\?&]" + name + "=([^&#]*)"),
+		results = regex.exec(location.search);
+	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " "));
+}
 
 $(window).load(function() {
 
@@ -352,9 +363,11 @@ $(window).load(function() {
 			coinChart.update();
 		}
 		else if(page =="inventory.html"){
-			getData('gold');
+			getData(getParameter('metal'));
 		}
 	};
+
+
 
 
 
