@@ -42,7 +42,7 @@ function loginPressed(event) {
         var login = document.forms['log-in-form'];
         Parse.User.logIn(login['email'].value, login['password'].value, {
             success: function(user) {
-                window.location.href = "./wire2.html";
+                window.location.href = "../home.html";
             },
             error: function(user, error) {
                 alert("Error: " + error.code + " " + error.message);

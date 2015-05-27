@@ -12,7 +12,7 @@
     <script src="./js/jquery-1.11.2.min.js"></script>
     <script src="./js/velocity.min.js"></script>
     <script src="./js/main.js"></script>
-    <title>Gold Item - CoinFlip</title>
+    <title>New Item - CoinFlip</title>
 </head>
 
 <body>
@@ -25,7 +25,7 @@
     <section class="main-section">
         <section class="coin_wrapper">
             <div class="mobile-nav">
-                <a href="wire3.html">
+                <a href="inventory.html">
                     <svg class="icon icon-keyboard-arrow-left">
                         <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
                             <title>keyboard-arrow-left</title>
@@ -34,10 +34,10 @@
                         <use xlink:href="#icon-keyboard-arrow-left"></use>
                     </svg>
                 </a>
-                ITEM DETAIL
+                ADD ITEM
             </div>
             <div class="coin_main">
-                <a href="wire3.html">
+                <a href="inventory.html">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
                             <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
@@ -46,7 +46,7 @@
                             </symbol>
                             <use xlink:href="#icon-play-arrow"></use>
                         </svg>
-                        Item Detail
+                        Add Item
                     </div>
                 </a>
                 <section class="coin_image">
@@ -58,27 +58,45 @@
                     <table>
                         <tr>
                             <td>Metal</td>
-                            <td>Gold</td>
+                            <td>
+                                <select>
+                                    <option value="gold">Gold</option>
+                                    <option value="silver">Silver</option>
+                                    <option value="platinum">Platinum</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td>Type</td>
-                            <td>US Eagle</td>
+                            <td>
+                                <select>
+                                    <option selected value="us_eagle">US Eagle</option>
+                                </select>
+                            </td>
                         </tr>
                         <tr>
                             <td>Purchase Date</td>
-                            <td>04 March 2015</td>
+                            <td>
+                                <input name="purchase_date" value="04 March 2015" />
+                            </td>
                         </tr>
                         <tr>
                             <td>Qty.</td>
-                            <td>1</td>
+                            <td>
+                                <input name="quantity" value="1" />
+                            </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
-                            <td>47.00</td>
+                            <td>
+                                <input name="quantity" value="47.00" />
+                            </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
-                            <td>1250.60</td>
+                            <td>
+                                <input name="quantity" value="1250.60" />
+                            </td>
                         </tr>
                         <tr>
                             <td>Gold %</td>
@@ -105,6 +123,8 @@
                             <td><strong>1199.10</strong></td>
                         </tr>
                     </table>
+                    <a href="inventory.html"><span id="save">Save to My Stack</span></a>
+                    <a href="inventory.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>
         </section>
