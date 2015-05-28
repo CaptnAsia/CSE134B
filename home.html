@@ -12,12 +12,18 @@
     <script src="./js/jquery-1.11.2.min.js"></script>
     <script src="./js/Chart.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/get.js"></script>
     <title>Home - CoinFlip</title>
 </head>
 
 <body>
     <script type="text/javascript">loadTopNavPersist();</script>
     <script type="text/javascript">loadSideNav(0);</script>
+
+    <script type="text/javascript">
+        $(document).ready(function(){ getPricePackets(homePageCallback); });
+    </script>
+    
 
     <section class="main-section">
 
@@ -55,7 +61,7 @@
                 </section>
                 <section class="market-list">
 
-                    <a href="inventory.html">
+                    <a href="inventory.html?metal=Gold">
                         <section class="market-item-header">
                             Gold
                             <svg class="icon icon-play-arrow">
@@ -68,7 +74,7 @@
                         </section>
                     </a>
                     <section class="market-item-stats">
-                        <table>
+                        <table id="gold_price">
                             <tr>
                                 <td>1206.10</td>
                                 <td>1207.10</td>
@@ -83,7 +89,7 @@
                     </section>
 
 
-                    <a href="inventory.html">
+                    <a href="inventory.html?metal=Silver">
                         <section class="market-item-header">
                             Silver
                             <svg class="icon icon-play-arrow">
@@ -96,7 +102,7 @@
                         </section>
                     </a>
                     <section class="market-item-stats">
-                        <table>
+                        <table id="silver_price">
                             <tr>
                                 <td>16.10</td>
                                 <td>16.50</td>
@@ -109,7 +115,7 @@
                             </tr>
                         </table>
                     </section>
-                    <a href="inventory.html">
+                    <a href="inventory.html?metal=Platinum">
                         <section class="market-item-header">
                             Platinum
                             <svg class="icon icon-play-arrow">
@@ -122,7 +128,7 @@
                         </section>
                     </a>
                     <section class="market-item-stats">
-                        <table>
+                        <table id="platinum_price">
                             <tr>
                                 <td>1206.10</td>
                                 <td>1207.10</td>

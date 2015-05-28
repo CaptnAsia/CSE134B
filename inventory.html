@@ -14,7 +14,7 @@
     <script src="./js/Chart.js"></script>
     <script src="./js/backend.js"></script>
     <script src="./js/main.js"></script>
-    <title>My Gold - CoinFlip</title>
+    <title class="metal">My {{metal}} - CoinFlip</title>
 </head>
 
 <body>
@@ -26,7 +26,7 @@
     </script>
     <section class="main-section">
         <section class="coin_wrapper">
-            <div class="mobile-nav">
+            <div class="mobile-nav metal">
                 <a href="home.html">
                     <svg class="icon icon-keyboard-arrow-left">
                         <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
@@ -36,7 +36,7 @@
                         <use xlink:href="#icon-keyboard-arrow-left"></use>
                     </svg>
                 </a>
-                MY GOLD
+                MY {{metal}}
                 <a href="new.html">
                     <svg class="icon icon-add">
                         <symbol id="icon-add" viewBox="0 0 1024 1024">
@@ -60,7 +60,7 @@
                             <td>+1.2%</td>
                         </tr>
                     </table> 
-                    <div class="total-label" id="my_gold_value">My Gold Value</div>
+                    <div class="total-label metal" id="my_gold_value">My {{metal}} Value</div>
 
                 </section>
                 <section class="mobile-toggle">
@@ -106,15 +106,15 @@
             <section class="graph-panel">
                 <section class="chart-legend">
                     <div class="legend-left-half">
-                        <section class="legend-item">
+                        <section class="legend-item metal">
                             <div class="legend-item-color" id="legend-1"></div>
-                            Gold Total
+                            {{metal}} Total
                         </section> 
                     </div>
                     <div class="legend-right-half">      
-                        <section class="legend-item">
+                        <section class="legend-item metal">
                             <div class="legend-item-color" id="legend-4"></div>
-                            1oz Gold
+                            1ozt {{metal}}
                         </section>
                     </div>    
                 </section>
@@ -129,7 +129,7 @@
                 <table>
                     <caption>
                         <section class="label-and-search">
-                            <h3>My Gold</h3>
+                            <h3 class="metal">My {{metal}}</h3>
                             <div class="stack_ctrl">
                                 <input type="search" placeholder="Search"/>
                                 <a href="new.html">
