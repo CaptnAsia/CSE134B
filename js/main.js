@@ -1,3 +1,7 @@
+var dataBind = {
+	'metal': getParameter('metal') || 'gold'
+}
+
 function loadTopNav(){
 	document.write("    <nav>");
 	document.write("        <svg class=\"icon-spinner2\">");
@@ -39,7 +43,7 @@ function loadTopNavPersist(){
 }
 
 function loadSideNav(selected){
-	var metal = getParameter('metal');
+	var metal = getParameter('metal').toLowerCase();
 	document.write("    <aside>");
 	document.write("        <a href=\"home.html\">");
 	if(selected == 0)
@@ -58,8 +62,8 @@ function loadSideNav(selected){
 	document.write("            <figcaption>Home<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=gold\">");
-	if(metal == 'gold')
+	document.write("        <a href=\"inventory.html?metal=Gold\">");
+	if(!metal || metal == 'gold')
 		document.write("        <figure class='nav-selected'>");
 	else
 		document.write("        <figure>");
@@ -67,7 +71,7 @@ function loadSideNav(selected){
 	document.write("            <figcaption>My Gold<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=silver\">");
+	document.write("        <a href=\"inventory.html?metal=Silver\">");
 	if(metal == 'silver')
 		document.write("        <figure class='nav-selected'>");
 	else
@@ -76,7 +80,7 @@ function loadSideNav(selected){
 	document.write("            <figcaption>My Silver<\/figcaption>");
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=platinum\">");
+	document.write("        <a href=\"inventory.html?metal=Platinum\">");
 	if(metal == 'platinum')
 		document.write("        <figure class='nav-selected'>");
 	else
@@ -97,13 +101,14 @@ function loadFooter(){
 var data;
 /* MIKE LU CODE START */
 var finishGraph = function (xAxis, yAxis, metal) {
+	metal = metal.toLowerCase();
 	var pointStroke = "rgba(255,255,255,0.6)";
 	var pointHighlightFill = "#fff";
 	var pointHighlightStroke = "#fff";
 	var graphColor;
-	if (metal == 'gold') graphColor = '#9FFF98';
-	else if (metal == 'silver') graphColor = '#F3FF88';
-	else graphColor = '#BBF5FF';
+	if (metal == 'platinum') graphColor = '#BBF5FF';
+	else if (metal == 'silver') graphColor = '#C29FFF';
+	else graphColor = '#9FFF98';
 	data = {
 		labels: xAxis,
 		datasets: [
@@ -202,6 +207,31 @@ $(window).load(function() {
 
 	var path = window.location.pathname;
 	var page = path.split("/").pop();
+
+
+	// Change {{metal}} to the metal value
+	for (var key in dataBind) {
+		if (dataBind.hasOwnProperty(key)) {
+			$('.metal').each(function(index) {
+				console.log(this);
+				var text = $(this).html().replace('{{'+key+'}}', dataBind[key]);
+				this.innerHTML = text;
+			})
+		}
+	}
+
+	// change the lengend colors for inventory page
+	if (page =="inventory.html") {
+		var legendColor;
+		switch (getParameter('metal').toLowerCase()) {
+			case 'silver': legendColor = 3; break;
+			case 'platinum': legendColor = 2; break;
+			default: legendColor = 1;
+		}
+		$('.legend-item-color').each(function (index) {
+			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
+		})
+	}
 
 
 	/* * * * * * * * * * * * * *

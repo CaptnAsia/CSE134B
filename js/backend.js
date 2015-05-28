@@ -52,6 +52,7 @@ function loginPressed(event) {
 }
 
 function getData(metal) {
+    metal = metal.toLowerCase();
     var authtoken = 'C5xqJubuHk82paW6ryzH';
     var xmlhttp;
     var dbLink;
@@ -61,16 +62,15 @@ function getData(metal) {
         xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
     var today = new Date();
-    2015-05-23
     var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     today.setMonth(today.getMonth()-1);
     var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    if (metal == 'gold') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    if (metal == 'platinum') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
     } else if (metal == 'silver') {
         dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
     } else {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
     }
 
     dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
