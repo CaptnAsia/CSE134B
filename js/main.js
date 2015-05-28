@@ -63,7 +63,7 @@ function loadSideNav(selected){
 	document.write("        <\/figure>       ");
 	document.write("        <\/a> ");
 	document.write("        <a href=\"inventory.html?metal=Gold\">");
-	if(!metal || metal == 'gold')
+	if((selected == 1 && !metal)|| metal == 'gold')
 		document.write("        <figure class='nav-selected'>");
 	else
 		document.write("        <figure>");
@@ -213,7 +213,6 @@ $(window).load(function() {
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
 			$('.metal').each(function(index) {
-				console.log(this);
 				var text = $(this).html().replace('{{'+key+'}}', dataBind[key]);
 				this.innerHTML = text;
 			})
