@@ -213,8 +213,8 @@ $(window).load(function() {
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
 			$('.metal').each(function(index) {
-				var text = $(this).html().replace('{{'+key+'}}', dataBind[key]);
-				this.innerHTML = text;
+				dataBind[key] = dataBind[key].charAt(0).toUpperCase() + dataBind[key].slice(1);
+				this.innerHTML = $(this).html().replace('{{'+key+'}}', dataBind[key]);;
 			})
 		}
 	}
