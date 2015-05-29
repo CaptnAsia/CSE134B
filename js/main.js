@@ -1,10 +1,14 @@
 var pageLoaded = false;
+var path = window.location.pathname;
+var page = path.split("/").pop();
+var graphData = {'data': {}}
 var dataBind = {
 	'metal': getParameter('metal') || 'gold'
 }
 
 
 loadMyStackJson();
+loadQuandl();
 
 function loadTopNav(){
 	document.write("    <nav>");
@@ -113,7 +117,66 @@ function loadFooter(){
 var data;
 /* MIKE LU CODE START */
 
+var finishGraph = function() {
+	var options = {
+		///Boolean - Whether grid lines are shown across the chart
+		scaleShowGridLines : true,
 
+		//String - Colour of the grid lines
+		scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
+
+		//Number - Width of the grid lines
+		scaleGridLineWidth : 1,
+
+		//Boolean - Whether to show horizontal lines (except X axis)
+		scaleShowHorizontalLines: true,
+
+		//Boolean - Whether to show vertical lines (except Y axis)
+		scaleShowVerticalLines: true,
+
+		scaleLabel: function(label){return '$' + label.value},
+
+		//Boolean - Whether the line is curved between points
+		bezierCurve : true,
+
+		//Number - Tension of the bezier curve between points
+		bezierCurveTension : 0.4,
+
+		//Boolean - Whether to show a dot for each point
+		pointDot : true,
+
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 4,
+
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
+
+		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+		pointHitDetectionRadius : 20,
+
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
+
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 2,
+
+		//Boolean - Whether to fill the dataset with a colour
+		datasetFill : true,
+
+		//String - A legend template
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+
+		responsive: true,
+
+		maintainAspectRatio: false,
+	};
+
+	var ctx = document.getElementById("total-chart").getContext("2d");
+	console.log(ctx + " " + graphData, + " " + options);
+	var coinChart = new Chart(ctx).Line(graphData.data,options);
+	coinChart.update();
+}
+/*
 var finishGraph = function (xAxis, yAxis, metal) {
 	metal = metal.toLowerCase();
 	var pointStroke = "rgba(255,255,255,0.6)";
@@ -126,7 +189,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 	data = {
 		labels: xAxis,
 		datasets: [
-			/*{
+			{
 				label: "Gold Total",
 				fillColor: "rgba(104, 206, 222, 0.05)",
 				strokeColor: "#FF6D67",
@@ -135,7 +198,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 				pointHighlightFill: pointHighlightFill,
 				pointHighlightStroke: pointHighlightStroke,
 				data: yAxis
-			},*/
+			},
 			 {
 			 label: "1ozt "+ metal,
 			 fillColor: "rgba(104, 206, 222, 0.05)",
@@ -208,7 +271,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 	var ctx = document.getElementById("total-chart").getContext("2d");
 	var coinChart = new Chart(ctx).Line(data,options);
 	coinChart.update();
-}
+}*/
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
@@ -261,14 +324,16 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
-var path = window.location.pathname;
-var page = path.split("/").pop();
+
 
 $(window).load(function() {
 
 	// makes sure data is finished before loading the user's stack
 	if (jsonFinished) {
 		loadMyStack();
+	}
+	if (historicPrices == 1) {
+		finishGraph();
 	}
 	pageLoaded = true;
 
@@ -293,9 +358,9 @@ $(window).load(function() {
 		$('.legend-item-color').each(function (index) {
 			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
 		})
+
+
 	}
-
-
 
 	// check if the market is open
 
@@ -325,6 +390,7 @@ $(window).load(function() {
 		isMarketOpen();
 	}
 
+
 	/* MIKE LU CODE END */
 
 	 $('.icon-spinner2').click(function(){
@@ -341,6 +407,7 @@ $(window).load(function() {
 	 *                         *
 	 * * * * * * * * * * * * * */
  	// graph for wire2 page
+	/*
  	var drawGraph = function(){
  		var pointStroke = "rgba(255,255,255,0.6)";
  		var pointHighlightFill = "#fff";
@@ -474,13 +541,13 @@ $(window).load(function() {
 		else if(page =="inventory.html"){
 			getData(getParameter('metal'));
 		}
-	};
+	};*/
 
 
 
 
 
-	drawGraph();
+	//drawGraph();
 
 	/* * * * * * * * * * * * * *
 	 *                         *
