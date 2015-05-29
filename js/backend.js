@@ -283,9 +283,21 @@ function getData(metal) {
     $.ajax({url: dbLink, success: function(result) {
         var xAxis = new Array(result.data.length);
         var yAxis = new Array(result.data.length);
-        for (var i = (result.data.length-1); i >= 0; i--) {
-            xAxis[result.data.length - i - 1] = result.data[i][0];
-            yAxis[result.data.length - i - 1] = result.data[i][1];
+        //var date = new Date();
+        var offset = 0;
+        var date = new Date(result.data[result.data.length-1][0]);
+        for (var i = result.data.length-1; i >= 0; i--) {
+        //for (var i = (result.data.length-1); i >= 0; i--) {
+            var chartDate = new Date(result.data[i][0]);
+            while (date < chartDate) {
+                console.log(date + ' ' + chartDate)
+                xAxis[offset] = date.getFullYear() + '-' + date.getMonth() + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+                yAxis[offset] = yAxis[offset] ? yAxis[offset] : yAxis[offset-1];
+                date.setDate(date.getDate()+1);
+                offset++;
+            }
+            xAxis[offset] = result.data[i][0];
+            yAxis[offset] = result.data[i][1];
         }
         if (!graphData.data.labels) graphData.data.labels = xAxis;
         var graphColor;
