@@ -11,7 +11,7 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"home.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"home.html\">ShinyStack<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -31,7 +31,7 @@ function loadTopNavPersist(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("        <a href=\"home.html\">COINFLIP<\/a>");
+	document.write("        <a href=\"home.html\">ShinyStack<\/a>");
 	document.write("        <svg class=\"icon-cog\">");
 	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
 	document.write("                <title>cog<\/title>");
@@ -94,7 +94,7 @@ function loadSideNav(selected){
 
 function loadFooter(){
 	document.write("    <footer>");
-	document.write("        &copy; 2015 CoinFlip");
+	document.write("        &copy; 2015 Team Bread");
 	document.write("    <\/footer> ");
 
 }
@@ -270,7 +270,7 @@ $(window).load(function() {
 	}
 
 	// check if the market is open
-	isMarketOpen();
+
 
 
 	/* * * * * * * * * * * * * *
@@ -283,6 +283,10 @@ $(window).load(function() {
 	if (document.getElementById('sign-up-button')) {
 		document.getElementById("sign-up-button").addEventListener("click", signupPressed, false);
 		document.getElementById("log-in-button").addEventListener("click", loginPressed, false);
+	}
+
+	if (page == 'home.html') {
+		isMarketOpen();
 	}
 	/* MIKE LU CODE END */
 
