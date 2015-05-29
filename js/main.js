@@ -172,7 +172,6 @@ var finishGraph = function() {
 	};
 
 	var ctx = document.getElementById("total-chart").getContext("2d");
-	console.log(ctx + " " + graphData, + " " + options);
 	var coinChart = new Chart(ctx).Line(graphData.data,options);
 	coinChart.update();
 }

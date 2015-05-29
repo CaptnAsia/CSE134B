@@ -279,7 +279,6 @@ function logOutPressed(event) {
 }
 
 function loadQuandl() {
-    console.log('working?');
     if (page == 'home.html') {
         getData('gold');
         getData('silver');
@@ -290,7 +289,6 @@ function loadQuandl() {
 }
 
 function getData(metal) {
-    console.log(metal);
     metal = metal.toLowerCase();
     var authtoken = 'C5xqJubuHk82paW6ryzH';
     var dbLink;
@@ -316,7 +314,6 @@ function getData(metal) {
         //for (var i = (result.data.length-1); i >= 0; i--) {
             var chartDate = new Date(result.data[i][0]);
             while (date < chartDate) {
-                console.log(date + ' ' + chartDate)
                 xAxis[offset] = date.getFullYear() + '-' + date.getMonth() + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
                 yAxis[offset] = yAxis[offset] ? yAxis[offset] : yAxis[offset-1];
                 date.setDate(date.getDate()+1);
