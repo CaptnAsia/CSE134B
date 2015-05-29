@@ -1,9 +1,7 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
 var myStackJson;
-if (Parse.User.current()) {
-    //alert(Parse.User.current().get('username'));
-}
+var jsonFinished = false;
 function loadMyStackJson() {
     myStackJson = {
         'gold': [],
@@ -13,6 +11,7 @@ function loadMyStackJson() {
 
     var Bullion = Parse.Object.extend("Bullion");
     var query = new Parse.Query(Bullion);
+    query.containedIn('owner', [Parse.User.current()])
     query.find({
       success: function(results) {
         //alert("Successfully retrieved " + results.length + " bullions.");
@@ -30,7 +29,7 @@ function loadMyStackJson() {
                     'id': bullion.id,
                     'name': bullion.get('name'),
                     'origin': bullion.get('origin'),
-                    'purchahseDate': bullion.get('purchaseDate'),
+                    'purchaseDate': bullion.get('purchaseDate'),
                     'quantity': bullion.get('quantity'),
                     'premium': bullion.get('premium'),
                     'unitPrice': bullion.get('unitPrice'),
@@ -40,10 +39,12 @@ function loadMyStackJson() {
             }
             //alert(JSON.stringify(myStackJson));
 
-            if (page === 'inventory.html') {
+            // If the page has already loaded then call the loadMyStack function
+            if (page === 'inventory.html' && pageLoaded) {
                 loadMyStack();
             }
         }
+          jsonFinished = true;
       },
       error: function(error) {
         alert("Error: " + error.code + " " + error.message);
@@ -290,3 +291,9 @@ function getData(metal) {
         /*
         */
 }
+
+$(function() {
+    $(document).ajaxStop(function() {
+        $(this).unbind("ajaxStop"); //prevent running again when other calls finish
+    });
+});
