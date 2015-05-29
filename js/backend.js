@@ -55,7 +55,9 @@ function loadMyStackJson() {
                 loadPurityHeader(metal);
                 loadMyStack(metal);
                 loadTotalValue(metal);
-                loadMetalDaily(metal);
+                if (historicPrices) {
+                    loadMetalDaily(metal);
+                }
             }
         }
           jsonFinished = true;
@@ -65,8 +67,10 @@ function loadMyStackJson() {
       }
     });
 }
-
 function loadMetalDaily(metal) {
+    alert(graphData.data.labels['2015-05-28']);
+}
+/*function loadMetalDaily(metal) {
     var authtoken = 'C5xqJubuHk82paW6ryzH';
     var xmlhttp;
     var dbLink;
@@ -126,7 +130,7 @@ function loadMetalDaily(metal) {
     }
     xmlhttp.open("GET",dbLink);
     xmlhttp.send();
-}
+}*/
 
 function loadPurityHeader(metal) {
     var purityHeader = document.getElementById('purity-header');
@@ -294,7 +298,7 @@ function getData(metal) {
     var dbLink;
     var today = new Date();
     var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    today.setMonth(today.getMonth()-1);
+    today.setDate(today.getDate()-30);
     var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     if (metal == 'platinum') {
         dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
@@ -305,23 +309,28 @@ function getData(metal) {
     }
     dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
     $.ajax({url: dbLink, success: function(result) {
-        var xAxis = new Array(result.data.length);
-        var yAxis = new Array(result.data.length);
+        var xAxis = new Array();
+        var yAxis = new Array();
         //var date = new Date();
         var offset = 0;
         var date = new Date(result.data[result.data.length-1][0]);
         for (var i = result.data.length-1; i >= 0; i--) {
-        //for (var i = (result.data.length-1); i >= 0; i--) {
             var chartDate = new Date(result.data[i][0]);
             while (date < chartDate) {
-                xAxis[offset] = date.getFullYear() + '-' + date.getMonth() + '-' + (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+                var dateString = date.getFullYear() + '-' +
+                    (date.getMonth() < 9 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '-' +
+                    (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
+                xAxis[offset] = dateString;
                 yAxis[offset] = yAxis[offset] ? yAxis[offset] : yAxis[offset-1];
                 date.setDate(date.getDate()+1);
                 offset++;
             }
             xAxis[offset] = result.data[i][0];
             yAxis[offset] = result.data[i][1];
+            date.setDate(date.getDate()+1);
+            offset++;
         }
+        console.log(result.data[1][0]);
         if (!graphData.data.labels) graphData.data.labels = xAxis;
         var graphColor;
         if (metal == 'platinum') graphColor = '#BBF5FF';
