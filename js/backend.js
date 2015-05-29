@@ -1,6 +1,8 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
 var myStackJson;
+var historicPrices = 0;
+var jsonFinished = false;
 
 function loadMyStackJson() {
     myStackJson = {
@@ -11,6 +13,7 @@ function loadMyStackJson() {
 
     var Bullion = Parse.Object.extend("Bullion");
     var query = new Parse.Query(Bullion);
+    query.containedIn('owner', [Parse.User.current()])
     query.find({
       success: function(results) {
         //alert("Successfully retrieved " + results.length + " bullions.");
@@ -38,11 +41,12 @@ function loadMyStackJson() {
             }
             //alert(JSON.stringify(myStackJson));
 
-            if (page === 'home.html') {
+            if (page === 'home.html' && pageLoaded) {
                 //loadTotalDaily();
             }
 
-            if (page === 'inventory.html') {
+            // If the page has already loaded then call the loadMyStack function
+            if (page === 'inventory.html' && pageLoaded) {
                 var metal = getParameter('metal');
                 if (metal === '') {
                     metal = 'gold';
@@ -54,6 +58,7 @@ function loadMyStackJson() {
                 loadMetalDaily(metal);
             }
         }
+          jsonFinished = true;
       },
       error: function(error) {
         alert("Error: " + error.code + " " + error.message);
@@ -268,6 +273,94 @@ function loginPressed(event) {
     }
 }
 
+function logOutPressed(event) {
+    Parse.User.logOut();
+    window.location.href = "./";
+}
+
+function loadQuandl() {
+    console.log('working?');
+    if (page == 'home.html') {
+        getData('gold');
+        getData('silver');
+        getData('platinum');
+    } else if (page == 'inventory.html') {
+        getData(getParameter('metal'));
+    }
+}
+
+function getData(metal) {
+    console.log(metal);
+    metal = metal.toLowerCase();
+    var authtoken = 'C5xqJubuHk82paW6ryzH';
+    var dbLink;
+    var today = new Date();
+    var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    today.setMonth(today.getMonth()-1);
+    var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    if (metal == 'platinum') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+    } else if (metal == 'silver') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+    } else {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    }
+    dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
+    $.ajax({url: dbLink, success: function(result) {
+        var xAxis = new Array(result.data.length);
+        var yAxis = new Array(result.data.length);
+        for (var i = (result.data.length-1); i >= 0; i--) {
+            xAxis[result.data.length - i - 1] = result.data[i][0];
+            yAxis[result.data.length - i - 1] = result.data[i][1];
+        }
+        if (!graphData.data.labels) graphData.data.labels = xAxis;
+        var graphColor;
+        if (metal == 'platinum') graphColor = '#BBF5FF';
+        else if (metal == 'silver') graphColor = '#C29FFF';
+        else graphColor = '#9FFF98';
+        if (!graphData.data.datasets) graphData.data.datasets = new Array();
+        graphData.data.datasets.push( {
+            label: '1ozt' + metal,
+            fillColor: "rgba(104, 206, 222, 0.05)",
+            strokeColor: graphColor,
+            pointColor: graphColor,
+            pointStrokeColor: "rgba(255,255,255,0.6)",
+            pointHighlightFill: "#fff",
+            pointHighlightStroke: "#fff",
+            data: yAxis
+        });
+        historicPrices++;
+        if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
+            (page == 'home.html' && historicPrices == 3))) {
+            finishGraph();
+        }
+    }})
+}
+/* var finishGraph = function (xAxis, yAxis, metal) {
+ metal = metal.toLowerCase();
+ var pointStroke = "rgba(255,255,255,0.6)";
+ var pointHighlightFill = "#fff";
+ var pointHighlightStroke = "#fff";
+ var graphColor;
+ if (metal == 'platinum') graphColor = '#BBF5FF';
+ else if (metal == 'silver') graphColor = '#C29FFF';
+ else graphColor = '#9FFF98';
+ data = {
+ labels: xAxis,
+ datasets: [
+{
+    label: "1ozt "+ metal,
+        fillColor: "rgba(104, 206, 222, 0.05)",
+    strokeColor: graphColor,
+    pointColor: graphColor,
+    pointStrokeColor: pointStroke,
+    pointHighlightFill: pointHighlightFill,
+    pointHighlightStroke: pointHighlightStroke,
+    data: yAxis
+}
+]
+};*/
+/*
 function getData(metal) {
     metal = metal.toLowerCase();
     var authtoken = 'C5xqJubuHk82paW6ryzH';
@@ -305,6 +398,10 @@ function getData(metal) {
     }
     xmlhttp.open("GET",dbLink);
     xmlhttp.send();
-        /*
-        */
-}
+}*/
+
+$(function() {
+    $(document).ajaxStop(function() {
+        $(this).unbind("ajaxStop"); //prevent running again when other calls finish
+    });
+});

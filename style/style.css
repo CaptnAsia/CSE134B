@@ -125,6 +125,18 @@ nav {
       -ms-transform: scale(1.05);
       -o-transform: scale(1.05);
       transform: scale(1.05); }
+  nav aside {
+    position: absolute;
+    left: auto;
+    right: 150px; }
+    nav aside #settingsBox {
+      width: 250px;
+      background-color: #272E32;
+      padding-bottom: 10px; }
+      nav aside #settingsBox #log-in-button {
+        display: block;
+        width: 90%;
+        margin: 0 auto; }
   nav .icon-spinner2 {
     left: 35px; }
   nav .icon-cog {
@@ -309,7 +321,8 @@ a {
   background: #397C86;
   border: 1px solid #151515; }
   #log-in-button:hover {
-    border: 1px solid #68CEDE; }
+    border: 1px solid #68CEDE;
+    cursor: pointer; }
 
 #w1-right {
   height: 450px; }

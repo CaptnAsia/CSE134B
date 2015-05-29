@@ -1,7 +1,14 @@
-
+var pageLoaded = false;
+var path = window.location.pathname;
+var page = path.split("/").pop();
+var graphData = {'data': {}}
 var dataBind = {
 	'metal': getParameter('metal') || 'gold'
 }
+
+
+loadMyStackJson();
+loadQuandl();
 
 function loadTopNav(){
 	document.write("    <nav>");
@@ -20,7 +27,11 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("    <\/nav>");
+	document.write("	<aside>");
+	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
+	document.write("	<\/aside>");
+	document.write("<\/nav>");
 }
 
 function loadTopNavPersist(){
@@ -40,6 +51,10 @@ function loadTopNavPersist(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
 	document.write("        <\/svg>");
+	document.write("	<aside>");
+	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
+	document.write("	<\/aside>");
 	document.write("    <\/nav>");
 }
 
@@ -102,7 +117,66 @@ function loadFooter(){
 var data;
 /* MIKE LU CODE START */
 
+var finishGraph = function() {
+	var options = {
+		///Boolean - Whether grid lines are shown across the chart
+		scaleShowGridLines : true,
 
+		//String - Colour of the grid lines
+		scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
+
+		//Number - Width of the grid lines
+		scaleGridLineWidth : 1,
+
+		//Boolean - Whether to show horizontal lines (except X axis)
+		scaleShowHorizontalLines: true,
+
+		//Boolean - Whether to show vertical lines (except Y axis)
+		scaleShowVerticalLines: true,
+
+		scaleLabel: function(label){return '$' + label.value},
+
+		//Boolean - Whether the line is curved between points
+		bezierCurve : true,
+
+		//Number - Tension of the bezier curve between points
+		bezierCurveTension : 0.4,
+
+		//Boolean - Whether to show a dot for each point
+		pointDot : true,
+
+		//Number - Radius of each point dot in pixels
+		pointDotRadius : 4,
+
+		//Number - Pixel width of point dot stroke
+		pointDotStrokeWidth : 1,
+
+		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
+		pointHitDetectionRadius : 20,
+
+		//Boolean - Whether to show a stroke for datasets
+		datasetStroke : true,
+
+		//Number - Pixel width of dataset stroke
+		datasetStrokeWidth : 2,
+
+		//Boolean - Whether to fill the dataset with a colour
+		datasetFill : true,
+
+		//String - A legend template
+		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
+
+		responsive: true,
+
+		maintainAspectRatio: false,
+	};
+
+	var ctx = document.getElementById("total-chart").getContext("2d");
+	console.log(ctx + " " + graphData, + " " + options);
+	var coinChart = new Chart(ctx).Line(graphData.data,options);
+	coinChart.update();
+}
+/*
 var finishGraph = function (xAxis, yAxis, metal) {
 	metal = metal.toLowerCase();
 	var pointStroke = "rgba(255,255,255,0.6)";
@@ -115,7 +189,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 	data = {
 		labels: xAxis,
 		datasets: [
-			/*{
+			{
 				label: "Gold Total",
 				fillColor: "rgba(104, 206, 222, 0.05)",
 				strokeColor: "#FF6D67",
@@ -124,7 +198,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 				pointHighlightFill: pointHighlightFill,
 				pointHighlightStroke: pointHighlightStroke,
 				data: yAxis
-			},*/
+			},
 			 {
 			 label: "1ozt "+ metal,
 			 fillColor: "rgba(104, 206, 222, 0.05)",
@@ -197,7 +271,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 	var ctx = document.getElementById("total-chart").getContext("2d");
 	var coinChart = new Chart(ctx).Line(data,options);
 	coinChart.update();
-}
+}*/
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
@@ -209,30 +283,39 @@ function isMarketOpen() {
 	var satDay = 6;
 	var sunDay = 0;
 	var date = new Date();
+	var hour = date.getUTCMinutes() == 0 ? 0 : 1
 	var closes = '';
 	var textAppend = document.createElement('span');
 	if (date.getDay() == satDay || date.getDay() == sunDay ||
 		date.getUTCHours() >= closeHour ||
 		(date.getUTCHours() == openHour && date.getMinutes() <= openMin) ||
 		(date.getUTCHours() < openHour)){
-		var addOn = 0;
-		var hour = date.getUTCMinutes() == 0 ? 0 : 1
+
 		textAppend.style.color = '#FF6A65';
 		textAppend.appendChild(document.createTextNode('closed'));
 		closes = 'opens in ';
 		if (date.getUTCDay() == satDay && date.getUTCHours() > 13) closes += '1d ';
 		else if (date.getUTCDay() == 5 && date.getUTCHours() > 13) closes += '2d '
 		var hoursLeft = date.getUTCHours() >= closeHour ? date.getUTCHours()-20 : date.getUTCHours()+hour;
-		closes += (addOn+ 16 - hoursLeft) + 'h' + (60*hour-date.getMinutes()) + 'min';
+		closes += (16 - hoursLeft) + 'h' + (60*hour-date.getUTCMinutes()) + 'min';
 	} else {
 		textAppend.style.color = '#A7FF8B';
 		textAppend.appendChild(document.createTextNode('open'));
-		closes = 'closes in ' + (closeHour - date.getUTCHours()) + 'h ' + (60*hour-date.getMinutes()) + 'min';
+		closes = 'closes in ' + (closeHour - hour - date.getUTCHours()) + 'h ' + (60*hour-date.getUTCMinutes()) + 'min';
 	}
 
 	document.getElementsByClassName('market-open')[0].appendChild(textAppend);
 	document.getElementsByClassName('market-time')[0].appendChild(document.createTextNode(closes));
 }
+
+function toggleSettings() {
+	document.getElementById('settingsBox').style.visibility =
+		document.getElementById('settingsBox').style.visibility == 'hidden' ? 'visible' : 'hidden';
+}
+
+
+
+
 /* MIKE LU CODE END */
 function getParameter(name) {
 	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -241,12 +324,18 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
-var path = window.location.pathname;
-var page = path.split("/").pop();
+
 
 $(window).load(function() {
 
-	loadMyStackJson();
+	// makes sure data is finished before loading the user's stack
+	if (jsonFinished) {
+		loadMyStack();
+	}
+	if (historicPrices == 1) {
+		finishGraph();
+	}
+	pageLoaded = true;
 
 	// Change {{metal}} to the metal value
 	for (var key in dataBind) {
@@ -269,6 +358,8 @@ $(window).load(function() {
 		$('.legend-item-color').each(function (index) {
 			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
 		})
+
+
 	}
 
 	// check if the market is open
@@ -287,9 +378,19 @@ $(window).load(function() {
 		document.getElementById("log-in-button").addEventListener("click", loginPressed, false);
 	}
 
+	if (document.getElementById('settingsBox')) {
+		document.getElementsByClassName("icon-cog")[0].addEventListener("click", toggleSettings, false);
+		document.getElementById('log-in-button').addEventListener("click", logOutPressed, false);
+
+		// input the current user name
+		document.getElementById('currentUser').appendChild(document.createTextNode(Parse.User.current().get('username')));
+	}
+
 	if (page == 'home.html') {
 		isMarketOpen();
 	}
+
+
 	/* MIKE LU CODE END */
 
 	 $('.icon-spinner2').click(function(){
@@ -306,6 +407,7 @@ $(window).load(function() {
 	 *                         *
 	 * * * * * * * * * * * * * */
  	// graph for wire2 page
+	/*
  	var drawGraph = function(){
  		var pointStroke = "rgba(255,255,255,0.6)";
  		var pointHighlightFill = "#fff";
@@ -439,13 +541,13 @@ $(window).load(function() {
 		else if(page =="inventory.html"){
 			getData(getParameter('metal'));
 		}
-	};
+	};*/
 
 
 
 
 
-	drawGraph();
+	//drawGraph();
 
 	/* * * * * * * * * * * * * *
 	 *                         *
