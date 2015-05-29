@@ -4,6 +4,7 @@ function loadMyStack() {
     var tbody = document.createElement('tbody');
     var mytable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
     var purityHeader = document.getElementById('purity-header');
+    var myStackTotalValue = document.getElementById('my-stack-total-value');
     var metal = getParameter('metal');
     if (metal === '') {
         metal = 'gold';
@@ -30,8 +31,10 @@ function loadMyStack() {
 
         if (results.length === 0) {
             tbody.innerHTML = "<tr><td>None<\/td><\/tr>";
+            myStackTotalValue.innerHTML = '$0.00';
         }
         else {
+            totalBullionValue = 0;
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
                 var newRow = tbody.insertRow(tbody.rows.length);
@@ -58,8 +61,11 @@ function loadMyStack() {
                 purity.appendChild(document.createTextNode(bullion.get('purity')));
 
                 var value = newRow.insertCell(newRow.cells.length);
-                value.appendChild(document.createTextNode(bullion.get('unitPrice')));
+                value.appendChild(document.createTextNode('$' + bullion.get('unitPrice')));
+
+                totalBullionValue += bullion.get('unitPrice') * bullion.get('quantity');
             }
+            myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
           mytable.appendChild(tbody);
           linkTable();
