@@ -53,7 +53,7 @@ function loadMyStackJson() {
 
 function loadMyStack() {
     var tbody = document.createElement('tbody');
-    var mytable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
+    var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
     var purityHeader = document.getElementById('purity-header');
     var myStackTotalValue = document.getElementById('my-stack-total-value');
 
@@ -77,13 +77,17 @@ function loadMyStack() {
     }
 
     var bullionStack = myStackJson[metal];
+    var totalBullionValue = 0;
 
     if (bullionStack.length === 0) {
-        tbody.innerHTML = "<tr><td>None<\/td><\/tr>";
+        var newRow = tbody.insertRow(tbody.rows.length);
+        var newCell = newRow.insertCell(newRow.cells.length);
+        newCell.appendChild(document.createTextNode('None'));
+        myTable.appendChild(tbody);
+
         myStackTotalValue.innerHTML = '$0.00';
     }
     else {
-        totalBullionValue = 0;
         for (var i = 0; i < bullionStack.length; i++) {
             var bullion = bullionStack[i];
 
@@ -115,11 +119,10 @@ function loadMyStack() {
 
             totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
         }
-        mytable.appendChild(tbody);
+        myTable.appendChild(tbody);
         linkTable();
-
-        myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
     }
+    myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 
     /*
     var Bullion = Parse.Object.extend("Bullion");
@@ -167,7 +170,7 @@ function loadMyStack() {
             }
             myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
         }
-          mytable.appendChild(tbody);
+          myTable.appendChild(tbody);
           linkTable();
       },
       error: function(error) {
