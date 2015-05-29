@@ -15,7 +15,9 @@
     <script src="./js/backend.js"></script>
     <script src="./js/main.js"></script>
     <script>
-
+        if (Parse.User.current()) {
+            window.location.href = './home.html';
+        }
     </script>
     <title>Login - ShinyStack</title>
 </head>
