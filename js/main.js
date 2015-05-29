@@ -100,6 +100,8 @@ function loadFooter(){
 }
 var data;
 /* MIKE LU CODE START */
+
+
 var finishGraph = function (xAxis, yAxis, metal) {
 	metal = metal.toLowerCase();
 	var pointStroke = "rgba(255,255,255,0.6)";
@@ -244,7 +246,6 @@ $(window).load(function() {
 		document.getElementById("sign-up-button").addEventListener("click", signupPressed, false);
 		document.getElementById("log-in-button").addEventListener("click", loginPressed, false);
 	}
-
 	/* MIKE LU CODE END */
 
 	 $('.icon-spinner2').click(function(){

@@ -1,13 +1,13 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
 function loadMyStack() {
-    var tbody = document.getElementById('my-stack-inventory');
+    var tbody = document.createElement('tbody');
+    var mytable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
     var purityHeader = document.getElementById('purity-header');
     var metal = getParameter('metal');
     if (metal === '') {
         metal = 'gold';
     }
-    // alert(metal);
     switch (metal) {
         case 'gold':
             purityHeader.innerHTML = "% au";
@@ -27,40 +27,61 @@ function loadMyStack() {
     query.find({
       success: function(results) {
         // alert("Successfully retrieved " + results.length + " bullions.");
+
         if (results.length === 0) {
-            tbody.innerHTML = "<tr><td>None</td></tr>";
+            tbody.innerHTML = "<tr><td>None<\/td><\/tr>";
         }
         else {
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
                 var newRow = tbody.insertRow(tbody.rows.length);
-
+                newRow.setAttribute('data-id', bullion.id);
+                var newElement;
                 var image = newRow.insertCell(newRow.cells.length);
-                image.className = 'stack-img-col';
-                image.innerHTML = '<div class="coin_mini"></div>';
+                image.className = 'stack_img_col';
+                newElement = document.createElement('div');
+                newElement.className ='coin_mini';
+                image.appendChild(newElement);
 
                 var name = newRow.insertCell(newRow.cells.length);
-                //name.innerHTML = '<a href="view.html">' + bullion.get('name') + '</a>';
-                name.innerHTML = '<a href="view.html"></a>' + bullion.get('name');
+                newElement = document.createTextNode(bullion.get('name'));
+                name.appendChild(newElement);
 
                 var quantity = newRow.insertCell(newRow.cells.length);
-                quantity.innerHTML = bullion.get('quantity');
+                quantity.appendChild(document.createTextNode(bullion.get('quantity')));
 
                 var weight = newRow.insertCell(newRow.cells.length);
-                weight.innerHTML = bullion.get('weight');
+
+                weight.appendChild(document.createTextNode(bullion.get('weight')));
 
                 var purity = newRow.insertCell(newRow.cells.length);
-                purity.innerHTML = bullion.get('purity');
+                purity.appendChild(document.createTextNode(bullion.get('purity')));
 
                 var value = newRow.insertCell(newRow.cells.length);
-                value.innerHTML = bullion.get('unitPrice');
+                value.appendChild(document.createTextNode(bullion.get('unitPrice')));
             }
         }
+          mytable.appendChild(tbody);
+          linkTable();
       },
       error: function(error) {
         alert("Error: " + error.code + " " + error.message);
       }
     });
+}
+
+function linkTable() {
+    var myStack = document.getElementsByClassName('my_stack')[0].firstElementChild;
+    for (var i = 1, row; row = myStack.rows[i]; i++) {
+        row.addEventListener("click", function (event) {
+            if (window.event) {
+                event = window.event;
+            }
+            var target = event.target ? event.target : event.srcElement;
+            //alert(event.target + ' ' + event.target.getAttribute('data-id'));
+            window.location.href = './view.html?id=' + event.target.parentNode.getAttribute('data-id');
+        }, false);
+    }
 }
 
 function signupPressed(event) {
