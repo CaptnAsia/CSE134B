@@ -20,7 +20,11 @@ function loadTopNav(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
 	document.write("        <\/svg>");
-	document.write("    <\/nav>");
+	document.write("	<aside>");
+	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
+	document.write("	<\/aside>");
+	document.write("<\/nav>");
 }
 
 function loadTopNavPersist(){
@@ -40,6 +44,10 @@ function loadTopNavPersist(){
 	document.write("            <\/symbol>");
 	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
 	document.write("        <\/svg>");
+	document.write("	<aside>");
+	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
+	document.write("	<\/aside>");
 	document.write("    <\/nav>");
 }
 
@@ -233,6 +241,15 @@ function isMarketOpen() {
 	document.getElementsByClassName('market-open')[0].appendChild(textAppend);
 	document.getElementsByClassName('market-time')[0].appendChild(document.createTextNode(closes));
 }
+
+function toggleSettings() {
+	document.getElementById('settingsBox').style.visibility =
+		document.getElementById('settingsBox').style.visibility == 'hidden' ? 'visible' : 'hidden';
+}
+
+
+
+
 /* MIKE LU CODE END */
 function getParameter(name) {
 	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -271,6 +288,8 @@ $(window).load(function() {
 		})
 	}
 
+
+
 	// check if the market is open
 
 
@@ -287,9 +306,18 @@ $(window).load(function() {
 		document.getElementById("log-in-button").addEventListener("click", loginPressed, false);
 	}
 
+	if (document.getElementById('settingsBox')) {
+		document.getElementsByClassName("icon-cog")[0].addEventListener("click", toggleSettings, false);
+		document.getElementById('log-in-button').addEventListener("click", logOutPressed, false);
+
+		// input the current user name
+		document.getElementById('currentUser').appendChild(document.createTextNode(Parse.User.current().get('username')));
+	}
+
 	if (page == 'home.html') {
 		isMarketOpen();
 	}
+
 	/* MIKE LU CODE END */
 
 	 $('.icon-spinner2').click(function(){

@@ -1,7 +1,9 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
 var myStackJson;
-
+if (Parse.User.current()) {
+    //alert(Parse.User.current().get('username'));
+}
 function loadMyStackJson() {
     myStackJson = {
         'gold': [],
@@ -238,6 +240,11 @@ function loginPressed(event) {
             }
         });
     }
+}
+
+function logOutPressed(event) {
+    Parse.User.logOut();
+    window.location.href = "./";
 }
 
 function getData(metal) {
