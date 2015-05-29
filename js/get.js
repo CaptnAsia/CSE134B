@@ -21,7 +21,7 @@ function extract(metals){
   return result;
 }
 
-function getPricePackets(callback){
+function setPriceTable(callback){
   var url = "http://integration.nfusionsolutions.biz/client/jmbullion/module/largehistoricalchart2/nflargehist?metal=gold";
 
   var xmlhttp;
@@ -75,4 +75,46 @@ function homePageCallback(gold,silver,plat){
   else tag.attr("class","neg-change");
 }
 
+var inventory_index;
+function inventoryCallback(gold,silver,plat){
+  var target = gold;
+  if(inventory_index == "Silver") target = silver;
+  else if(inventory_index == "Platinum") target = plat;
+
+  $("#price_table tr:first-child td:first-child").html("$"+target[0]);
+  $("#price_table tr:first-child td:nth-child(2)").html("$"+target[1]);
+  $("#price_table tr:first-child td:nth-child(3)").html("$"+target[2]);
+  var tag = $("#gold_price tr:first-child td:nth-child(3)");
+  if(target[2] > 0) tag.attr("class","pos-change");
+  else tag.attr("class","neg-change");
+}
+
+
+
+function retrieveGetParameters(){
+  var str = String(window.location);
+  var i = str.indexOf("?");
+  if(i == -1) return 0;
+  var paras = str.substring(i+1);
+
+  var result = new Object();
+  while(paras.length > 0){
+    // alert("paras = " + paras);
+    i = paras.indexOf('=');
+    if (i == -1) break;
+    var key = paras.substring(0,i);
+    paras = paras.substring(i+1);
+    i = paras.indexOf('&');
+    var value = "";
+    if(i != -1){
+      value = paras.substring(0,i);
+      paras = paras.substring(i+1);
+    }else if(paras.length > 0){
+      value = paras;
+      paras = "";
+    }
+    result[key] = value;
+  }
+  return result;
+}
 
