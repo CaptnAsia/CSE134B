@@ -14,6 +14,7 @@
     <script src="./js/Chart.js"></script>
     <script src="./js/backend.js"></script>
     <script src="./js/main.js"></script>
+    <script src="./js/get.js"></script>
     <title class="metal">My {{metal}} - CoinFlip</title>
 </head>
 
@@ -24,6 +25,12 @@
     <script type="text/javascript">
     loadSideNav(1);
     </script>
+    <script type="text/javascript">
+        var result = retrieveGetParameters();
+        inventory_index = result["metal"];
+        setPriceTable(inventoryCallback);
+    </script>
+
     <section class="main-section">
         <section class="coin_wrapper">
             <div class="mobile-nav metal">
@@ -36,7 +43,7 @@
                         <use xlink:href="#icon-keyboard-arrow-left"></use>
                     </svg>
                 </a>
-                MY {{metal}}
+                My {{metal}}
                 <a href="new.html">
                     <svg class="icon icon-add">
                         <symbol id="icon-add" viewBox="0 0 1024 1024">
@@ -88,7 +95,7 @@
                         Current Spot
                     </section>
                     <section class="market-item-stats">
-                        <table>
+                        <table id="price_table">
                             <tr>
                                 <td>1206.10</td>
                                 <td>1207.10</td>
