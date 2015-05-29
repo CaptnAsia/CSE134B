@@ -1,14 +1,65 @@
 Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8GDbGb6SzfrKmJaKOqIiFTeK");
 
+var myStackJson;
+
+function loadMyStackJson() {
+    myStackJson = {
+        'gold': [],
+        'silver': [],
+        'platinum': []
+    }
+
+    var Bullion = Parse.Object.extend("Bullion");
+    var query = new Parse.Query(Bullion);
+    query.find({
+      success: function(results) {
+        //alert("Successfully retrieved " + results.length + " bullions.");
+
+        if (results.length === 0) {
+            //alert('My Stack is empty!');
+        }
+        else {
+            totalBullionValue = 0;
+            for (var i = 0; i < results.length; i++) {
+                var bullion = results[i];
+                var metal = bullion.get('metal');
+
+                myStackJson[metal].push({
+                    'id': bullion.id,
+                    'name': bullion.get('name'),
+                    'origin': bullion.get('origin'),
+                    'purchahseDate': bullion.get('purchaseDate'),
+                    'quantity': bullion.get('quantity'),
+                    'premium': bullion.get('premium'),
+                    'unitPrice': bullion.get('unitPrice'),
+                    'weight': bullion.get('weight'),
+                    'purity': bullion.get('purity')
+                });
+            }
+            //alert(JSON.stringify(myStackJson));
+
+            if (page === 'inventory.html') {
+                loadMyStack();
+            }
+        }
+      },
+      error: function(error) {
+        alert("Error: " + error.code + " " + error.message);
+      }
+    });
+}
+
 function loadMyStack() {
     var tbody = document.createElement('tbody');
     var mytable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
     var purityHeader = document.getElementById('purity-header');
     var myStackTotalValue = document.getElementById('my-stack-total-value');
+
     var metal = getParameter('metal');
     if (metal === '') {
         metal = 'gold';
     }
+
     switch (metal) {
         case 'gold':
             purityHeader.innerHTML = "% au";
@@ -22,6 +73,53 @@ function loadMyStack() {
         default:
             purityHeader.innerHTML = "% au";
     }
+
+    var bullionStack = myStackJson[metal];
+
+    if (bullionStack.length === 0) {
+        tbody.innerHTML = "<tr><td>None<\/td><\/tr>";
+        myStackTotalValue.innerHTML = '$0.00';
+    }
+    else {
+        totalBullionValue = 0;
+        for (var i = 0; i < bullionStack.length; i++) {
+            var bullion = bullionStack[i];
+
+            var newRow = tbody.insertRow(tbody.rows.length);
+            newRow.setAttribute('data-id', bullion.id);
+
+            var image = newRow.insertCell(newRow.cells.length);
+            image.className = 'stack_img_col';
+            var newElement = document.createElement('div');
+            newElement.className ='coin_mini';
+            image.appendChild(newElement);
+
+            var name = newRow.insertCell(newRow.cells.length);
+            newElement = document.createTextNode(bullion['name']);
+            name.appendChild(newElement);
+
+            var quantity = newRow.insertCell(newRow.cells.length);
+            quantity.appendChild(document.createTextNode(bullion['quantity']));
+
+            var weight = newRow.insertCell(newRow.cells.length);
+
+            weight.appendChild(document.createTextNode(bullion['weight']));
+
+            var purity = newRow.insertCell(newRow.cells.length);
+            purity.appendChild(document.createTextNode(bullion['purity']));
+
+            var value = newRow.insertCell(newRow.cells.length);
+            value.appendChild(document.createTextNode('$' + bullion['unitPrice']));
+
+            totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
+        }
+        mytable.appendChild(tbody);
+        linkTable();
+
+        myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+    }
+
+    /*
     var Bullion = Parse.Object.extend("Bullion");
     var query = new Parse.Query(Bullion);
     query.equalTo("metal", metal);
@@ -74,6 +172,7 @@ function loadMyStack() {
         alert("Error: " + error.code + " " + error.message);
       }
     });
+    */
 }
 
 function linkTable() {

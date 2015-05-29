@@ -1,3 +1,4 @@
+
 var dataBind = {
 	'metal': getParameter('metal') || 'gold'
 }
@@ -205,11 +206,12 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
+var path = window.location.pathname;
+var page = path.split("/").pop();
+
 $(window).load(function() {
 
-	var path = window.location.pathname;
-	var page = path.split("/").pop();
-
+	loadMyStackJson();
 
 	// Change {{metal}} to the metal value
 	for (var key in dataBind) {
