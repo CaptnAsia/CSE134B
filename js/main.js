@@ -197,6 +197,41 @@ var finishGraph = function (xAxis, yAxis, metal) {
 	var coinChart = new Chart(ctx).Line(data,options);
 	coinChart.update();
 }
+
+// simple check if market is open. Only checks if outside 930-1600 and if on weekends
+function isMarketOpen() {
+	//13:30 UTC = 9:30 EST
+	//20:00 UTC = 16:00 EST
+	var openHour = 13;
+	var openMin = 30;
+	var closeHour = 20;
+	var satDay = 6;
+	var sunDay = 0;
+	var date = new Date();
+	var closes = '';
+	var textAppend = document.createElement('span');
+	if (date.getDay() == satDay || date.getDay() == sunDay ||
+		date.getUTCHours() >= closeHour ||
+		(date.getUTCHours() == openHour && date.getMinutes() <= openMin) ||
+		(date.getUTCHours() < openHour)){
+		var addOn = 0;
+		var hour = date.getUTCMinutes() == 0 ? 0 : 1
+		textAppend.style.color = '#FF6A65';
+		textAppend.appendChild(document.createTextNode('closed'));
+		closes = 'opens in ';
+		if (date.getUTCDay() == satDay && date.getUTCHours() > 13) closes += '1d ';
+		else if (date.getUTCDay() == 5 && date.getUTCHours() > 13) closes += '2d '
+		var hoursLeft = date.getUTCHours() >= closeHour ? date.getUTCHours()-20 : date.getUTCHours()+hour;
+		closes += (addOn+ 16 - hoursLeft) + 'h' + (60*hour-date.getMinutes()) + 'min';
+	} else {
+		textAppend.style.color = '#A7FF8B';
+		textAppend.appendChild(document.createTextNode('open'));
+		closes = 'closes in ' + (closeHour - date.getUTCHours()) + 'h ' + (60*hour-date.getMinutes()) + 'min';
+	}
+
+	document.getElementsByClassName('market-open')[0].appendChild(textAppend);
+	document.getElementsByClassName('market-time')[0].appendChild(document.createTextNode(closes));
+}
 /* MIKE LU CODE END */
 function getParameter(name) {
 	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -233,6 +268,9 @@ $(window).load(function() {
 			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
 		})
 	}
+
+	// check if the market is open
+	isMarketOpen();
 
 
 	/* * * * * * * * * * * * * *
