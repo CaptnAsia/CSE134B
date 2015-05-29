@@ -3,6 +3,7 @@ Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8G
 var myStackJson;
 var historicPrices = 0;
 var jsonFinished = false;
+
 function loadMyStackJson() {
     myStackJson = {
         'gold': [],
@@ -40,9 +41,21 @@ function loadMyStackJson() {
             }
             //alert(JSON.stringify(myStackJson));
 
+            if (page === 'home.html' && pageLoaded) {
+                //loadTotalDaily();
+            }
+
             // If the page has already loaded then call the loadMyStack function
             if (page === 'inventory.html' && pageLoaded) {
-                loadMyStack();
+                var metal = getParameter('metal');
+                if (metal === '') {
+                    metal = 'gold';
+                }
+
+                loadPurityHeader(metal);
+                loadMyStack(metal);
+                loadTotalValue(metal);
+                loadMetalDaily(metal);
             }
         }
           jsonFinished = true;
@@ -53,16 +66,70 @@ function loadMyStackJson() {
     });
 }
 
-function loadMyStack() {
-    var tbody = document.createElement('tbody');
-    var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
-    var purityHeader = document.getElementById('purity-header');
-    var myStackTotalValue = document.getElementById('my-stack-total-value');
+function loadMetalDaily(metal) {
+    var authtoken = 'C5xqJubuHk82paW6ryzH';
+    var xmlhttp;
+    var dbLink;
 
-    var metal = getParameter('metal');
-    if (metal === '') {
-        metal = 'gold';
+    if (window.XMLHttpRequest) {
+        xmlhttp= new XMLHttpRequest();
+    } else {
+        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
     }
+    var today = new Date();
+    var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    today.setMonth(today.getMonth()-1);
+    var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
+    if (metal == 'platinum') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+    } else if (metal == 'silver') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+    } else {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    }
+
+    dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
+    xmlhttp.onreadystatechange = function () {
+        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+            var myData = JSON.parse(xmlhttp.responseText);
+            var bullionStack = myStackJson[metal];
+            alert(JSON.stringify(bullionStack));
+            var yAxis = new Array(myData.data.length);
+
+            for (var i = (myData.data.length-1); i >= 0; i--) {
+                var quandlNextDay = (i === 0)? -1 : Date.parse(myData.data[i - 1][0]);
+                var quandlTodayValue = myData.data[i][1];
+
+                if (i === 1) {
+                    alert(myData.data[i - 1][0]);
+                    alert(quandlNextDay);
+                    alert(quandlTodayValue);
+                }
+
+                for (var j = 0; j < bullionStack.length; j++) {
+                    var entry = bullionStack[j];
+                    var entryDate = Date.parse(entry['purchaseDate']);
+                    if (i === myData.data.length-1 && j === 0) {
+                        alert(entry['purchaseDate']);
+                        alert(entryDate);
+                    }
+
+                    if (entryDate < quandlNextDay || quandlNextDay === -1) {
+                        var amountOzt = (entry['weight'] / 31.1) * entry['quantity'] * entry['purity'];
+                        yAxis[myData.data.length - i - 1] += amountOzt * quandlTodayValue;
+                    }
+                }
+            }
+
+            alert(yAxis);
+        }
+    }
+    xmlhttp.open("GET",dbLink);
+    xmlhttp.send();
+}
+
+function loadPurityHeader(metal) {
+    var purityHeader = document.getElementById('purity-header');
 
     switch (metal) {
         case 'gold':
@@ -77,17 +144,34 @@ function loadMyStack() {
         default:
             purityHeader.innerHTML = "% au";
     }
+}
+
+function loadTotalValue(metal) {
+    var myStackTotalValue = document.getElementById('my-stack-total-value');
 
     var bullionStack = myStackJson[metal];
     var totalBullionValue = 0;
+
+    if (bullionStack.length !== 0) {
+        for (var i = 0; i < bullionStack.length; i++) {
+            var bullion = bullionStack[i];
+            totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
+        }
+    }
+    myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+function loadMyStack(metal) {
+    var tbody = document.createElement('tbody');
+    var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
+
+    var bullionStack = myStackJson[metal];
 
     if (bullionStack.length === 0) {
         var newRow = tbody.insertRow(tbody.rows.length);
         var newCell = newRow.insertCell(newRow.cells.length);
         newCell.appendChild(document.createTextNode('None'));
         myTable.appendChild(tbody);
-
-        myStackTotalValue.innerHTML = '$0.00';
     }
     else {
         for (var i = 0; i < bullionStack.length; i++) {
@@ -118,68 +202,10 @@ function loadMyStack() {
 
             var value = newRow.insertCell(newRow.cells.length);
             value.appendChild(document.createTextNode('$' + bullion['unitPrice']));
-
-            totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
         }
         myTable.appendChild(tbody);
         linkTable();
     }
-    myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-
-    /*
-    var Bullion = Parse.Object.extend("Bullion");
-    var query = new Parse.Query(Bullion);
-    query.equalTo("metal", metal);
-    query.find({
-      success: function(results) {
-        // alert("Successfully retrieved " + results.length + " bullions.");
-
-        if (results.length === 0) {
-            tbody.innerHTML = "<tr><td>None<\/td><\/tr>";
-            myStackTotalValue.innerHTML = '$0.00';
-        }
-        else {
-            totalBullionValue = 0;
-            for (var i = 0; i < results.length; i++) {
-                var bullion = results[i];
-                var newRow = tbody.insertRow(tbody.rows.length);
-                newRow.setAttribute('data-id', bullion.id);
-                var newElement;
-                var image = newRow.insertCell(newRow.cells.length);
-                image.className = 'stack_img_col';
-                newElement = document.createElement('div');
-                newElement.className ='coin_mini';
-                image.appendChild(newElement);
-
-                var name = newRow.insertCell(newRow.cells.length);
-                newElement = document.createTextNode(bullion.get('name'));
-                name.appendChild(newElement);
-
-                var quantity = newRow.insertCell(newRow.cells.length);
-                quantity.appendChild(document.createTextNode(bullion.get('quantity')));
-
-                var weight = newRow.insertCell(newRow.cells.length);
-
-                weight.appendChild(document.createTextNode(bullion.get('weight')));
-
-                var purity = newRow.insertCell(newRow.cells.length);
-                purity.appendChild(document.createTextNode(bullion.get('purity')));
-
-                var value = newRow.insertCell(newRow.cells.length);
-                value.appendChild(document.createTextNode('$' + bullion.get('unitPrice')));
-
-                totalBullionValue += bullion.get('unitPrice') * bullion.get('quantity');
-            }
-            myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
-        }
-          myTable.appendChild(tbody);
-          linkTable();
-      },
-      error: function(error) {
-        alert("Error: " + error.code + " " + error.message);
-      }
-    });
-    */
 }
 
 function linkTable() {
