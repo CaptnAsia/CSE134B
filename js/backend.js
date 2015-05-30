@@ -434,6 +434,48 @@ function getData(metal) {
     xmlhttp.send();
 }*/
 
+function saveBullion() {
+	var Bullion = Parse.Object.extend("Bullion");
+	var bullion = new Bullion();
+	
+	var purchaseDate = document.getElementsByName("purchase_date");
+	var save_date = new Date(purchaseDate[0].value);
+	alert(save_date)
+	
+	var save_input = document.getElementById("metal_type");
+	bullion.set("metal", save_input.options[save_input.selectedIndex].text);
+	save_input = document.getElementById("coin_type");
+	bullion.set("name", save_input.options[save_input.selectedIndex].text);
+	
+	save_input = document.getElementsByName("premium");
+	bullion.set("premium", Number(save_input[0].value));
+
+	save_input = document.getElementsByName("quantity");
+	bullion.set("quantity", Number(save_input[0].value));
+	
+	save_input = document.getElementsByName("unit_price");
+	bullion.set("unitPrice", Number(save_input[0].value));
+	
+	bullion.set("investment", 1);
+	bullion.set("origin", "US");
+	bullion.set("owner", Parse.User.current());
+	bullion.set("purchaseDate", save_date);
+	bullion.set("purity", .85);
+	bullion.set("weight", 1.234);
+
+	bullion.save(null, {
+	  success: function(bullion) {
+		// Execute any logic that should take place after the object is saved.
+		alert('New object created with objectId: ' + bullion.id);
+	  },
+	  error: function(bullion, error) {
+		// Execute any logic that should take place if the save fails.
+		// error is a Parse.Error with an error code and message.
+		alert('Failed to create new object, with error code: ' + error.message);
+	  }
+	});
+}
+
 $(function() {
     $(document).ajaxStop(function() {
         $(this).unbind("ajaxStop"); //prevent running again when other calls finish
