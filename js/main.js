@@ -358,6 +358,10 @@ $(window).load(function() {
 			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
 		})
 
+		if (historicPrices) {
+			loadMetalDaily(metal);
+		}
+
 
 	}
 

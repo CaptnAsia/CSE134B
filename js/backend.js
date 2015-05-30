@@ -68,7 +68,19 @@ function loadMyStackJson() {
     });
 }
 function loadMetalDaily(metal) {
-    alert(graphData.data.labels['2015-05-28']);
+    //alert(graphData.data.labels.indexOf('2015-05-28'));
+    // value of 1ozt of metal yesterday
+    var yesterday = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length -2];
+    // value of 1ozt of metal today
+    var today = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length-1];
+
+    // value of 1ozt of metal at beginning of month
+    var beginning = graphData.data.datasets[0].data[0];
+
+    // Daily Percentage of change of market percent.
+    // TODO: do math here, eric, for the user's
+    var dailyPercent = today/yesterday - 1;
+    alert(dailyPercent);
 }
 /*function loadMetalDaily(metal) {
     var authtoken = 'C5xqJubuHk82paW6ryzH';
@@ -330,7 +342,6 @@ function getData(metal) {
             date.setDate(date.getDate()+1);
             offset++;
         }
-        console.log(result.data[1][0]);
         if (!graphData.data.labels) graphData.data.labels = xAxis;
         var graphColor;
         if (metal == 'platinum') graphColor = '#BBF5FF';
@@ -351,7 +362,12 @@ function getData(metal) {
         if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
             (page == 'home.html' && historicPrices == 3))) {
             finishGraph();
+            if (pageLoaded && jsonFinished) {
+                loadMetalDaily();
+            }
         }
+
+
     }})
 }
 /* var finishGraph = function (xAxis, yAxis, metal) {
