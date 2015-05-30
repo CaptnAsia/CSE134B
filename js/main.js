@@ -360,6 +360,21 @@ $(window).load(function() {
 
 
 	}
+	else if(page == "new.html") {
+		//change to current day
+		var today = new Date();
+		var month = today.getMonth()+1;
+		var day = today.getDate();
+		if(month < 10) {
+			month = "0"+month;
+		}
+		if(day < 10) {
+			day = "0"+day;
+		}
+		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;		
+		var purchaseDate = document.getElementsByName("purchase_date");
+		purchaseDate[0].value = todayFormatted;
+	}
 
 	// check if the market is open
 

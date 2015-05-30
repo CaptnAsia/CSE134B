@@ -9,7 +9,9 @@
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+	<script src="./js/parse-1.4.2.js"></script>
     <script src="./js/jquery-1.11.2.min.js"></script>
+	<script src="./js/backend.js"></script>
     <script src="./js/velocity.min.js"></script>
     <script src="./js/main.js"></script>
     <title>New Item - ShinyStack</title>
@@ -59,7 +61,7 @@
                         <tr>
                             <td>Metal</td>
                             <td>
-                                <select>
+                                <select id="metal_type">
                                     <option value="gold">Gold</option>
                                     <option value="silver">Silver</option>
                                     <option value="platinum">Platinum</option>
@@ -69,15 +71,15 @@
                         <tr>
                             <td>Type</td>
                             <td>
-                                <select>
-                                    <option selected value="us_eagle">US Eagle</option>
+                                <select id="coin_type">
+                                    <option selected value="US Eagle">US Eagle</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Purchase Date</td>
                             <td>
-                                <input name="purchase_date" value="04 March 2015" />
+                                <input type="date" name="purchase_date" value="" />
                             </td>
                         </tr>
                         <tr>
@@ -89,18 +91,18 @@
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input name="quantity" value="47.00" />
+                                <input name="premium" value="0.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input name="quantity" value="1250.60" />
+                                <input name="unit_price" value="0.00" />
                             </td>
                         </tr>
                         <tr>
-                            <td>Gold %</td>
-                            <td>0.999</td>
+                            <td>Purity</td>
+                            <td>91.67%</td>
                         </tr>
                         <tr>
                             <td>Weight/unit (g)</td>
@@ -123,7 +125,7 @@
                             <td><strong>1199.10</strong></td>
                         </tr>
                     </table>
-                    <a href="inventory.html"><span id="save">Save to My Stack</span></a>
+                    <p onclick="saveBullion()" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
                     <a href="inventory.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>

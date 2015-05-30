@@ -418,6 +418,49 @@ function getData(metal) {
     xmlhttp.send();
 }*/
 
+function saveBullion() {
+	var Bullion = Parse.Object.extend("Bullion");
+	var bullion = new Bullion();
+	
+	var m_type = document.getElementById("metal_type");
+	var m_input = m_type.options[m_type.selectedIndex].text;
+	var c_type = document.getElementById("coin_type");
+	var c_input = c_type.options[c_type.selectedIndex].text;
+	var field = document.getElementsByName("premium");
+	bullion.set("premium", Number(field[0].value));
+
+	//var field_input = Number(field[0].value);
+	field = document.getElementsByName("quantity");
+	bullion.set("quantity", Number(field[0].value));
+	field = document.getElementsByName("unit_price");
+	bullion.set("unit_price", Number(field[0].value));
+
+
+	
+	bullion.set("investment", 1);
+	bullion.set("metal", m_input);
+	bullion.set("name", c_input);
+	bullion.set("origin", "US");
+	//bullion.set("owner", "");
+	//bullion.set("purchaseDate", "US Eagle");
+	bullion.set("purity", .85);
+	//bullion.set("quantity", Number(field[0].value));
+	//bullion.set("unitPrice", Number(field[0].value));
+	bullion.set("weight", 1.234);
+
+	bullion.save(null, {
+	  success: function(bullion) {
+		// Execute any logic that should take place after the object is saved.
+		alert('New object created with objectId: ' + bullion.id);
+	  },
+	  error: function(bullion, error) {
+		// Execute any logic that should take place if the save fails.
+		// error is a Parse.Error with an error code and message.
+		alert('Failed to create new object, with error code: ' + error.message);
+	  }
+	});
+}
+
 $(function() {
     $(document).ajaxStop(function() {
         $(this).unbind("ajaxStop"); //prevent running again when other calls finish
