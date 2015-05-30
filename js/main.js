@@ -371,7 +371,7 @@ $(window).load(function() {
 		if(day < 10) {
 			day = "0"+day;
 		}
-		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;		
+		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
 		var purchaseDate = document.getElementsByName("purchase_date");
 		purchaseDate[0].value = todayFormatted;
 	}
