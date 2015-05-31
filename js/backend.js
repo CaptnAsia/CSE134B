@@ -25,7 +25,7 @@ function loadMyStackJson() {
             totalBullionValue = 0;
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
-                var metal = bullion.get('metal');
+                var metal = bullion.get('metal').toLowerCase();
 
                 myStackJson[metal].push({
                     'id': bullion.id,
