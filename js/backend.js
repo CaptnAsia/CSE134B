@@ -55,6 +55,7 @@ function loadMyStackJson() {
                 loadPurityHeader(metal);
                 loadMyStack(metal);
                 loadTotalValue(metal);
+
                 if (historicPrices) {
                     loadMetalDaily(metal);
                 }
@@ -78,9 +79,13 @@ function loadMetalDaily(metal) {
     var beginning = graphData.data.datasets[0].data[0];
 
     // Daily Percentage of change of market percent.
-    // TODO: do math here, eric, for the user's
-    var dailyPercent = today/yesterday - 1;
-    alert(dailyPercent);
+    // //TODO: do math here, eric, for the user's
+    var dailyPercent = (today/yesterday - 1).toFixed(2);
+    // Doesn't work yet
+    dailyPercent = (dailyPercent >= 0)? '+' + dailyPercent : dailyPercent;
+    var dailyPercentHTML = document.getElementById('daily-change-percent');
+    dailyPercentHTML.innerHTML = dailyPercent;
+    //alert("dailyPercent: " + dailyPercent);
 }
 /*function loadMetalDaily(metal) {
     var authtoken = 'C5xqJubuHk82paW6ryzH';
