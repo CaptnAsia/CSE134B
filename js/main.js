@@ -5,6 +5,8 @@ var graphData = {'data': {}}
 var dataBind = {
 	'metal': getParameter('metal') || 'gold'
 }
+var marketPriceLoaded = false;
+var bidPrices = [0,0,0];
 
 
 loadMyStackJson();

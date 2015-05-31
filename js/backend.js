@@ -54,7 +54,7 @@ function loadMyStackJson() {
 
                 loadPurityHeader(metal);
                 loadMyStack(metal);
-                loadTotalValue(metal);
+                // loadTotalValue(metal);
 
                 if (historicPrices) {
                     loadMetalDaily(metal);
