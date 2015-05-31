@@ -72,4 +72,3 @@ function retrieveGetParameters(){
   }
   return result;
 }
-

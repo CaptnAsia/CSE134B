@@ -102,7 +102,19 @@ are some notes about how we decided to implement certain features of the app.
 	   not work as intended because we can't get the Parse data in Internet
 	   Explorer.
 
-	3) TODO: Frankie: talk about your get.js file and explain how can you get it to work.
+	3) Retrieving the Bid/Ask/Change prices was one hell of a task. First we had
+		 to find a website that has this information, which too more than an hour!
+		 Then, we need to figure out a way to parse all the information from the 
+		 website. Because of Chrome's same-origin policy, we cannot parse htmls
+		 directly in javascript. Therefore, I wrote a php script on my server to
+		 parse the html instead. It uses curl to retrieve the html, then parse it
+		 and create an array of json objects. To make it work, I also added two 
+		 headers, one is the content type, used to specify the content format as 
+		 json. Secondly, I set the access-control-allow-origin header to accept
+		 origin from anywhere, this allows any client side javascript to retrieve
+		 the information. Finally, all we had to do is to issue an ajax request 
+		 to that php file in our javascript. The returned json objects would contain
+		 the information.
 
 	4) When getting the details (purity, weight, etc) of each type of bullion,
 	   we went to the bullion coin Wikipedia page for this data, and hardcoded
