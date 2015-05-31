@@ -323,20 +323,7 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
-
-
 $(window).load(function() {
-
-	// makes sure data is finished before loading the user's stack
-	if (jsonFinished) {
-		loadMyStack();
-	}
-	if (historicPrices == 1) {
-		finishGraph();
-	}
-	pageLoaded = true;
-
-	// Change {{metal}} to the metal value
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
 			$('.metal').each(function(index) {
@@ -345,39 +332,55 @@ $(window).load(function() {
 			})
 		}
 	}
-
-	// change the lengend colors for inventory page
-	if (page =="inventory.html") {
-		var legendColor;
-		switch (getParameter('metal').toLowerCase()) {
-			case 'silver': legendColor = 3; break;
-			case 'platinum': legendColor = 2; break;
-			default: legendColor = 1;
-		}
-		$('.legend-item-color').each(function (index) {
-			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
-		})
-
-		if (historicPrices) {
-			loadMetalDaily(metal);
-		}
-
+	// makes sure data is finished before loading the user's stack
+	if (jsonFinished) {
+		loadMyStack();
+	}
+	// quandl data?
+	if (historicPrices == 1) {
 
 	}
-	else if(page == "new.html") {
-		//change to current day
-		var today = new Date();
-		var month = today.getMonth()+1;
-		var day = today.getDate();
-		if(month < 10) {
-			month = "0"+month;
+	pageLoaded = true;
+
+	// Change {{metal}} to the metal value
+
+
+	// change the lengend colors for inventory page
+	if (page =='home.html') {
+		if (historicPrices == 3) {
+			finishGraph();
 		}
-		if(day < 10) {
-			day = "0"+day;
+	} else if (page =="inventory.html") {
+			var legendColor;
+			switch (getParameter('metal').toLowerCase()) {
+				case 'silver': legendColor = 3; break;
+				case 'platinum': legendColor = 2; break;
+				default: legendColor = 1;
+			}
+			$('.legend-item-color').each(function (index) {
+				this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
+			})
+
+			if (historicPrices) {
+				loadMetalDaily(metal);
+				finishGraph();
+			}
+
+		else if(page == "new.html") {
+			//change to current day
+			var today = new Date();
+			var month = today.getMonth()+1;
+			var day = today.getDate();
+			if(month < 10) {
+				month = "0"+month;
+			}
+			if(day < 10) {
+				day = "0"+day;
+			}
+			var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
+			var purchaseDate = document.getElementsByName("purchase_date");
+			purchaseDate[0].value = todayFormatted;
 		}
-		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
-		var purchaseDate = document.getElementsByName("purchase_date");
-		purchaseDate[0].value = todayFormatted;
 	}
 
 	// check if the market is open
