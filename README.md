@@ -21,6 +21,7 @@ Navigation:
 #   Cross-Platform Issues   #
 # # # # # # # # # # # # # # #
 
+(Provided documented issues by The Dream Team)
 Chrome:
 	We mainly developed on Chrome, so there were issues with compatibility in
 	that department. 
@@ -50,6 +51,7 @@ Safari:
 	that doesn't work for some strange reason, so we compensated with some
 	white-space: nowrap so that our mobile toggling selectors didn't overflow.
 
+(Our discovered issues by Team Bread)
 Internet Explorer:
 	Internet Explorer will not load the Parse data. More on that later in the
 	README.
