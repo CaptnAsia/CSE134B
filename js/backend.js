@@ -311,14 +311,14 @@ function loadBullion(bullion_id){
                             var weightPerUnit2 = weightPerUnitRow.insertCell(weightPerUnitRow.cells.length);
                             var cellData = (Number(bullion.get('weight')))/(Number(bullion.get('quantity')));
                             weightPerUnit2.appendChild(document.createTextNode(cellData));
-
+                            /*
                             var gramsPerUnitRow = tbody.insertRow(tbody.rows.length);
                             var gramsPerUnit1 = gramsPerUnitRow.insertCell(gramsPerUnitRow.cells.length); 
                             gramsPerUnit1.appendChild(document.createTextNode(bullion.get('metal') + ' g/u'));
                             var gramsPerUnit2 = gramsPerUnitRow.insertCell(gramsPerUnitRow.cells.length);
                             var cellData2 = (Number(bullion.get('weight')) * Number(bullion.get('purity')))/(Number(bullion.get('quantity')));
                             gramsPerUnit2.appendChild(document.createTextNode(cellData2));
-
+                            */
                             var oztPerUnitRow = tbody.insertRow(tbody.rows.length);
                             var oztPerUnit1 = oztPerUnitRow.insertCell(oztPerUnitRow.cells.length); 
                             oztPerUnit1.appendChild(document.createTextNode(bullion.get('metal') + ' ozt/u'));
