@@ -40,7 +40,6 @@ function loadMyStackJson() {
                     'purity': bullion.get('purity')
                 });
             }
-            //alert(JSON.stringify(myStackJson));
 
             if (page === 'home.html' && pageLoaded) {
                 //loadTotalDaily();
@@ -89,67 +88,6 @@ function loadMetalDaily(metal) {
     dailyPercentHTML.innerHTML = dailyPercent;
     //alert("dailyPercent: " + dailyPercent);
 }
-/*function loadMetalDaily(metal) {
-    var authtoken = 'C5xqJubuHk82paW6ryzH';
-    var xmlhttp;
-    var dbLink;
-
-    if (window.XMLHttpRequest) {
-        xmlhttp= new XMLHttpRequest();
-    } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    var today = new Date();
-    var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    today.setMonth(today.getMonth()-1);
-    var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    if (metal == 'platinum') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
-    } else if (metal == 'silver') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
-    } else {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
-    }
-
-    dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var myData = JSON.parse(xmlhttp.responseText);
-            var bullionStack = myStackJson[metal];
-            alert(JSON.stringify(bullionStack));
-            var yAxis = new Array(myData.data.length);
-
-            for (var i = (myData.data.length-1); i >= 0; i--) {
-                var quandlNextDay = (i === 0)? -1 : Date.parse(myData.data[i - 1][0]);
-                var quandlTodayValue = myData.data[i][1];
-
-                if (i === 1) {
-                    alert(myData.data[i - 1][0]);
-                    alert(quandlNextDay);
-                    alert(quandlTodayValue);
-                }
-
-                for (var j = 0; j < bullionStack.length; j++) {
-                    var entry = bullionStack[j];
-                    var entryDate = Date.parse(entry['purchaseDate']);
-                    if (i === myData.data.length-1 && j === 0) {
-                        alert(entry['purchaseDate']);
-                        alert(entryDate);
-                    }
-
-                    if (entryDate < quandlNextDay || quandlNextDay === -1) {
-                        var amountOzt = (entry['weight'] / 31.1) * entry['quantity'] * entry['purity'];
-                        yAxis[myData.data.length - i - 1] += amountOzt * quandlTodayValue;
-                    }
-                }
-            }
-
-            alert(yAxis);
-        }
-    }
-    xmlhttp.open("GET",dbLink);
-    xmlhttp.send();
-}*/
 
 function loadPurityHeader(metal) {
     var purityHeader = document.getElementById('purity-header');
