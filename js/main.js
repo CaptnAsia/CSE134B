@@ -5,6 +5,8 @@ var graphData = {'data': {}}
 var dataBind = {
 	'metal': getParameter('metal') || 'gold'
 }
+var marketPriceLoaded = false;
+var bidPrices = [0,0,0];
 
 
 loadMyStackJson();
@@ -335,7 +337,7 @@ $(window).load(function() {
 		finishGraph();
 	}
 	pageLoaded = true;
-
+	
 	// Change {{metal}} to the metal value
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
@@ -349,6 +351,9 @@ $(window).load(function() {
 	// change the lengend colors for inventory page
 	if (page =="inventory.html") {
 		var legendColor;
+		//lastMetal = getParameter('metal').toLowerCase();
+		//loadBullionStack(lastMetal);
+		//alert(lastMetal + 'inventoryLastMetal');
 		switch (getParameter('metal').toLowerCase()) {
 			case 'silver': legendColor = 3; break;
 			case 'platinum': legendColor = 2; break;
@@ -359,7 +364,7 @@ $(window).load(function() {
 		})
 
 		if (historicPrices) {
-			loadMetalDaily(metal);
+			loadMetalDaily(getParameter('metal').toLowerCase());
 		}
 
 
@@ -378,6 +383,14 @@ $(window).load(function() {
 		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
 		var purchaseDate = document.getElementsByName("purchase_date");
 		purchaseDate[0].value = todayFormatted;
+	}
+
+	else if(page == "view.html"){
+		var bull_id = getParameter('id');
+		//var metal = getParameter('metal');
+		//alert(metal + 'from if');
+		//alert(metalforView + 'from if');
+		loadBullion(bull_id);
 	}
 
 	// check if the market is open
