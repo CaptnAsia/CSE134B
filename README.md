@@ -103,7 +103,7 @@ are some notes about how we decided to implement certain features of the app.
 	   Explorer.
 
 	3) Retrieving the Bid/Ask/Change prices was one hell of a task. First we had
-		 to find a website that has this information, which too more than an hour!
+		 to find a website that has this information, which took more than an hour!
 		 Then, we need to figure out a way to parse all the information from the 
 		 website. Because of Chrome's same-origin policy, we cannot parse htmls
 		 directly in javascript. Therefore, I wrote a php script on my server to
@@ -142,11 +142,20 @@ are some notes about how we decided to implement certain features of the app.
 	   onto the web page in the form of either graphs, percentages, or lists of
 	   bullion a user owns.
 
-	8) We didn't prioritize adding an edit feature for view.html when we were
+
+	8) Unfortunately, we did not have time to plot the graph for our "My Stack"
+	   totals. Considering how many users that would potentially use this application,
+	   we felt that it would be impractical to store all of the historic data for the
+	   total value of each of the user's bullions. In other words, we couldn't
+	   (didn't have enough time) figure out an efficient method/formula to store &
+	   calculate the historic price of each of the user's bullions (we tried though!).
+
+	9) We didn't prioritize adding an edit feature for view.html when we were
 	   looking at each individual bullion since we didn't see a whole lot of 
 	   functionality in implementing this feature. THe only situation would be
 	   if data was inputted incorrectly when the coin was first added, but in
 	   order to prevent clients from mis-editing it unnecessarily, we decided 
 	   not to implement this feature.
+=======   
 
 
