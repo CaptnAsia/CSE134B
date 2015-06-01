@@ -17,9 +17,12 @@ function getMetalPrices(callback){
 }
 
 function modifyPriceTable(table_id, metal){
-  $(table_id +" tr:first-child td:first-child").html("$"+metal.bid);
-  $(table_id +" tr:first-child td:nth-child(2)").html("$"+metal.ask);
-  $(table_id +" tr:first-child td:nth-child(3)").html("$"+metal.change);
+  var bid = "$"+String(metal.bid).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  var ask = "$"+String(metal.ask).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  var change = "$"+String(metal.change).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  $(table_id +" tr:first-child td:first-child").html(bid);
+  $(table_id +" tr:first-child td:nth-child(2)").html(ask);
+  $(table_id +" tr:first-child td:nth-child(3)").html(change);
 
   var tag = $(table_id + " tr:first-child td:nth-child(3)");
   if(metal.change > 0) tag.attr("class","pos-change");
@@ -120,7 +123,7 @@ function loadStackValue(target_metal, bid_price){
             value = 0;
           }
         }
-        totalValues += value;
+        totalValues += value + bullion.get('premium');
       }
       //update the value
       totalValues = totalValues.toFixed(2)
@@ -133,47 +136,3 @@ function loadStackValue(target_metal, bid_price){
     }
   });
 }
-
-// if (results.length === 0)
-//       else {
-//           totalBullionValue = 0;
-//           for (var i = 0; i < results.length; i++) {
-//               var bullion = results[i];
-//               var metal = bullion.get('metal').toLowerCase();
-
-//               myStackJson[metal].push({
-//                   'id': bullion.id,
-//                   'name': bullion.get('name'),
-//                   'origin': bullion.get('origin'),
-//                   'purchaseDate': bullion.get('purchaseDate'),
-//                   'quantity': bullion.get('quantity'),
-//                   'premium': bullion.get('premium'),
-//                   'unitPrice': bullion.get('unitPrice'),
-//                   'weight': bullion.get('weight'),
-//                   'purity': bullion.get('purity')
-//               });
-//           }
-//           //alert(JSON.stringify(myStackJson));
-
-//           if (page === 'home.html' && pageLoaded) {
-//               //loadTotalDaily();
-//           }
-
-//           // If the page has already loaded then call the loadMyStack function
-//           if (page === 'inventory.html' && pageLoaded) {
-//               var metal = getParameter('metal');
-//               if (metal === '') {
-//                   metal = 'gold';
-//               }
-
-//               loadPurityHeader(metal);
-//               loadMyStack(metal);
-//               // loadTotalValue(metal);
-//               loadStackValue();
-
-//               if (historicPrices) {
-//                   loadMetalDaily(metal);
-//               }
-//           }
-//       }
-//         jsonFinished = true;
