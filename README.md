@@ -115,6 +115,10 @@ are some notes about how we decided to implement certain features of the app.
 		 the information. Finally, all we had to do is to issue an ajax request 
 		 to that php file in our javascript. The returned json objects would contain
 		 the information.
+		 The url we used to retrieve bid/ask/change prices is:
+		 http://www.frankieliu.com/ucsd/cse134b/prices.php
+		 The actual php script can be viewed here (view page source):
+		 http://www.frankieliu.com/ucsd/cse134b/prices.html
 
 	4) When getting the details (purity, weight, etc) of each type of bullion,
 	   we went to the bullion coin Wikipedia page for this data, and hardcoded
