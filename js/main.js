@@ -381,19 +381,43 @@ $(window).load(function() {
 		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
 		var purchaseDate = document.getElementsByName("purchase_date");
 		purchaseDate[0].value = todayFormatted;
-		
-		function update_total(quantity, premium, unit_price) {
-			var total = quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))
+
+		function update_total(quantity, premium, unit_price, update_gold) {
+			if(quantity[0].value < 0) {
+				quantity[0].value = 0;
+			}
+			else if(premium[0].value < 0) {
+				premium[0].value = 0;
+			}
+			else if(unit_price[0].value < 0) {
+				unit_price[0].value = 0;
+			}
+			
+			quantity[0].value = Math.floor(quantity[0].value);
+			premium[0].value = Number(premium[0].value).toFixed(2);
+			unit_price[0].value = Number(unit_price[0].value).toFixed(2);
+			var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))).toFixed(2);
 			var total_location = document.getElementById("added_val");
-			total_location.innerHTML = "<strong>"+total+"</strong>"
+			total_location.innerHTML = "<strong>"+total+"</strong>";
+			
+			if(update_gold) {
+				var ozt_u = document.getElementById("ozt_u").innerHTML;
+				var total_au = (ozt_u * quantity[0].value).toFixed(2);
+				var total_au_location = document.getElementById("total_au");
+				total_au_location.innerHTML = (total_au);
+			}
+		}
+		
+		function greg(quantity) {
+			
 		}
 		
 		var quantity = document.getElementsByName("quantity");
 		var premium = document.getElementsByName("premium");
 		var unit_price = document.getElementsByName("unit_price");
-		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
-		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
-		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
+		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 1)}, false);
+		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
+		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
 	}
 
 	// check if the market is open
