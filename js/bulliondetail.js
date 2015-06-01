@@ -205,9 +205,37 @@ bullionDetail['gold']['Australia Gold Nugget']
 */
 
 function update_types() {
-	//var len = Object.keys(bullionDetail.gold).length
-	//for 
-	//alert( Object.keys(bullionDetail.platinum["Mexico Libertad"]).length );
-	alert( bullionDetail.platinum["Mexico Libertad"] );
-
+	var metal = document.getElementById("metal_type");
+	var select = metal.options[metal.selectedIndex].value;
+	var coin_list = document.getElementById("coin_type");
+	var len = coin_list.length;
+	for (i=coin_list.length-1; i >= 0 ; i--)
+	{
+		coin_list.remove(i);
+	}
+	
+	if(select == "platinum") {
+		for (var key in bullionDetail.platinum) {
+			//console.log(key + ' ' +bullionDetail.platinum[key]);
+			//metal = bullionDetail.platinum[key].
+			//console.log(key);
+			var option = document.createElement('option');
+			option.text = option.value = key;
+			coin_list.add(option,0);
+		}
+	}
+	else if (select == "gold") {
+		for (var key in bullionDetail.gold) {
+			var option = document.createElement('option');
+				option.text = option.value = key;
+				coin_list.add(option,0);
+		}
+	}
+	else {
+		for (var key in bullionDetail.silver) {
+			var option = document.createElement('option');
+				option.text = option.value = key;
+				coin_list.add(option,0);
+		}
+	}
 }
