@@ -35,29 +35,25 @@ function homePageCallback(result){
   modifyPriceTable("#silver_price",result[1]);
   modifyPriceTable("#platinum_price",result[2]);
 
-  var bidPrices = [0,0,0];
-  bidPrices[0] = Number(result[0].bid);
-  bidPrices[1] = Number(result[1].bid);
-  bidPrices[2] = Number(result[2].bid);
-  loadStackValue("All",bidPrices);
+  loadStackValue("All",result);
 }
 
 var inventory_index;
 function inventoryCallback(result){
-  var bidPrices;
+  var metal;
   if(inventory_index == "Gold"){
     modifyPriceTable("#price_table",result[0]);
-    bidPrices = result[0].bid;
+    metal = result[0];
   }
   else if(inventory_index == "Silver"){
     modifyPriceTable("#price_table",result[1]);
-    bidPrices = result[1].bid;
+    metal = result[1];
   }
   else{
     modifyPriceTable("#price_table",result[2]);
-    bidPrices = result[2].bid;
+    metal = result[2];
   }
-  loadStackValue(inventory_index.toLowerCase(),bidPrices);
+  loadStackValue(inventory_index.toLowerCase(),metal);
 }
 
 function retrieveGetParameters(){
@@ -87,7 +83,7 @@ function retrieveGetParameters(){
   return result;
 }
 
-function loadStackValue(target_metal, bid_price){
+function loadStackValue(target_metal, metals){
   var Bullion = Parse.Object.extend("Bullion");
   var query = new Parse.Query(Bullion);
   query.containedIn('owner', [Parse.User.current()])
@@ -98,32 +94,18 @@ function loadStackValue(target_metal, bid_price){
         var bullion = results[i];
         var metal = bullion.get('metal').toLowerCase();
         var value = bullion.get('weight') * bullion.get('purity') * bullion.get('quantity');
-        if(metal == "gold"){
-          if(target_metal == "All"){
-            value *= bid_price[0];
-          }else if(target_metal == metal){
-            value *= bid_price;
-          }else{
-            value = 0;
-          }
-        }else if(metal == "silver"){
-          if(target_metal == "All"){
-            value *= bid_price[1];
-          }else if(target_metal == metal){
-            value *= bid_price;
-          }else{
-            value = 0;
-          }
+        if(metal == target_metal){
+          value *= metals.bid;
+          value += bullion.get('premium');
+        }else if(target_metal == "All"){
+          if(metal == "gold") value *= metals[0].bid;
+          else if(metal == "silver") value *= metals[1].bid;
+          else value *= metals[2].bid;
+          value += bullion.get('premium');
         }else{
-          if(target_metal == "All"){
-            value *= bid_price[2];
-          }else if(target_metal == metal){
-            value *= bid_price;
-          }else{
-            value = 0;
-          }
+          value = 0;
         }
-        totalValues += value + bullion.get('premium');
+        totalValues += value;
       }
       //update the value
       totalValues = totalValues.toFixed(2)
