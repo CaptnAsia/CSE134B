@@ -99,10 +99,7 @@ function makeMyGraph(metal) {
         }
     }
 }
-function getWeight(metal, name) {
-    var weight = bullionDetail[metal][name].weight;
-    return weight.split(',');
-}
+
 function loadMetalDaily(metal) {
     //alert(graphData.data.labels.indexOf('2015-05-28'));
     // value of 1ozt of metal yesterday

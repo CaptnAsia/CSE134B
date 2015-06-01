@@ -208,7 +208,6 @@ function update_types() {
 	var metal = document.getElementById("metal_type");
 	var selected_metal = String(metal.options[metal.selectedIndex].value);
 	var coin_list = document.getElementById("coin_type");
-	var len = coin_list.length;
 	for (i=coin_list.length-1; i >= 0 ; i--)
 	{
 		coin_list.remove(i);
@@ -229,10 +228,36 @@ function update_attributes() {
 	var selected_metal = String(metal.options[metal.selectedIndex].value);
 	var coin_list = document.getElementById("coin_type");
 	var coin_type = String(coin_list.options[coin_list.selectedIndex].value);
-	for(var key in bullionDetail[selected_metal]) {
-		if(key == coin_type) {
-			console.log(key);
-		}
+
+	var purity = document.getElementById("purity");
+	purity.innerHTML = bullionDetail[selected_metal][coin_type].purity+"%";
+	
+	
+	var weight = bullionDetail[selected_metal][coin_type].weight;
+	var greg = weight.split(',');
+	var weight_list = document.getElementById("weight");
+	for (i=weight_list.length-1; i >= 0 ; i--)
+	{
+		weight_list.remove(i);
 	}
-	//console.log(bullionDetail[metal]);
+	for(i=0; i < greg.length; i++) {
+		var option = document.createElement('option');
+		option.text = option.value = greg[i];
+		weight_list.add(option,0);
+	}
+}
+
+function update_weight() {
+	var weight = document.getElementById("weight");
+	var selected_weight = weight.options[weight.selectedIndex].value;
+	var quantity = document.getElementsByName("quantity");
+	
+	var abc = selected_weight.trim().split(' ');
+	var b = eval(abc[0]);
+	
+	var ozt_u = document.getElementById("ozt_u");
+	ozt_u.innerHTML = Number(b);
+	
+	var total_au = document.getElementById("total_au");
+	total_au.innerHTML = (b * quantity[0].value).toFixed(2);
 }

@@ -82,6 +82,18 @@
                                 </select>
                             </td>
                         </tr>
+						<tr>
+                            <td>Weight/unit (g)</td>
+                            <td>
+                                <select id="weight" onchange="update_weight()">
+                                    <option selected value="1/20 ozt">1/20 ozt</option>
+									<option value="1/10 ozt">1/10 ozt</option>
+									<option value="1/4 ozt">1/4 ozt</option>
+									<option value="1/2 ozt">1/2 ozt</option>
+									<option value="1 ozt">1 ozt</option>
+                                </select>
+                            </td>
+                        </tr>
                         <tr>
                             <td>Purchase Date</td>
                             <td>
@@ -111,12 +123,8 @@
                             <td id="purity">91.67%</td>
                         </tr>
                         <tr>
-                            <td>Weight/unit (g)</td>
-                            <td>1.244</td>
-                        </tr>
-                        <tr>
-                            <td>Gold ozt/u</td>
-                            <td id="ozt_u">0.0400</td>
+                            <td>Metal ozt/u</td>
+                            <td id="ozt_u" value="0.0400">0.0400</td>
                         </tr>
                         <tr>
                             <td>Total au (ozt)</td>
