@@ -252,7 +252,7 @@ function loadBullion(bullion_id){
                             var type1 = typeRow.insertCell(typeRow.cells.length); 
                             type1.appendChild(document.createTextNode('Type'));
                             var type2 = typeRow.insertCell(typeRow.cells.length);
-                            type2.appendChild(document.createTextNode('Type?'));
+                            type2.appendChild(document.createTextNode(bullion.get('name')));
                             
                             var qtyRow = tbody.insertRow(tbody.rows.length);
                             var qty1 = qtyRow.insertCell(qtyRow.cells.length); 
@@ -291,7 +291,7 @@ function loadBullion(bullion_id){
                             var weightPerUnit1 = weightPerUnitRow.insertCell(weightPerUnitRow.cells.length); 
                             weightPerUnit1.appendChild(document.createTextNode('Weight/unit (g)'));
                             var weightPerUnit2 = weightPerUnitRow.insertCell(weightPerUnitRow.cells.length);
-                            var cellData = (Number(bullion.get('weight')))/(Number(bullion.get('quantity')));
+                            var cellData = Number(bullion.get('weight'));
                             weightPerUnit2.appendChild(document.createTextNode(cellData));
                             /*
                             var gramsPerUnitRow = tbody.insertRow(tbody.rows.length);
@@ -305,14 +305,14 @@ function loadBullion(bullion_id){
                             var oztPerUnit1 = oztPerUnitRow.insertCell(oztPerUnitRow.cells.length); 
                             oztPerUnit1.appendChild(document.createTextNode(bullion.get('metal') + ' ozt/u'));
                             var oztPerUnit2 = oztPerUnitRow.insertCell(oztPerUnitRow.cells.length);
-                            var cellData2 = ((Number(bullion.get('weight')) * Number(bullion.get('purity')))/(Number(bullion.get('quantity')) * 31.1034768)).toFixed(5);
+                            var cellData2 = ((Number(bullion.get('weight')) * Number(bullion.get('purity'))) * 31.1034768).toFixed(5);
                             oztPerUnit2.appendChild(document.createTextNode(cellData2));
 
                             var totalOztRow = tbody.insertRow(tbody.rows.length);
                             var totalOzt1 = totalOztRow.insertCell(totalOztRow.cells.length); 
                             totalOzt1.appendChild(document.createTextNode('Total au (ozt)'));
                             var totalOzt2 = totalOztRow.insertCell(totalOztRow.cells.length);
-                            var cellData3 = ((Number(bullion.get('weight')))/(Number(bullion.get('quantity')) * 31.1034768)).toFixed(5);
+                            var cellData3 = ((Number(bullion.get('weight')))*31.1034768).toFixed(5);
                             totalOzt2.appendChild(document.createTextNode(cellData3));
 
                             var totalRow = tbody.insertRow(tbody.rows.length);
@@ -332,6 +332,8 @@ function loadBullion(bullion_id){
         }
     });
 }
+
+
 
 function linkTable() {
     var myStack = document.getElementsByClassName('my_stack')[0].firstElementChild;
