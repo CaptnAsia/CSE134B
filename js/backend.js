@@ -2,6 +2,7 @@ Parse.initialize("AExU8zqOb8xQlqLVykAzD3CyD2YfQmzJM41lOyj7", "lqsaTVz8JWchE92g8G
 
 var myStackJson;
 var historicPrices = 0;
+var myGraphData = {'gold': [], 'silver': [], 'platinum': []}
 var jsonFinished = false;
 
 
@@ -41,8 +42,11 @@ function loadMyStackJson() {
                 });
             }
 
-            if (page === 'home.html' && pageLoaded) {
+            if (page === 'home.html' && pageLoaded && historicPrices) {
                 //loadTotalDaily();
+                makeMyGraph('gold');
+                makeMyGraph('silver');
+                makeMyGraph('platinum');
             }
 
             // If the page has already loaded then call the loadMyStack function
@@ -54,6 +58,9 @@ function loadMyStackJson() {
 
                 loadPurityHeader(metal);
                 loadMyStack(metal);
+                if (historicPrices) {
+                    makeMyGraph(metal);
+                }
                 // loadTotalValue(metal);
 
                 // if (historicPrices) {
@@ -61,13 +68,40 @@ function loadMyStackJson() {
                 // }
             }
         }
-          console.log('finished getting json');
           jsonFinished = true;
       },
       error: function(error) {
         alert("Error: " + error.code + " " + error.message);
       }
     });
+}
+
+/* TODO: fix on next release */
+function makeMyGraph(metal) {
+    /*weight*goldprice*purity*/
+    myGraphData[metal] = new Array(graphData.data.labels.length);
+    for (var i = 0; i < myStackJson[metal].length; i++) {
+        var pDate = myStackJson[metal][i].purchaseDate;
+        var j = 0;
+        var eDate = new Date(graphData.data.labels[0]);
+        if (pDate > eDate) {
+            console.log(formatDate(pDate));
+            j = graphData.data.labels.indexOf(formatDate(pDate));
+
+            while (j < myGraphData[metal].length) {
+                j++;
+                /*var value = myStackJson[metal][i].quantity*
+                            myStackJson[metal][i].weight*
+                            graphData.data.datasets.
+                myGraphData[metal][j] += myStackJson[metal[i].]*/
+            }
+            console.log('hello: ' + j);
+        }
+    }
+}
+function getWeight(metal, name) {
+    var weight = bullionDetail[metal][name].weight;
+    return weight.split(',');
 }
 function loadMetalDaily(metal) {
     //alert(graphData.data.labels.indexOf('2015-05-28'));
@@ -87,6 +121,11 @@ function loadMetalDaily(metal) {
     var dailyPercentHTML = document.getElementById('daily-change-percent');
     dailyPercentHTML.innerHTML = dailyPercent;
     //alert("dailyPercent: " + dailyPercent);
+}
+
+function formatDate(date) {
+    var month = date.getMonth() < 9 ? '0' : '';
+    return date.getFullYear() + '-' + month +(date.getMonth()+1) + '-' + date.getDate();
 }
 
 function loadPurityHeader(metal) {
@@ -431,6 +470,9 @@ function getData(metal) {
         if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
             (page == 'home.html' && historicPrices == 3))) {
             finishGraph();
+            if (jsonFinished) {
+                makeMyGraph(getParameter('metal'));
+            }
             // if (pageLoaded && jsonFinished) {
                 // loadMetalDaily();
             // }
