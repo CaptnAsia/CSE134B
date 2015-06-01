@@ -114,7 +114,9 @@ are some notes about how we decided to implement certain features of the app.
 		 origin from anywhere, this allows any client side javascript to retrieve
 		 the information. Finally, all we had to do is to issue an ajax request 
 		 to that php file in our javascript. The returned json objects would contain
-		 the information.
+		 the bid/ask/change information.
+		 Note, Chrome is the only browser that denies cross-origin request. All other
+		 browsers like Safari and Firefox allow such requests to go through.
 		 The url we used to retrieve bid/ask/change prices is:
 		 http://www.frankieliu.com/ucsd/cse134b/prices.php
 		 The actual php script can be viewed here (view page source):
