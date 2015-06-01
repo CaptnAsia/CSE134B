@@ -57,9 +57,9 @@ function loadMyStackJson() {
                 loadMyStack(metal);
                 // loadTotalValue(metal);
 
-                if (historicPrices) {
-                    loadMetalDaily(metal);
-                }
+                // if (historicPrices) {
+                //     loadMetalDaily(metal);
+                // }
             }
         }
           jsonFinished = true;
@@ -490,9 +490,9 @@ function getData(metal) {
         if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
             (page == 'home.html' && historicPrices == 3))) {
             finishGraph();
-            if (pageLoaded && jsonFinished) {
-                loadMetalDaily();
-            }
+            // if (pageLoaded && jsonFinished) {
+                // loadMetalDaily();
+            // }
         }
 
 
