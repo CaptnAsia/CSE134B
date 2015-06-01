@@ -142,4 +142,11 @@ are some notes about how we decided to implement certain features of the app.
 	   onto the web page in the form of either graphs, percentages, or lists of
 	   bullion a user owns.
 
+	8) We didn't prioritize adding an edit feature for view.html when we were
+	   looking at each individual bullion since we didn't see a whole lot of 
+	   functionality in implementing this feature. THe only situation would be
+	   if data was inputted incorrectly when the coin was first added, but in
+	   order to prevent clients from mis-editing it unnecessarily, we decided 
+	   not to implement this feature.
+
 
