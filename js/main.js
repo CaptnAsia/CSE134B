@@ -366,6 +366,7 @@ $(window).load(function() {
 
 
 	}
+	
 	else if(page == "new.html") {
 		//change to current day
 		var today = new Date();
@@ -380,6 +381,19 @@ $(window).load(function() {
 		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
 		var purchaseDate = document.getElementsByName("purchase_date");
 		purchaseDate[0].value = todayFormatted;
+		
+		function update_total(quantity, premium, unit_price) {
+			var total = quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))
+			var total_location = document.getElementById("added_val");
+			total_location.innerHTML = "<strong>"+total+"</strong>"
+		}
+		
+		var quantity = document.getElementsByName("quantity");
+		var premium = document.getElementsByName("premium");
+		var unit_price = document.getElementsByName("unit_price");
+		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
+		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
+		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price)}, false);
 	}
 
 	// check if the market is open
