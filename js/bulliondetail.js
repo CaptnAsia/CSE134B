@@ -206,7 +206,7 @@ bullionDetail['gold']['Australia Gold Nugget']
 
 function update_types() {
 	var metal = document.getElementById("metal_type");
-	var select = metal.options[metal.selectedIndex].value;
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
 	var coin_list = document.getElementById("coin_type");
 	var len = coin_list.length;
 	for (i=coin_list.length-1; i >= 0 ; i--)
@@ -214,28 +214,25 @@ function update_types() {
 		coin_list.remove(i);
 	}
 	
-	if(select == "platinum") {
-		for (var key in bullionDetail.platinum) {
-			//console.log(key + ' ' +bullionDetail.platinum[key]);
-			//metal = bullionDetail.platinum[key].
-			//console.log(key);
-			var option = document.createElement('option');
-			option.text = option.value = key;
-			coin_list.add(option,0);
+	for(var key in bullionDetail[selected_metal]) {
+		console.log(key);
+		var option = document.createElement('option');
+		option.text = option.value = key;
+		coin_list.add(option,0);
+	}
+}
+
+function update_attributes() {
+	var purity = document.getElementById("purity");
+
+	var metal = document.getElementById("metal_type");
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
+	var coin_list = document.getElementById("coin_type");
+	var coin_type = String(coin_list.options[coin_list.selectedIndex].value);
+	for(var key in bullionDetail[selected_metal]) {
+		if(key == coin_type) {
+			console.log(key);
 		}
 	}
-	else if (select == "gold") {
-		for (var key in bullionDetail.gold) {
-			var option = document.createElement('option');
-				option.text = option.value = key;
-				coin_list.add(option,0);
-		}
-	}
-	else {
-		for (var key in bullionDetail.silver) {
-			var option = document.createElement('option');
-				option.text = option.value = key;
-				coin_list.add(option,0);
-		}
-	}
+	//console.log(bullionDetail[metal]);
 }

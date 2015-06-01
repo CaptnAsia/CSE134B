@@ -72,7 +72,7 @@
                         <tr>
                             <td>Type</td>
                             <td>
-                                <select style="" id="coin_type">
+                                <select onchange="update_attributes()" id="coin_type">
                                     <option selected value="Australia Platinum Koala">Australia Platinum Koala</option>
 									<option value="Australia Platinum Platypus">Australia Platinum Platypus</option>
 									<option value="Canada Platinum Maple Leaf">Canada Platinum Maple Leaf</option>
@@ -97,18 +97,18 @@
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input type="number" name="premium" value="0.00" />
+                                <input type="number" name="premium" value="0.01" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input type="number" name="unit_price" value="0.00" />
+                                <input type="number" name="unit_price" value="0.01" />
                             </td>
                         </tr>
                         <tr>
                             <td>Purity</td>
-                            <td>91.67%</td>
+                            <td id="purity">91.67%</td>
                         </tr>
                         <tr>
                             <td>Weight/unit (g)</td>
