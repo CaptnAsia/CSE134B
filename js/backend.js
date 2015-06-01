@@ -4,6 +4,7 @@ var myStackJson;
 var historicPrices = 0;
 var jsonFinished = false;
 
+
 function loadMyStackJson() {
     myStackJson = {
         'gold': [],
@@ -56,9 +57,9 @@ function loadMyStackJson() {
                 loadMyStack(metal);
                 // loadTotalValue(metal);
 
-                if (historicPrices) {
-                    loadMetalDaily(metal);
-                }
+                // if (historicPrices) {
+                //     loadMetalDaily(metal);
+                // }
             }
         }
           console.log('finished getting json');
@@ -232,6 +233,126 @@ function loadMyStack(metal) {
     }
 }
 
+/*
+function loadBullionStack(metal){
+    lastMetal = metal;
+    currentBullionStack = myStackJson[metal];
+    //alert('loaded new bullionstack');
+}
+*/
+
+//Ricky's load bullion for view.html
+function loadBullion(bullion_id){
+    var bullTable = document.getElementsByClassName('coin_detail')[0].firstElementChild;
+    var tbody = document.createElement('tbody');
+    var Bullion = Parse.Object.extend("Bullion");
+    var query = new Parse.Query(Bullion);
+    query.containedIn('owner', [Parse.User.current()])
+    //query.containedIn('id'.toLowerCase(), [bullion_id])
+    query.find({
+      success: function(results) {
+        //alert(results.length);
+        //var bullion = results;
+        //if(results.length != 0){
+        //alert(bullion);
+        //var count =0;
+        for(var i = 0; i < results.length; i++){
+                //alert(results[0]);
+                var bullion = results[i];
+                //alert(bullion.id + 'is id');
+                //alert(bullion_id + 'is bullion_id');
+                var metal = bullion.get('metal');
+                //var bullion = myStackJson[metal];
+                //for(var x = 0; x < bullion.length; x++){
+                    if(bullion.id.toLowerCase() === bullion_id){
+                            var metalRow = tbody.insertRow(tbody.rows.length);
+                            var metal1 = metalRow.insertCell(metalRow.cells.length); 
+                            metal1.appendChild(document.createTextNode('Metal'));
+                            var metal2 = metalRow.insertCell(metalRow.cells.length);
+                            metal2.appendChild(document.createTextNode(metal));
+                            
+                            var typeRow = tbody.insertRow(tbody.rows.length);
+                            var type1 = typeRow.insertCell(typeRow.cells.length); 
+                            type1.appendChild(document.createTextNode('Type'));
+                            var type2 = typeRow.insertCell(typeRow.cells.length);
+                            type2.appendChild(document.createTextNode('Type?'));
+                            
+                            var qtyRow = tbody.insertRow(tbody.rows.length);
+                            var qty1 = qtyRow.insertCell(qtyRow.cells.length); 
+                            qty1.appendChild(document.createTextNode('Qty.'));
+                            var qty2 = qtyRow.insertCell(qtyRow.cells.length);
+                            qty2.appendChild(document.createTextNode(bullion.get('quantity')));
+
+                            var purchRow = tbody.insertRow(tbody.rows.length);
+                            var purch1 = purchRow.insertCell(purchRow.cells.length); 
+                            purch1.appendChild(document.createTextNode('Purchase Date'));
+                            var purch2 = purchRow.insertCell(purchRow.cells.length);
+                            purch2.appendChild(document.createTextNode(bullion.get('purchaseDate')));
+                            
+                            var PremiumRow = tbody.insertRow(tbody.rows.length);
+                            var Premium1 = PremiumRow.insertCell(PremiumRow.cells.length); 
+                            Premium1.appendChild(document.createTextNode('Premium'));
+                            var Premium2 = PremiumRow.insertCell(PremiumRow.cells.length);
+                            Premium2.appendChild(document.createTextNode(bullion.get('premium')));
+
+                            var unitPriceRow = tbody.insertRow(tbody.rows.length);
+                            var unitPrice1 = unitPriceRow.insertCell(unitPriceRow.cells.length); 
+                            unitPrice1.appendChild(document.createTextNode('Unit Price'));
+                            var unitPrice2 = unitPriceRow.insertCell(unitPriceRow.cells.length);
+                            //alert(bullion.get('unitPrice'));
+                            unitPrice2.appendChild(document.createTextNode(bullion.get('unitPrice')));
+
+                            var purityRow = tbody.insertRow(tbody.rows.length);
+                            var purity1 = purityRow.insertCell(purityRow.cells.length); 
+                            purity1.appendChild(document.createTextNode(bullion.get('metal') + '%'));
+                            var purity2 = purityRow.insertCell(purityRow.cells.length);
+                            purity2.appendChild(document.createTextNode(bullion.get('purity')));
+
+                            var weightPerUnitRow = tbody.insertRow(tbody.rows.length);
+                            var weightPerUnit1 = weightPerUnitRow.insertCell(weightPerUnitRow.cells.length); 
+                            weightPerUnit1.appendChild(document.createTextNode('Weight/unit (g)'));
+                            var weightPerUnit2 = weightPerUnitRow.insertCell(weightPerUnitRow.cells.length);
+                            var cellData = (Number(bullion.get('weight')))/(Number(bullion.get('quantity')));
+                            weightPerUnit2.appendChild(document.createTextNode(cellData));
+                            /*
+                            var gramsPerUnitRow = tbody.insertRow(tbody.rows.length);
+                            var gramsPerUnit1 = gramsPerUnitRow.insertCell(gramsPerUnitRow.cells.length); 
+                            gramsPerUnit1.appendChild(document.createTextNode(bullion.get('metal') + ' g/u'));
+                            var gramsPerUnit2 = gramsPerUnitRow.insertCell(gramsPerUnitRow.cells.length);
+                            var cellData2 = (Number(bullion.get('weight')) * Number(bullion.get('purity')))/(Number(bullion.get('quantity')));
+                            gramsPerUnit2.appendChild(document.createTextNode(cellData2));
+                            */
+                            var oztPerUnitRow = tbody.insertRow(tbody.rows.length);
+                            var oztPerUnit1 = oztPerUnitRow.insertCell(oztPerUnitRow.cells.length); 
+                            oztPerUnit1.appendChild(document.createTextNode(bullion.get('metal') + ' ozt/u'));
+                            var oztPerUnit2 = oztPerUnitRow.insertCell(oztPerUnitRow.cells.length);
+                            var cellData2 = (Number(bullion.get('weight')) * Number(bullion.get('purity')))/(Number(bullion.get('quantity')) * 31.1034768);
+                            oztPerUnit2.appendChild(document.createTextNode(cellData2));
+
+                            var totalOztRow = tbody.insertRow(tbody.rows.length);
+                            var totalOzt1 = totalOztRow.insertCell(totalOztRow.cells.length); 
+                            totalOzt1.appendChild(document.createTextNode('total au (ozt)'));
+                            var totalOzt2 = totalOztRow.insertCell(totalOztRow.cells.length);
+                            var cellData3 = (Number(bullion.get('weight')))/(Number(bullion.get('quantity')) * 31.1034768);
+                            totalOzt2.appendChild(document.createTextNode(cellData3));
+
+                            var totalRow = tbody.insertRow(tbody.rows.length);
+                            var total1 = totalRow.insertCell(totalRow.cells.length); 
+                            total1.appendChild(document.createTextNode('Total'));
+                            var total2 = totalRow.insertCell(totalRow.cells.length);
+                            total2.appendChild(document.createTextNode('Total?'));
+                    }   
+                //}  
+            } 
+        //alert(count + 'is count');
+        bullTable.appendChild(tbody);   
+       },
+        error: function(error) {
+            alert("Error: " + error.code + " " + error.message);
+        }
+    });
+}
+
 function linkTable() {
     var myStack = document.getElementsByClassName('my_stack')[0].firstElementChild;
     for (var i = 1, row; row = myStack.rows[i]; i++) {
@@ -241,7 +362,9 @@ function linkTable() {
             }
             var target = event.target ? event.target : event.srcElement;
             //alert(event.target + ' ' + event.target.getAttribute('data-id'));
+            //var bullion_id = event.target.parentNode.getAttribute('data-id');
             window.location.href = './view.html?id=' + event.target.parentNode.getAttribute('data-id');
+            //loadBullion(bullion_id);
         }, false);
     }
 }
@@ -370,9 +493,9 @@ function getData(metal) {
         if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
             (page == 'home.html' && historicPrices == 3))) {
             finishGraph();
-            if (pageLoaded && jsonFinished) {
-                loadMetalDaily();
-            }
+            // if (pageLoaded && jsonFinished) {
+                // loadMetalDaily();
+            // }
         }
 
 
@@ -464,7 +587,6 @@ function saveBullion() {
 	save_input = document.getElementsByName("unit_price");
 	bullion.set("unitPrice", Number(save_input[0].value));
 	
-	bullion.set("investment", 1);
 	bullion.set("origin", "US");
 	bullion.set("owner", Parse.User.current());
 	bullion.set("purchaseDate", save_date);

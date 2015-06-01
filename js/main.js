@@ -276,6 +276,7 @@ var finishGraph = function (xAxis, yAxis, metal) {
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
+	console.log('called twice?');
 	//13:30 UTC = 9:30 EST
 	//20:00 UTC = 16:00 EST
 	var openHour = 13;
@@ -326,6 +327,9 @@ function getParameter(name) {
 }
 
 $(window).load(function() {
+	if (pageLoaded) {
+		return;
+	}
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
 			$('.metal').each(function(index) {
@@ -341,7 +345,6 @@ $(window).load(function() {
 	}
 	// quandl data?
 	if (historicPrices == 1) {
-
 	}
 	pageLoaded = true;
 
@@ -354,22 +357,26 @@ $(window).load(function() {
 			finishGraph();
 		}
 	} else if (page =="inventory.html") {
-			var legendColor;
-			switch (getParameter('metal').toLowerCase()) {
-				case 'silver': legendColor = 3; break;
-				case 'platinum': legendColor = 2; break;
-				default: legendColor = 1;
-			}
-			$('.legend-item-color').each(function (index) {
-				this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
-			})
+		var legendColor;
+		switch (getParameter('metal').toLowerCase()) {
+			case 'silver':
+				legendColor = 3;
+				break;
+			case 'platinum':
+				legendColor = 2;
+				break;
+			default:
+				legendColor = 1;
+		}
+		$('.legend-item-color').each(function (index) {
+			this.setAttribute('id', 'legend-' + (legendColor + (3 * index)));
+		})
 
-			if (historicPrices) {
-				loadMetalDaily(metal);
-				finishGraph();
-			}
-
-		else if(page == "new.html") {
+		if (historicPrices) {
+			loadMetalDaily(getParameter('metal').toLowerCase());
+			finishGraph();
+		}
+	} else if(page == "new.html") {
 			//change to current day
 			var today = new Date();
 			var month = today.getMonth()+1;
@@ -380,10 +387,47 @@ $(window).load(function() {
 			if(day < 10) {
 				day = "0"+day;
 			}
-			var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
-			var purchaseDate = document.getElementsByName("purchase_date");
-			purchaseDate[0].value = todayFormatted;
+		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
+		var purchaseDate = document.getElementsByName("purchase_date");
+		purchaseDate[0].value = todayFormatted;
+
+		function update_total(quantity, premium, unit_price, update_gold) {
+			if(quantity[0].value < 0) {
+				quantity[0].value = 0;
+			}
+			else if(premium[0].value < 0) {
+				premium[0].value = 0;
+			}
+			else if(unit_price[0].value < 0) {
+				unit_price[0].value = 0;
+			}
+			
+			quantity[0].value = Math.floor(quantity[0].value);
+			premium[0].value = Number(premium[0].value).toFixed(2);
+			unit_price[0].value = Number(unit_price[0].value).toFixed(2);
+			var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))).toFixed(2);
+			var total_location = document.getElementById("added_val");
+			total_location.innerHTML = "<strong>"+total+"</strong>";
+			
+			if(update_gold) {
+				var ozt_u = document.getElementById("ozt_u").innerHTML;
+				var total_au = document.getElementById("total_au");
+				total_au.innerHTML = (ozt_u * quantity[0].value).toFixed(2);
+			}
 		}
+		
+		var quantity = document.getElementsByName("quantity");
+		var premium = document.getElementsByName("premium");
+		var unit_price = document.getElementsByName("unit_price");
+		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 1)}, false);
+		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
+		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
+	} else if(page == "view.html"){
+		var bull_id = getParameter('id');
+		//var metal = getParameter('metal');
+		//alert(metal + 'from if');
+		//alert(metalforView + 'from if');
+		loadBullion(bull_id);
 	}
 
 	// check if the market is open
