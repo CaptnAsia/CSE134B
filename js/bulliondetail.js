@@ -202,3 +202,12 @@ for (var i = 1, row; row = goldtable.rows[i]; i++) {
 }
 
 bullionDetail['gold']['Australia Gold Nugget']
+*/
+
+function update_types() {
+	//var len = Object.keys(bullionDetail.gold).length
+	//for 
+	//alert( Object.keys(bullionDetail.platinum["Mexico Libertad"]).length );
+	alert( bullionDetail.platinum["Mexico Libertad"] );
+
+}

@@ -402,14 +402,9 @@ $(window).load(function() {
 			
 			if(update_gold) {
 				var ozt_u = document.getElementById("ozt_u").innerHTML;
-				var total_au = (ozt_u * quantity[0].value).toFixed(2);
-				var total_au_location = document.getElementById("total_au");
-				total_au_location.innerHTML = (total_au);
+				var total_au = document.getElementById("total_au");
+				total_au.innerHTML = (ozt_u * quantity[0].value).toFixed(2);
 			}
-		}
-		
-		function greg(quantity) {
-			
 		}
 		
 		var quantity = document.getElementsByName("quantity");

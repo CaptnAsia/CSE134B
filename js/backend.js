@@ -461,7 +461,6 @@ function saveBullion() {
 	save_input = document.getElementsByName("unit_price");
 	bullion.set("unitPrice", Number(save_input[0].value));
 	
-	bullion.set("investment", 1);
 	bullion.set("origin", "US");
 	bullion.set("owner", Parse.User.current());
 	bullion.set("purchaseDate", save_date);
