@@ -1,6 +1,6 @@
 ===============================================================================
-                             CSE134B DREAM TEAM
-                               COINFLIP - HW3
+                             CSE134B TEAM BREAD
+                              SHINYSTACK - HW4
 ===============================================================================
 
 # # # # # # # # # # # # # # # 
@@ -12,20 +12,10 @@ Navigation:
 	as such:
 
 	index.html - Login/signup page with demo
-	wire2.html - Home page with Total Coin Value and graphs for all coins
-	wire3.html - My Gold page with details on owned gold coins
-	wire4.html - Gold Item page that looks at a specific gold coin
-	wire5.html - New Item page that is the mock-up for adding a new coin
-
-	Clicking on the AG (silver) or PT (platinum) boxes on the side nav will
-	simply navigate you to the AU (gold) page [wire3.html] as this mock-up
-	only implements the My Gold page.
-
-Responsive Design:
-	THe high-fidelity mock switches to mobile view when the screen size 
-	reaches a width of 1000px or below.
-
-
+	home.html - Home page with Total Coin Value and graphs for all coins
+	inventory.html - Inventory page that shows all of your specified metal's info
+	view.html - Be able to view a specific bullion and it's details
+	new.html - New Item page to add new items to a bullion stack.
 
 # # # # # # # # # # # # # # # 
 #   Cross-Platform Issues   #
@@ -61,12 +51,8 @@ Safari:
 	white-space: nowrap so that our mobile toggling selectors didn't overflow.
 
 Internet Explorer:
-	Okay this one actually scared us a ton at first because the entire layout 
-	was whack. Turns out after some research, the "main" semantic element isn't
-	supported in IE, so the padding we had used for that element didn't have
-	any effect at all. To fix this, we simply switched out the "main" element
-	for a "section" element with a specific class and styled it the same
-	as we had with the "main" element.
+	Internet Explorer will not load the Parse data. More on that later in the
+	README.
 
 
 
@@ -96,75 +82,64 @@ CSS:
 
 
 
-# # # # # # # # # # # # # # # 
-#    Implementation Tech    #
-# # # # # # # # # # # # # # #
+# # # # # # # # # # # # # # # # # # # # # # #
+#    Implementation Tech and Explanation    #
+# # # # # # # # # # # # # # # # # # # # # # #
 
-HTML:
-	We used HTML5 so this technology was pretty straightforward. Perhaps
-	the one noteworthy thing is our use of SVG, particularly for icons
-	from IcoMoon.io (source: https://icomoon.io/) to save us the time
-	of actually designing our own icons
+Inherited the same tech that the previous team used with some additions. Here
+are some notes about how we decided to implement certain features of the app.
 
-SASS/CSS:
-	We wrote all of our CSS using SASS that compiled into CSS. We used 
-	SASS in a way that the syntax was identical to that of simply using
-	CSS. The only additions we utilized SASS for were as follows:
+	1) Because we are inheriting the code from the previous team, we decided
+	   that we should use very minimal amount of libraries, and mostly stuck
+	   with vanilla js and jQuery to get the job done.
 
-		1) SASS Variables - easier refactoring of color themes
-		2) SASS Nesting   - easier for the developer to nest attributes, mainly
-			                used as a security fall-back against conflicting 
-			                styling as we were merging files and work
-		3) SASS Mixins    - For any CSS attributes that needed all the extra
-		                    prefix declarations for moz, webkit, etc., we used
-		                    simple @include mixins from SASS to avoid having to
-		                    type all the prefixes ourselves.
+	2) For implementation of the backend, we decided to use Parse because of
+	   how fast and easy it is to get up an running. Unfortunately it wasn't
+	   until after we started using this technology that we found out that
+	   Parse requires a https protocol to run properly on Internet Explorer.
+	   This wouldn't be a problem when the code is fully deployed to a server,
+	   but when stepping through the website in development the website will
+	   not work as intended because we can't get the Parse data in Internet
+	   Explorer.
 
-    Otherwise, all of our SASS was written exactly the same as CSS. We simply
-    employed the SASS to save some time and organize common themes easier. 
+	3) Retrieving the Bid/Ask/Change prices was one hell of a task. First we had
+		 to find a website that has this information, which too more than an hour!
+		 Then, we need to figure out a way to parse all the information from the 
+		 website. Because of Chrome's same-origin policy, we cannot parse htmls
+		 directly in javascript. Therefore, I wrote a php script on my server to
+		 parse the html instead. It uses curl to retrieve the html, then parse it
+		 and create an array of json objects. To make it work, I also added two 
+		 headers, one is the content type, used to specify the content format as 
+		 json. Secondly, I set the access-control-allow-origin header to accept
+		 origin from anywhere, this allows any client side javascript to retrieve
+		 the information. Finally, all we had to do is to issue an ajax request 
+		 to that php file in our javascript. The returned json objects would contain
+		 the information.
 
-    The SASS file is located in sass/style.scss.
-    The CSS file is located in style/style.css.
+	4) When getting the details (purity, weight, etc) of each type of bullion,
+	   we went to the bullion coin Wikipedia page for this data, and hardcoded
+	   the information into a json object in bulliondetail.js. We figured that
+	   this type of information does not change that frequently and thought
+	   this would be best to get the information when the user is adding an
+	   new bullion to their stack.
 
+	5) In order to get the historic prices of each bullion metal, we decided to
+	   use the Quandl api service as a baseline for each coin value for every
+	   specific date. We also use the Quandl data to calculate the approximate
+	   value of each coin when adding new coins to the list.
 
-Javascript:
-	We used a little bit a Javascript, not much, to accomplish these goals:
+	6) In order to change the metal's and colors on the inventory.html page we
+	   decided to use the url query string to set the metal and do a quick
+	   data-bind to loop through all the classes that have a data-binded
+	   'variable' and replace it with that metal. The user will see flashes
+	   of {{metal}} but will quickly go away.
 
-		1) Importing top navigation, side navigation, and footer on all pages.
-		   This allowed us to be able to just change the common elements in one 
-		   place and have it affect all 5 pages rather than have to go through 
-		   every single page for changes. This was done through simple document
-		   write statements (with extra input in to the function for the side
-		   navigation, this let us easily specify which side navigation button
-		   should be 'pressed'). These import functions are all in main.js and
-		   are:
-		   		- loadTopNav()
-		   		- loadTopNavPersist()
-		   		- loadSideNav(selected)
-		   		- loadFooter()
-
-		2) Creating the graphs. This was done using a library called Chart.js.
-		   Source: http://www.chartjs.org/
-
-		3) Handling navigation toggle buttons. This is when the application is 
-		   shrunk down to mobile size where the toggle buttons of information
-		   and chart appear. Instead of having those buttons navigate to
-		   different pages, we thought it made more sense that they would 
-		   toggle what information is already on the page. This was done with
-		   jQuery on click events. 
-		   Source: https://jquery.com/
-
-
-
-# # # # # # # # # # # # # # # 
-#        Thank you!         #
-# # # # # # # # # # # # # # #
-
-We hope you enjoyed our high-fidelity mock-up of CoinFlip, the simple 
-application for managing your entire coin collection! Feel free to 
-contact us with any feedback, comments, suggestions, or concerns.
-
-Best,
-CSE134B Dream Team
+	7) We decided to asynchronously load the data from the Parse database,
+	   Quandl database, and the webpage at the same time. However this created
+	   problems on what time we could actually start writing to the webpage. In
+	   order to fix this, we just added appropriate flags to every one of these
+	   events, and whichever task finished last will start loading all the data
+	   onto the web page in the form of either graphs, percentages, or lists of
+	   bullion a user owns.
 
 

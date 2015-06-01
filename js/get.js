@@ -1,95 +1,64 @@
 
-function extract(metals){
-  var result = ["","","",0];
-  var st1 = "bid&quot;:";
-  var st2 = ",&quot;ask&quot;:";
-  var st3 = ",&quot;high&quot;:";
-  var st4 = "oneDayChange&quot;:";
-  var st5 = ",&quot;oneDayPercentChange";
 
-  var i = metals.indexOf(st1);
-  var j = metals.indexOf(st2);
-  var k = metals.indexOf(st3);
-  var l = metals.indexOf(st4);
-  var m = metals.indexOf(st5);
+function getMetalPrices(callback){
+  // var url = "http://integration.nfusionsolutions.biz/client/jmbullion/module/largehistoricalchart2/nflargehist?metal=gold";
+  var target = "http://www.frankieliu.com/ucsd/cse134b/prices.php";
 
-  result[0] = metals.substring(i+st1.length, j);
-  result[1] = metals.substring(j+st2.length, k);
-  result[2] = metals.substring(l+st4.length, m);
-  result[3] = m;
-
-  return result;
-}
-
-function setPriceTable(callback){
-  var url = "http://integration.nfusionsolutions.biz/client/jmbullion/module/largehistoricalchart2/nflargehist?metal=gold";
-
-  var xmlhttp;
-  if (window.XMLHttpRequest) {
-      xmlhttp= new XMLHttpRequest();
-  } else {
-      xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-  }
-
-  xmlhttp.onreadystatechange = function(){
-    if (xmlhttp.readyState == 4 && xmlhttp.status == 200){
-      var result = xmlhttp.responseText;
-      var start = result.indexOf("<ul class=\"metals\">");
-      var end = result.indexOf("<div class=\"metal-details\">");
-      var metals = result.substring(start,end);
-
-      var gold = extract(metals);
-      metals = metals.substring(gold[3]+20);
-      var silver = extract(metals);
-      metals = metals.substring(silver[3]+20);
-      var plat = extract(metals);
-
-      callback(gold,silver,plat);
+  $.ajax({
+    url: target,
+    dataType: "json",
+    success: function(result){
+      callback(result);
+    },
+    error: function(result){
+      console.log("ERROR: can't retrieve price information from server.");
     }
-  }
-
-  xmlhttp.open("GET",url);
-  xmlhttp.send();
+  });
 }
 
-function homePageCallback(gold,silver,plat){
+function modifyPriceTable(table_id, metal){
+  var bid = "$"+String(metal.bid).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  var ask = "$"+String(metal.ask).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  var change = "$"+String(metal.change).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+  $(table_id +" tr:first-child td:first-child").html(bid);
+  $(table_id +" tr:first-child td:nth-child(2)").html(ask);
+  $(table_id +" tr:first-child td:nth-child(3)").html(change);
+
+  var tag = $(table_id + " tr:first-child td:nth-child(3)");
+  if(metal.change > 0) tag.attr("class","pos-change");
+  else tag.attr("class","neg-change");
+}
+
+function homePageCallback(result){
   //fill in data
-  $("#gold_price tr:first-child td:first-child").html("$"+gold[0]);
-  $("#gold_price tr:first-child td:nth-child(2)").html("$"+gold[1]);
-  $("#gold_price tr:first-child td:nth-child(3)").html("$"+gold[2]);
-  $("#silver_price tr:first-child td:first-child").html("$"+silver[0]);
-  $("#silver_price tr:first-child td:nth-child(2)").html("$"+silver[1]);
-  $("#silver_price tr:first-child td:nth-child(3)").html("$"+silver[2]);
-  $("#platinum_price tr:first-child td:first-child").html("$"+plat[0]);
-  $("#platinum_price tr:first-child td:nth-child(2)").html("$"+plat[1]);
-  $("#platinum_price tr:first-child td:nth-child(3)").html("$"+plat[2]);
-  //adjust color
-  var tag = $("#gold_price tr:first-child td:nth-child(3)");
-  if(gold[2] > 0) tag.attr("class","pos-change");
-  else tag.attr("class","neg-change");
-  tag = $("#silver_price tr:first-child td:nth-child(3)");
-  if(silver[2] > 0) tag.attr("class","pos-change");
-  else tag.attr("class","neg-change");
-  tag = $("#platinum_price tr:first-child td:nth-child(3)");
-  if(plat[2] > 0) tag.attr("class","pos-change");
-  else tag.attr("class","neg-change");
+  modifyPriceTable("#gold_price",result[0]);
+  modifyPriceTable("#silver_price",result[1]);
+  modifyPriceTable("#platinum_price",result[2]);
+
+  var bidPrices = [0,0,0];
+  bidPrices[0] = Number(result[0].bid);
+  bidPrices[1] = Number(result[1].bid);
+  bidPrices[2] = Number(result[2].bid);
+  loadStackValue("All",bidPrices);
 }
 
 var inventory_index;
-function inventoryCallback(gold,silver,plat){
-  var target = gold;
-  if(inventory_index == "Silver") target = silver;
-  else if(inventory_index == "Platinum") target = plat;
-
-  $("#price_table tr:first-child td:first-child").html("$"+target[0]);
-  $("#price_table tr:first-child td:nth-child(2)").html("$"+target[1]);
-  $("#price_table tr:first-child td:nth-child(3)").html("$"+target[2]);
-  var tag = $("#gold_price tr:first-child td:nth-child(3)");
-  if(target[2] > 0) tag.attr("class","pos-change");
-  else tag.attr("class","neg-change");
+function inventoryCallback(result){
+  var bidPrices;
+  if(inventory_index == "Gold"){
+    modifyPriceTable("#price_table",result[0]);
+    bidPrices = result[0].bid;
+  }
+  else if(inventory_index == "Silver"){
+    modifyPriceTable("#price_table",result[1]);
+    bidPrices = result[1].bid;
+  }
+  else{
+    modifyPriceTable("#price_table",result[2]);
+    bidPrices = result[2].bid;
+  }
+  loadStackValue(inventory_index.toLowerCase(),bidPrices);
 }
-
-
 
 function retrieveGetParameters(){
   var str = String(window.location);
@@ -118,3 +87,52 @@ function retrieveGetParameters(){
   return result;
 }
 
+function loadStackValue(target_metal, bid_price){
+  var Bullion = Parse.Object.extend("Bullion");
+  var query = new Parse.Query(Bullion);
+  query.containedIn('owner', [Parse.User.current()])
+  query.find({
+    success: function(results) {
+      var totalValues = 0.0;
+      for(var i = 0; i < results.length; i++){
+        var bullion = results[i];
+        var metal = bullion.get('metal').toLowerCase();
+        var value = bullion.get('weight') * bullion.get('purity') * bullion.get('quantity');
+        if(metal == "gold"){
+          if(target_metal == "All"){
+            value *= bid_price[0];
+          }else if(target_metal == metal){
+            value *= bid_price;
+          }else{
+            value = 0;
+          }
+        }else if(metal == "silver"){
+          if(target_metal == "All"){
+            value *= bid_price[1];
+          }else if(target_metal == metal){
+            value *= bid_price;
+          }else{
+            value = 0;
+          }
+        }else{
+          if(target_metal == "All"){
+            value *= bid_price[2];
+          }else if(target_metal == metal){
+            value *= bid_price;
+          }else{
+            value = 0;
+          }
+        }
+        totalValues += value + bullion.get('premium');
+      }
+      //update the value
+      totalValues = totalValues.toFixed(2)
+      priceValue = "$" + String(totalValues);
+      priceValue = priceValue.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      $(".total-dollars").html(priceValue);
+    },
+    error: function(error) {
+      alert("Error: " + error.code + " " + error.message);
+    }
+  });
+}

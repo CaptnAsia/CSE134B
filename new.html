@@ -85,19 +85,19 @@
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input name="quantity" value="1" />
+                                <input type="number" name="quantity" value="1" />
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input name="premium" value="0.00" />
+                                <input type="number" name="premium" value="0.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input name="unit_price" value="0.00" />
+                                <input type="number" name="unit_price" value="0.00" />
                             </td>
                         </tr>
                         <tr>
@@ -109,20 +109,16 @@
                             <td>1.244</td>
                         </tr>
                         <tr>
-                            <td>Gold g/u</td>
-                            <td>1.244</td>
-                        </tr>
-                        <tr>
                             <td>Gold ozt/u</td>
-                            <td>0.0400</td>
+                            <td id="ozt_u">0.0400</td>
                         </tr>
                         <tr>
                             <td>Total au (ozt)</td>
-                            <td>0.0400</td>
+                            <td id="total_au">0.0400</td>
                         </tr>
                         <tr>
                             <td><strong>TOTAL</strong></td>
-                            <td><strong>1199.10</strong></td>
+                            <td id="added_val"><strong>0.00</strong></td>
                         </tr>
                     </table>
                     <p onclick="saveBullion()" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
