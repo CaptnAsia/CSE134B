@@ -335,8 +335,9 @@ $(window).load(function() {
 		}
 	}
 	// makes sure data is finished before loading the user's stack
+	console.log('window load: ' + jsonFinished);
 	if (jsonFinished) {
-		loadMyStack();
+		loadMyStack(getParameter('metal'));
 	}
 	// quandl data?
 	if (historicPrices == 1) {

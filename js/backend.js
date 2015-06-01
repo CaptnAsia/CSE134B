@@ -61,6 +61,7 @@ function loadMyStackJson() {
                 }
             }
         }
+          console.log('finished getting json');
           jsonFinished = true;
       },
       error: function(error) {
@@ -169,7 +170,7 @@ function loadPurityHeader(metal) {
 
 function loadTotalValue(metal) {
     var myStackTotalValue = document.getElementById('my-stack-total-value');
-
+    console.log(myStackJson);
     var bullionStack = myStackJson[metal];
     var totalBullionValue = 0;
 
@@ -183,12 +184,14 @@ function loadTotalValue(metal) {
 }
 
 function loadMyStack(metal) {
+    console.log('loadmystack: ' + jsonFinished);
+    console.log('what is my stack: ' + myStackJson + ' ' + metal);
     var tbody = document.createElement('tbody');
     var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
 
     var bullionStack = myStackJson[metal];
-
-    if (bullionStack.length === 0) {
+    console.log(bullionStack);
+    if (bullionStack.length == 0) {
         var newRow = tbody.insertRow(tbody.rows.length);
         var newCell = newRow.insertCell(newRow.cells.length);
         newCell.appendChild(document.createTextNode('None'));
