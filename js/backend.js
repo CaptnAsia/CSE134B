@@ -287,7 +287,9 @@ function loadBullion(bullion_id){
                             var purch1 = purchRow.insertCell(purchRow.cells.length); 
                             purch1.appendChild(document.createTextNode('Purchase Date'));
                             var purch2 = purchRow.insertCell(purchRow.cells.length);
-                            purch2.appendChild(document.createTextNode(bullion.get('purchaseDate')));
+                            var date = bullion.get('purchaseDate');
+                            date = String(date).split(" ");
+                            purch2.appendChild(document.createTextNode(date[1] + ' ' + date[2] + ', ' + date[3]));
                             
                             var PremiumRow = tbody.insertRow(tbody.rows.length);
                             var Premium1 = PremiumRow.insertCell(PremiumRow.cells.length); 
@@ -340,7 +342,8 @@ function loadBullion(bullion_id){
                             var total1 = totalRow.insertCell(totalRow.cells.length); 
                             total1.appendChild(document.createTextNode('Total'));
                             var total2 = totalRow.insertCell(totalRow.cells.length);
-                            total2.appendChild(document.createTextNode('Total?'));
+                            var total3 = (Number(bullion.get('premium'))+ Number(bullion.get('unitPrice'))) * Number(bullion.get('quantity'));
+                            total2.appendChild(document.createTextNode('$ ' + total3));
                     }   
                 //}  
             } 
