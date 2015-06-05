@@ -401,7 +401,7 @@ function loginPressed(event) {
 
 function logOutPressed(event) {
     Parse.User.logOut();
-    window.location.href = "./";
+    window.location.href = "./index.html";
 }
 
 function loadQuandl() {
