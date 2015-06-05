@@ -258,16 +258,35 @@ $(window).load(function() {
 
 	/* MIKE LU CODE END */
 
-	 $('.icon-spinner2').click(function(){
-	 	location.reload();	
-	 });
-	 //From Ricky: This causes a console error on new.html when selecting from dropdown
-	 //Since not all of them have a elements
-	 $('tr').click(function(){
-	 	$(this).find('a')[0].click();
-	 });
+	$('.icon-spinner2').click(function(){
+		location.reload();	
+	});
+	//From Ricky: This causes a console error on new.html when selecting from dropdown
+	//Since not all of them have a elements
+	$('tr').click(function(){
+		$(this).find('a')[0].click();
+	});
 
 
+ 	/* FRANKIE CODE: */
+ 	//Link view.html,new.html back to inventory.html 
+ 	var get_para = getParameter('metal');
+ 	if(get_para.length == 0) get_para = "gold";
+	var addr = "inventory.html?metal=" + get_para;
+	var links = document.getElementsByClassName("return_link");
+	if(links){
+		for(var i = 0; i < links.length; i++){
+			links[i].href = addr;
+		}
+	}
+	//For links directing to new.html in inventory.html, add metal=gold/silver/platinum parameter
+	links = document.getElementsByClassName("add_new_coin");
+	if(links){
+		addr = "new.html?metal=" + get_para;
+		for(var i = 0; i < links.length; i++){
+				links[i].href = addr;
+		}
+	}
 
 	//drawGraph();
 

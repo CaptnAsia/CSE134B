@@ -20,13 +20,14 @@ function loadMyStackJson() {
       success: function(results) {
         //alert("Successfully retrieved " + results.length + " bullions.");
         if (results.length === 0) {
-            //alert('My Stack is empty!');
+            // alert('My Stack is empty!');
         }
         else {
             totalBullionValue = 0;
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
                 var metal = bullion.get('metal').toLowerCase();
+                console.log("Adding metal: " + metal);
 
                 myStackJson[metal].push({
                     'id': bullion.id,
@@ -121,8 +122,6 @@ function loadPurityHeader(metal) {
 }
 
 function loadMyStack(metal) {
-    console.log('loadmystack: ' + jsonFinished);
-    console.log('what is my stack: ' + myStackJson + ' ' + metal);
     var tbody = document.createElement('tbody');
     var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
 
@@ -296,7 +295,7 @@ function linkTable() {
             var target = event.target ? event.target : event.srcElement;
             //alert(event.target + ' ' + event.target.getAttribute('data-id'));
             //var bullion_id = event.target.parentNode.getAttribute('data-id');
-            window.location.href = './view.html?id=' + event.target.parentNode.getAttribute('data-id');
+            window.location.href = './view.html?metal=' + getParameter('metal') + '&id=' + event.target.parentNode.getAttribute('data-id');
             //loadBullion(bullion_id);
         }, false);
     }
