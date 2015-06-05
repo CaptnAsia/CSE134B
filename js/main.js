@@ -464,7 +464,8 @@ $(window).load(function() {
 	 $('.icon-spinner2').click(function(){
 	 	location.reload();	
 	 });
-
+	 //From Ricky: This causes a console error on new.html when selecting from dropdown
+	 //Since not all of them have a elements
 	 $('tr').click(function(){
 	 	$(this).find('a')[0].click();
 	 });
