@@ -19,7 +19,6 @@ function loadMyStackJson() {
     query.find({
       success: function(results) {
         //alert("Successfully retrieved " + results.length + " bullions.");
-
         if (results.length === 0) {
             //alert('My Stack is empty!');
         }
@@ -61,14 +60,9 @@ function loadMyStackJson() {
                 if (historicPrices) {
                     makeMyGraph(metal);
                 }
-                // loadTotalValue(metal);
-
-                // if (historicPrices) {
-                //     loadMetalDaily(metal);
-                // }
             }
         }
-          jsonFinished = true;
+        jsonFinished = true;
       },
       error: function(error) {
         alert("Error: " + error.code + " " + error.message);
@@ -78,6 +72,8 @@ function loadMyStackJson() {
 
 /* TODO: fix on next release */
 function makeMyGraph(metal) {
+    //value check and default to gold
+    if(metal.length == 0) metal = "gold";
     /*weight*goldprice*purity*/
     myGraphData[metal] = new Array(graphData.data.labels.length);
     for (var i = 0; i < myStackJson[metal].length; i++) {
@@ -100,25 +96,6 @@ function makeMyGraph(metal) {
     }
 }
 
-function loadMetalDaily(metal) {
-    //alert(graphData.data.labels.indexOf('2015-05-28'));
-    // value of 1ozt of metal yesterday
-    var yesterday = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length -2];
-    // value of 1ozt of metal today
-    var today = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length-1];
-
-    // value of 1ozt of metal at beginning of month
-    var beginning = graphData.data.datasets[0].data[0];
-
-    // Daily Percentage of change of market percent.
-    // //TODO: do math here, eric, for the user's
-    var dailyPercent = (today/yesterday - 1).toFixed(2);
-    // Doesn't work yet
-    dailyPercent = (dailyPercent >= 0)? '+' + dailyPercent : dailyPercent;
-    var dailyPercentHTML = document.getElementById('daily-change-percent');
-    dailyPercentHTML.innerHTML = dailyPercent;
-    //alert("dailyPercent: " + dailyPercent);
-}
 
 function formatDate(date) {
     var month = date.getMonth() < 9 ? '0' : '';
@@ -141,21 +118,6 @@ function loadPurityHeader(metal) {
         default:
             purityHeader.innerHTML = "% au";
     }
-}
-
-function loadTotalValue(metal) {
-    var myStackTotalValue = document.getElementById('my-stack-total-value');
-    console.log(myStackJson);
-    var bullionStack = myStackJson[metal];
-    var totalBullionValue = 0;
-
-    if (bullionStack.length !== 0) {
-        for (var i = 0; i < bullionStack.length; i++) {
-            var bullion = bullionStack[i];
-            totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
-        }
-    }
-    myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
 }
 
 function loadMyStack(metal) {
@@ -207,13 +169,6 @@ function loadMyStack(metal) {
     }
 }
 
-/*
-function loadBullionStack(metal){
-    lastMetal = metal;
-    currentBullionStack = myStackJson[metal];
-    //alert('loaded new bullionstack');
-}
-*/
 
 //Ricky's load bullion for view.html
 function loadBullion(bullion_id){
@@ -331,7 +286,6 @@ function loadBullion(bullion_id){
 }
 
 
-
 function linkTable() {
     var myStack = document.getElementsByClassName('my_stack')[0].firstElementChild;
     for (var i = 1, row; row = myStack.rows[i]; i++) {
@@ -387,7 +341,7 @@ function loginPressed(event) {
         target.previousElementSibling.style.display = "block";
         target.setAttribute('data-pressed', '1');
     } else {
-        var login = document.forms['log-in-form'];zn
+        var login = document.forms['log-in-form'];
         Parse.User.logIn(login['email'].value, login['password'].value, {
             success: function(user) {
                 window.location.href = "./home.html";
@@ -475,77 +429,10 @@ function getData(metal) {
             if (jsonFinished) {
                 makeMyGraph(getParameter('metal'));
             }
-            // if (pageLoaded && jsonFinished) {
-                // loadMetalDaily();
-            // }
         }
-
-
     }})
 }
-/* var finishGraph = function (xAxis, yAxis, metal) {
- metal = metal.toLowerCase();
- var pointStroke = "rgba(255,255,255,0.6)";
- var pointHighlightFill = "#fff";
- var pointHighlightStroke = "#fff";
- var graphColor;
- if (metal == 'platinum') graphColor = '#BBF5FF';
- else if (metal == 'silver') graphColor = '#C29FFF';
- else graphColor = '#9FFF98';
- data = {
- labels: xAxis,
- datasets: [
-{
-    label: "1ozt "+ metal,
-        fillColor: "rgba(104, 206, 222, 0.05)",
-    strokeColor: graphColor,
-    pointColor: graphColor,
-    pointStrokeColor: pointStroke,
-    pointHighlightFill: pointHighlightFill,
-    pointHighlightStroke: pointHighlightStroke,
-    data: yAxis
-}
-]
-};*/
-/*
-function getData(metal) {
-    metal = metal.toLowerCase();
-    var authtoken = 'C5xqJubuHk82paW6ryzH';
-    var xmlhttp;
-    var dbLink;
-    if (window.XMLHttpRequest) {
-        xmlhttp= new XMLHttpRequest();
-    } else {
-        xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-    }
-    var today = new Date();
-    var endDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    today.setMonth(today.getMonth()-1);
-    var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
-    if (metal == 'platinum') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
-    } else if (metal == 'silver') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
-    } else {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
-    }
 
-    dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
-    xmlhttp.onreadystatechange = function () {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var myData = JSON.parse(xmlhttp.responseText);
-            var xAxis = new Array(myData.data.length);
-            var yAxis = new Array(myData.data.length);
-            for (var i = (myData.data.length-1); i >= 0; i--) {
-                xAxis[myData.data.length - i - 1] = myData.data[i][0];
-                yAxis[myData.data.length - i - 1] = myData.data[i][1];
-            }
-            finishGraph(xAxis, yAxis, metal);
-        }
-    }
-    xmlhttp.open("GET",dbLink);
-    xmlhttp.send();
-}*/
 
 function saveBullion() {
 	var Bullion = Parse.Object.extend("Bullion");

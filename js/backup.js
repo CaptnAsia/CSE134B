@@ -310,3 +310,121 @@ function getData(metal) {
     xmlhttp.open("GET",dbLink);
     xmlhttp.send();
 }*/
+
+/*
+function loadBullionStack(metal){
+    lastMetal = metal;
+    currentBullionStack = myStackJson[metal];
+    //alert('loaded new bullionstack');
+}
+*/
+
+function loadMetalDaily(metal) {
+    //alert(graphData.data.labels.indexOf('2015-05-28'));
+    // value of 1ozt of metal yesterday
+    var yesterday = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length -2];
+    // value of 1ozt of metal today
+    var today = graphData.data.datasets[0].data[graphData.data.datasets[0].data.length-1];
+
+    // value of 1ozt of metal at beginning of month
+    var beginning = graphData.data.datasets[0].data[0];
+
+    // Daily Percentage of change of market percent.
+    // //TODO: do math here, eric, for the user's
+    var dailyPercent = (today/yesterday - 1).toFixed(2);
+    // Doesn't work yet
+    dailyPercent = (dailyPercent >= 0)? '+' + dailyPercent : dailyPercent;
+    var dailyPercentHTML = document.getElementById('daily-change-percent');
+    dailyPercentHTML.innerHTML = dailyPercent;
+    //alert("dailyPercent: " + dailyPercent);
+}
+
+function loadTotalValue(metal) {
+    var myStackTotalValue = document.getElementById('my-stack-total-value');
+    console.log(myStackJson);
+    var bullionStack = myStackJson[metal];
+    var totalBullionValue = 0;
+
+    if (bullionStack.length !== 0) {
+        for (var i = 0; i < bullionStack.length; i++) {
+            var bullion = bullionStack[i];
+            totalBullionValue += bullion['unitPrice'] * bullion['quantity'];
+        }
+    }
+    myStackTotalValue.innerHTML = '$' + totalBullionValue.toFixed(2).replace(/\d(?=(\d{3})+\.)/g, '$&,');
+}
+
+
+
+// --------------- GET.js ------------------------------------------------------------
+
+/*
+  var Bullion = Parse.Object.extend("Bullion");
+  var query = new Parse.Query(Bullion);
+  query.containedIn('owner', [Parse.User.current()])
+  query.find({
+    success: function(results) {
+      var totalValues = 0.0;
+      var totalChanges = 0.0;
+      var originalValues = 0.0;
+      for(var i = 0; i < results.length; i++){
+        var bullion = results[i];
+        var metal = bullion.get('metal').toLowerCase();
+        var weight = bullion.get('weight') * bullion.get('purity') * bullion.get('quantity');
+        var origin = bullion.get('unitPrice') + bullion.get('premium');
+        var value = 0;
+        var change = 0;
+        if(metal == target_metal){
+          value = weight * metals.bid + bullion.get('premium');
+          change = weight * metals.change;
+        }else if(target_metal == "All"){
+          var targetMetal = metals[2];
+          if(metal == "gold") targetMetal = metals[0];
+          else if(metal == "silver") targetMetal = metals[1];
+          value = weight * targetMetal.bid + bullion.get('premium');
+          change = weight * targetMetal.change;
+        }else{
+          origin = 0;
+        }
+        totalValues += value;
+        totalChanges += change;
+        originalValues += origin;
+      }
+      //update the percent change value
+      var percentChange;
+      var overalChange;
+      if(totalValues == 0){
+        percentChange = 0;
+        overalChange = 0;
+      }else{
+        percentChange = totalChanges * 100 / totalValues;
+        overalChange = (totalValues - originalValues) / originalValues;
+      }
+      percentChange = percentChange.toFixed(2);
+      overalChange = overalChange.toFixed(2);
+      var changeString = String(percentChange) + "%";
+      var overalString = String(overalChange) + "%";
+      if(percentChange > 0) changeString = "+" + changeString;
+      if(overalChange > 0) overalString = "+" + overalString;
+
+      //update the total value
+      totalValues = totalValues.toFixed(2);
+      totalValueString = "$" + String(totalValues);
+      totalValueString = totalValueString.replace(/\d(?=(\d{3})+\.)/g, '$&,');
+      $(".total-dollars").html(totalValueString);
+      
+      if(toggle){
+        //For home page
+        $(".total-change").html(changeString);
+      }else{
+        //For inventory page
+        $("#daily-change-percent").html(changeString);
+        $("#overall_change_percent").html(overalString);
+      }
+    },
+    error: function(error) {
+      console.log("Error: " + error.code + " " + error.message);
+    }
+  });
+
+*/
