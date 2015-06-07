@@ -318,6 +318,39 @@ function loadBullion(bullion_id){
     });
 }
 
+function deleteBullion(bullion_id){
+    var bullTable = document.getElementsByClassName('coin_detail')[0].firstElementChild;
+    var tbody = document.createElement('tbody');
+    var Bullion = Parse.Object.extend("Bullion");
+    var query = new Parse.Query(Bullion);
+    query.containedIn('owner', [Parse.User.current()])
+    //query.containedIn('id'.toLowerCase(), [bullion_id])
+    query.find({
+        success: function(results) {
+        //alert(results.length);
+        //var bullion = results;
+        //if(results.length != 0){
+        //alert(bullion);
+        //var count =0;
+            for(var i = 0; i < results.length; i++){
+                //alert(results[0]);
+                var bullion = results[i];
+                //alert(bullion.id + 'is id');
+                //alert(bullion_id + 'is bullion_id');
+                var metal = bullion.get('metal');
+                //var bullion = myStackJson[metal];
+                //for(var x = 0; x < bullion.length; x++){
+                    if(bullion.id.toLowerCase() === bullion_id){
+                        bullion.destory({});
+                    }
+            }
+        },
+        error: function(error) {
+            alert("Error: " + error.code + " " + error.message);
+        }
+
+    });
+}
 
 function linkTable() {
     var myStack = document.getElementsByClassName('my_stack')[0].firstElementChild;
