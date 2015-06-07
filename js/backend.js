@@ -321,7 +321,8 @@ function loadBullion(bullion_id){
     });
 }
 
-function deleteBullion(bullion_id){
+function deleteBullion(){
+    var bullion_id = getParameter('id');
     var bullTable = document.getElementsByClassName('coin_detail')[0].firstElementChild;
     var tbody = document.createElement('tbody');
     var Bullion = Parse.Object.extend("Bullion");
@@ -344,7 +345,9 @@ function deleteBullion(bullion_id){
                 //var bullion = myStackJson[metal];
                 //for(var x = 0; x < bullion.length; x++){
                     if(bullion.id.toLowerCase() === bullion_id){
-                        bullion.destory({});
+                        bullion.destroy({});
+                        alert("successfully deleted");
+                        window.location.href = './home.html';
                     }
             }
         },
