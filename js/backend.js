@@ -25,7 +25,7 @@ function loadMyStackJson() {
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
                 var metal = bullion.get('metal').toLowerCase();
-                console.log("Adding metal: " + metal);
+                //console.log("Adding metal: " + metal);
 
                 myStackJson[metal].push({
                     'id': bullion.id,
@@ -59,7 +59,7 @@ function loadMyStackJson() {
                 loadPurityHeader(metal);
                 loadMyStack(metal);
                 if (historicPrices) {
-                    console.log('test');
+                    //console.log('test');
                     makeMyGraph(metal);
                     finishGraph();
                 }
@@ -73,12 +73,12 @@ function loadMyStackJson() {
     });
 }
 
-/* TODO: fix on next release */
+
 function makeMyGraph(metal) {
     if (myStackJson[metal].length == 0) {
         return;
     }
-    console.log('adding my ' + metal + 'values to graph');
+    //console.log('adding my ' + metal + 'values to graph');
     //value check and default to gold
     if(metal.length == 0) metal = "gold";
     /*weight*goldprice*purity*/
@@ -92,21 +92,24 @@ function makeMyGraph(metal) {
         var eDate = new Date(graphData.data.labels[0]);
         if (pDate > eDate) {
             j = graphData.data.labels.indexOf(formatDate(pDate));
+            if (j == -1) continue;
         }
-        while (j < myGraphData[metal].length) {
+        var k, d;
+        for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets.length; k++) {
+            if (d[k].label == ('1ozt'+metal)) {
+                break;
+            }
+        }
+        while (j < (myGraphData[metal].length)) {
+            //console.log(j);
             if (!myGraphData[metal][j]) {
                 myGraphData[metal][j] = 0;
-            }
-            var k, d;
-            for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets.length; k++) {
-                if (d[k].label == ('1ozt'+metal)) {
-                    break;
-                }
             }
             var value = myStackJson[metal][i].quantity*
                     myStackJson[metal][i].weight*
                     graphData.data.datasets[k].data[j];
-            myGraphData[metal][j] += value.toFixed(2);
+            value += myGraphData[metal][j];
+            myGraphData[metal][j] = value.toFixed(2);
             j++;
         }
     }
@@ -160,7 +163,7 @@ function loadMyStack(metal) {
     var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
 
     var bullionStack = myStackJson[metal];
-    console.log(bullionStack);
+    //console.log(bullionStack);
     if (bullionStack.length == 0) {
         var newRow = tbody.insertRow(tbody.rows.length);
         var newCell = newRow.insertCell(newRow.cells.length);
@@ -389,7 +392,7 @@ function signupPressed(event) {
                 alert(user.getEmail() + "signed up");
             },
             error: function (user, error) {
-                //alert("Error: " + error.code + " " + error.message);
+                alert("Error: " + error.code + " " + error.message);
             }
         });
     }
@@ -424,6 +427,37 @@ function logOutPressed(event) {
     window.location.href = "./index.html";
 }
 
+function changeUserSettings() {
+
+    var pass = document.getElementById('user_pass').value;
+    var user = Parse.User.current();
+    if (user) {
+        email = document.getElementById('new_email').value;
+        if (email) {
+            user.set('email', email);
+            user.set('username', email);
+        }
+
+        pass = document.getElementById('new_pass').value;
+        if (pass) {
+            user.set('password', pass);
+        }
+        user.save(null, {
+            success: function(user) {
+                var message = document.getElementById('error_messages');
+                var email = document.getElementById('user_email').innerHTML = Parse.User.current().get('username');
+                message.innerHTML = 'Successfully updated the user.';
+                message.style.visibility = 'visible';
+
+            },
+            error: function(user, error) {
+                message.innerHTML = 'error: ' + error.code + ' ' + error.message;
+                message.style.visiblity = 'visible';
+            }
+        });
+    }
+}
+
 function loadQuandl() {
     if (page == 'home.html') {
         getData('gold');
@@ -443,11 +477,11 @@ function getData(metal) {
     today.setDate(today.getDate()-30);
     var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     if (metal == 'platinum') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.json';
     } else if (metal == 'silver') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/AG_EIB.json';
     } else {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json';
     }
     dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
     $.ajax({url: dbLink, success: function(result) {
@@ -508,6 +542,51 @@ function getData(metal) {
     }})
 }
 
+//called on update_attributes
+function update_unit_price() {
+	var spot_price;
+	var unit_price = document.getElementById("unit_price");
+	var weight = document.getElementById("weight");
+	var purity = Number(document.getElementById("purity").getAttribute("data-value"));
+	var selected_weight = Number(weight.options[weight.selectedIndex].value);
+	
+	//use quandl to get spot_price
+	var metal = document.getElementById("metal_type");
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
+		
+    var authtoken = 'C5xqJubuHk82paW6ryzH';
+    var dbLink;
+	var purchase_date = document.getElementsByName("purchase_date");
+	purchase_date = new Date(purchase_date[0].value);
+	purchase_date.setDate(purchase_date.getDate()+1);
+	
+	var start_date = new Date(purchase_date);
+	for(i=0;i<7;i++) {
+	start_date.setDate(start_date.getDate()-2);
+	}
+	
+	var start_date = start_date.getFullYear()+"-"+(start_date.getMonth()+1)+"-"+start_date.getDate();
+	var end_date = purchase_date.getFullYear()+"-"+(purchase_date.getMonth()+1)+"-"+purchase_date.getDate();
+
+	if (selected_metal == 'platinum') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+    } else if (selected_metal == 'silver') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+    } else {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    }
+	dbLink += "?trim_start="+start_date+"&trim_end="+end_date+"&auth_token="+authtoken;
+	 $.ajax({url: dbLink, success: function(result) {
+		if(result.data[0][1] != null) {
+			spot_price = result.data[0][1];
+		}
+		else {
+			spot_price = result.data[0][2];
+		}
+		unit_price.textContent = ((selected_weight * purity) * spot_price).toFixed(2);
+		update_total();
+	 }})	
+}
 
 function saveBullion() {
 	var Bullion = Parse.Object.extend("Bullion");
@@ -528,8 +607,8 @@ function saveBullion() {
 	save_input = document.getElementsByName("quantity");
 	bullion.set("quantity", Number(save_input[0].value));
 	
-	save_input = document.getElementsByName("unit_price");
-	bullion.set("unitPrice", Number(save_input[0].value));
+	save_input = document.getElementById("unit_price");
+	bullion.set("unitPrice", Number(save_input.textContent));
 	
 	save_input = document.getElementById("purity");
 	bullion.set("purity", Number(save_input.getAttribute("data-value")));
@@ -543,7 +622,7 @@ function saveBullion() {
 
 	bullion.save(null, {
 	  success: function(bullion) {
-	  console.log("coin saved");
+	  //console.log("coin saved");
 		// Execute any logic that should take place after the object is saved.
 		//alert('New object created with objectId: ' + bullion.id);
 	  },
@@ -552,7 +631,7 @@ function saveBullion() {
 		// error is a Parse.Error with an error code and message.
 	  }
 	});
-	//window.history.back();
+	window.history.back();
 }
 
 $(function() {

@@ -20,6 +20,7 @@
 </head>
 
 <body>
+<noscript>Please enable JavaScript in order to use this website.</noscript>
     <script type="text/javascript">
     loadTopNav();
     </script>
@@ -87,7 +88,7 @@
 						<tr>
                             <td>Weight/unit</td>
                             <td>
-                                <select id="weight" onchange="update_weight()">
+                                <select id="weight" onchange="update_weight();">
                                     <option selected value=".05">1/20 ozt</option>
 									<option value=".1">1/10 ozt</option>
 									<option value=".25">1/4 ozt</option>
@@ -99,41 +100,39 @@
                         <tr>
                             <td>Purchase Date</td>
                             <td>
-                                <input type="date" name="purchase_date" value="" />
+                                <input type="date" name="purchase_date" value="" onblur="update_purchase_date();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input type="number" name="quantity" min="1" value="1" />
+                                <input type="number" name="quantity" min="1" value="1"  onblur="update_weight(); update_total();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input type="number" name="premium" min="0.01" value="0.01" />
+                                <input type="number" name="premium" min="0.01" value="0.01" onblur="update_total();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
-                            <td>
-                                <input type="number" name="unit_price" min="0.01" value="0.01" />
-                            </td>
+							<td id="unit_price" onblur="update_total();">50.37</td>
                         </tr>
                         <tr>
                             <td>Purity</td>
-                            <td id="purity" data-value=".9167">91.67%</td>
+                            <td id="purity" data-value=".9995">99.95%</td>
                         </tr>
                         <tr>
                             <td id="total_au_hdr">Total Pt (ozt)</td>
-                            <td id="total_au">0.0400</td>
+                            <td id="total_au">0.05</td>
                         </tr>
                         <tr>
                             <td><strong>TOTAL</strong></td>
-                            <td id="added_val"><strong>0.02</strong></td>
+                            <td id="added_val"><strong>50.37</strong></td>
                         </tr>
                     </table>
-                    <p onclick="saveBullion()" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
+                    <p onclick="saveBullion();" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
                     <a href="inventory.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>

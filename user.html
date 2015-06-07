@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta name="description" content="bullion management site, rare coins, gold, silver, platinum">
+    <meta name="author" content="CSE134B Dream Team">
+    <link rel="stylesheet" type="text/css" href="./style/style.css">
+    <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
+    <link rel="icon" href="favicon.ico" type="image/x-icon" />
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="./js/parse-1.4.2.js"></script>
+    <script src="./js/jquery-1.11.2.min.js"></script>
+    <script src="./js/bulliondetail.js"></script>
+    <script src="./js/backend.js"></script>
+    <script src="./js/velocity.min.js"></script>
+    <script src="./js/render.js"></script>
+    <script src="./js/main.js"></script>
+    <title>User Settings - ShinyStack</title>
+</head>
+<body>
+<noscript>Please enable JavaScript in order to use this website.</noscript>
+<script type="text/javascript">
+    loadTopNav();
+</script>
+<script type="text/javascript">
+    loadSideNav(1);
+</script>
+
+<section class="main-section">
+    <section class="coin_wrapper">
+        <div class="mobile-nav">
+            <a class="return_link" href="#">
+                <svg class="icon icon-keyboard-arrow-left">
+                    <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
+                        <title>keyboard-arrow-left</title>
+                        <path class="path1" d="M657.707 696.96l-195.627-195.627 195.627-195.627-60.373-60.373-256 256 256 256z"></path>
+                    </symbol>
+                    <use xlink:href="#icon-keyboard-arrow-left"></use>
+                </svg>
+            </a>
+            USER SETTINGS
+        </div>
+        <div class="coin_main">
+            <a class="return_link" href="#">
+                <div class="breadcrumb">
+                    <svg class="icon icon-play-arrow-rev">
+                        <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
+                            <title>play-arrow</title>
+                            <path class="path1" d="M682.667 213.333v597.333l-469.333-298.667z"></path>
+                        </symbol>
+                        <use xlink:href="#icon-play-arrow"></use>
+                    </svg>
+                    User Settings
+                </div>
+            </a>
+            <section class="coin_detail">
+                <table>
+                    <tr>
+                        <td>Current Email: </td>
+                        <td id="user_email"></td>
+                    </tr>
+                    <tr>
+                        <td>New Email: </td>
+                        <td>
+                            <input type="text" id="new_email">
+                            </input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>New Password: </td>
+                        <td>
+                            <input type="password" id="new_pass">
+                            </input>
+                        </td>
+                    </tr>
+                </table>
+                <section id="error_messages" style="text-align: center; margin-bottom: 10px; visibility: hidden">Error: something happened</section>
+                <p onclick="changeUserSettings()" style="cursor:pointer;"><span id="save">Update User and/or Password</span></p>
+                <a href="home.html"><span id="cancel">Cancel</span></a>
+            </section>
+        </div>
+    </section>
+    <script type="text/javascript">
+        loadFooter();
+    </script>
+</section>
+
+</body>
+</html>

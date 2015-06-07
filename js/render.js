@@ -18,6 +18,7 @@ function loadTopNav(){
   document.write("        <\/svg>");
   document.write("  <aside>");
   document.write("    <div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+  document.write("      <span id=\"sign-up-button\" style=\"display: block;width: 90%;margin: 0 auto 10px;\">User Settings<\/span>");
   document.write("      <span id=\"log-in-button\">Log Out<\/span><\/div>");
   document.write("  <\/aside>");
   document.write("<\/nav>");
@@ -42,6 +43,7 @@ function loadTopNavPersist(){
   document.write("        <\/svg>");
   document.write("  <aside>");
   document.write("    <div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
+  document.write("      <span id=\"sign-up-button\" style=\"display: block;width: 90%;margin: 0 auto 10px;\">User Settings<\/span>");
   document.write("      <span id=\"log-in-button\">Log Out<\/span><\/div>");
   document.write("  <\/aside>");
   document.write("    <\/nav>");

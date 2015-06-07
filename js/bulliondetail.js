@@ -66,7 +66,7 @@ var bullionDetail = {
         },
         "United Kingdom Sovereign": {
             "purity": ".9167",
-            "weight": "7.3224 g = 0.2354 ozt",
+            "weight": "0.2354 ozt",
             "year": "1887 - 1932\n1949 - 1952 (dated 1925)\n1957 - 1959\n1962 - 1968\n1974, 1976, 1978 - 1982\n2000–present"
         },
         "United Kingdom Britannia": {"purity": ".9999", "weight": "1 ozt", "year": "2013-"},
@@ -153,7 +153,7 @@ var bullionDetail = {
         "Tokelau Crocodile": {"purity": ".999", "weight": "1 ozt", "year": "2013"},
         "Turkey Street Stray Animals": {"purity": ".925", "weight": "1 ozt", "year": "-"},
         "Ukraine Archangel Michael": {"purity": ".9999", "weight": "1 ozt", "year": "2011–present"},
-        "United Kingdom The George and the Dragon": {"purity": ".999", "weight": "15.71 g", "year": "2013"},
+        "United Kingdom The George and the Dragon": {"purity": ".999", "weight": "1/2 ozt", "year": "2013"},
         "United Kingdom Britannia": {"purity": ".999", "weight": "1 ozt", "year": "2013-"},
         "United States America the Beautiful": {"purity": ".999", "weight": "5 ozt", "year": "2010–present"},
         "United States Silver Eagle": {"purity": ".999", "weight": "1 ozt", "year": "1986–present"}
@@ -246,7 +246,6 @@ function update_types() {
 	}
 	
 	update_attributes();
-	//update_unit_price();
 }
 
 function update_attributes() {
@@ -274,7 +273,7 @@ function update_attributes() {
 		weight_list.add(option,0);
 	}
 	
-	//update_unit_price();
+	update_weight();
 }
 
 
@@ -286,4 +285,6 @@ function update_weight() {
 	
 	var total_au = document.getElementById("total_au");
 	total_au.textContent = (selected_weight * quantity[0].value).toFixed(2);
+	update_unit_price();
+	update_total();
 }

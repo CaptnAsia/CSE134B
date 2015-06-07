@@ -76,7 +76,7 @@ var finishGraph = function() {
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
-	console.log('called twice?');
+	//console.log('called twice?');
 	//13:30 UTC = 9:30 EST
 	//20:00 UTC = 16:00 EST
 	var openHour = 13;
@@ -131,6 +131,59 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
+function todayFormatted() {
+	var today = new Date();
+	var month = today.getMonth()+1;
+	var day = today.getDate();
+	if(month < 10) {
+		month = "0"+month;
+	}
+	if(day < 10) {
+		day = "0"+day;
+	}
+	var today_formatted = today.getFullYear()+"-"+month+"-"+day;
+	return today_formatted;
+}
+
+// purchase_date cannot be past today
+function update_purchase_date() {
+	var metal = document.getElementById("metal_type");
+	metal = metal.options[metal.selectedIndex].value;
+	var purchase_date = document.getElementsByName("purchase_date");
+	var pDateObj = new Date(purchase_date[0].value);
+	var today = new Date();
+	if(pDateObj >= today){
+		purchase_date[0].value = todayFormatted();
+	}
+	// quandl only goes back so far...
+	else if(purchase_date[0].value < "1990-04-02" && metal == "platinum") {
+		purchase_date[0].value = "1990-04-02";
+	}
+	else if(purchase_date[0].value < "1968-01-02") {
+		purchase_date[0].value = "1968-01-02";
+	}
+	update_unit_price();
+}
+
+function update_total() {
+	var quantity = document.getElementsByName("quantity");
+	var premium = document.getElementsByName("premium");
+	var unit_price = document.getElementById("unit_price");
+	if(quantity[0].value < 1) {
+		quantity[0].value = 1;
+	}
+	if(premium[0].value < 0.01) {
+		premium[0].value = 0.01;
+	}
+	
+	quantity[0].value = Math.floor(quantity[0].value);
+	premium[0].value = Number(premium[0].value).toFixed(2);
+	unit_price.textContent = Number(unit_price.textContent).toFixed(2);
+	var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price.textContent))).toFixed(2);
+	var total_location = document.getElementById("added_val");
+	total_location.innerHTML = "<strong>"+total+"</strong>";
+		}
+		
 $(window).load(function() {
 	if (pageLoaded) {
 		return;
@@ -144,7 +197,7 @@ $(window).load(function() {
 		}
 	}
 	// makes sure data is finished before loading the user's stack
-	console.log('window load: ' + jsonFinished);
+	//console.log('window load: ' + jsonFinished);
 	if (jsonFinished) {
 		loadMyStack(getParameter('metal'));
 	}
@@ -183,55 +236,18 @@ $(window).load(function() {
 		}
 	} else if(page == "new.html") {
 			//change to current day
-			var today = new Date();
-			var month = today.getMonth()+1;
-			var day = today.getDate();
-			if(month < 10) {
-				month = "0"+month;
-			}
-			if(day < 10) {
-				day = "0"+day;
-			}
-		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
+		var today_formatted = todayFormatted();
 		var purchaseDate = document.getElementsByName("purchase_date");
-		purchaseDate[0].value = todayFormatted;
+		purchaseDate[0].value = today_formatted;
+		update_unit_price();
 
-		function update_total(quantity, premium, unit_price, update_gold) {
-			if(quantity[0].value < 1) {
-				quantity[0].value = 1;
-			}
-			else if(premium[0].value < 0.01) {
-				premium[0].value = 0.01;
-			}
-			else if(unit_price[0].value < 0) {
-				unit_price[0].value = 0.01;
-			}
-			
-			quantity[0].value = Math.floor(quantity[0].value);
-			premium[0].value = Number(premium[0].value).toFixed(2);
-			unit_price[0].value = Number(unit_price[0].value).toFixed(2);
-			var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))).toFixed(2);
-			var total_location = document.getElementById("added_val");
-			total_location.innerHTML = "<strong>"+total+"</strong>";
-			
-			if(update_gold) {
-				var weight = document.getElementById("weight");
-				var selected_weight = weight.options[weight.selectedIndex].value;
-				var total_au = document.getElementById("total_au");
-				total_au.textContent = (selected_weight * quantity[0].value).toFixed(2);
-			}
-		}
-		
-		var quantity = document.getElementsByName("quantity");
-		var premium = document.getElementsByName("premium");
-		var unit_price = document.getElementsByName("unit_price");
-		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 1)}, false);
-		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
-		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
 	} else if(page == "view.html"){
 		var bull_id = getParameter('id');
 		//var metal = getParameter('metal');
 		loadBullion(bull_id);
+	} else if (page == 'user.html') {
+		var currUser = Parse.User.current();
+		document.getElementById('user_email').innerHTML = currUser.get('username');
 	}
 
 	// check if the market is open
@@ -253,7 +269,7 @@ $(window).load(function() {
 	if (document.getElementById('settingsBox')) {
 		document.getElementsByClassName("icon-cog")[0].addEventListener("click", toggleSettings, false);
 		document.getElementById('log-in-button').addEventListener("click", logOutPressed, false);
-
+		document.getElementById('sign-up-button').addEventListener('click', function() { window.location.href = './user.html'}, false);
 		// input the current user name
 		document.getElementById('currentUser').appendChild(document.createTextNode(Parse.User.current().get('username')));
 	}
@@ -268,11 +284,12 @@ $(window).load(function() {
 	$('.icon-spinner2').click(function(){
 		location.reload();	
 	});
-	//From Ricky: This causes a console error on new.html when selecting from dropdown
-	//Since not all of them have a elements
-	$('tr').click(function(){
-		$(this).find('a')[0].click();
-	});
+	if(page != "new.html")
+	{
+		$('tr').click(function(){
+			$(this).find('a')[0].click();
+		});
+	}
 
 
  	/* FRANKIE CODE: */
