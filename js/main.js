@@ -197,14 +197,14 @@ $(window).load(function() {
 		purchaseDate[0].value = todayFormatted;
 
 		function update_total(quantity, premium, unit_price, update_gold) {
-			if(quantity[0].value < 0) {
-				quantity[0].value = 0;
+			if(quantity[0].value < 1) {
+				quantity[0].value = 1;
 			}
-			else if(premium[0].value < 0) {
-				premium[0].value = 0;
+			else if(premium[0].value < 0.01) {
+				premium[0].value = 0.01;
 			}
 			else if(unit_price[0].value < 0) {
-				unit_price[0].value = 0;
+				unit_price[0].value = 0.01;
 			}
 			
 			quantity[0].value = Math.floor(quantity[0].value);
