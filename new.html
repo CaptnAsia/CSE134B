@@ -85,14 +85,14 @@
                             </td>
                         </tr>
 						<tr>
-                            <td>Weight/unit (g)</td>
+                            <td>Weight/unit</td>
                             <td>
                                 <select id="weight" onchange="update_weight()">
-                                    <option selected value="1/20 ozt">1/20 ozt</option>
-									<option value="1/10 ozt">1/10 ozt</option>
-									<option value="1/4 ozt">1/4 ozt</option>
-									<option value="1/2 ozt">1/2 ozt</option>
-									<option value="1 ozt">1 ozt</option>
+                                    <option selected value=".05">1/20 ozt</option>
+									<option value=".1">1/10 ozt</option>
+									<option value=".25">1/4 ozt</option>
+									<option value=".5">1/2 ozt</option>
+									<option value="1">1 ozt</option>
                                 </select>
                             </td>
                         </tr>
@@ -111,22 +111,18 @@
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input type="number" name="premium" value="0.01" />
+                                <input type="number" name="premium" value="0.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
                             <td>
-                                <input type="number" name="unit_price" value="0.01" />
+                                <input type="number" name="unit_price" value="0.00" />
                             </td>
                         </tr>
                         <tr>
                             <td>Purity</td>
-                            <td id="purity">91.67%</td>
-                        </tr>
-                        <tr>
-                            <td>Metal ozt/u</td>
-                            <td id="ozt_u" value="0.0400">0.0400</td>
+                            <td id="purity" data-value=".9167">91.67%</td>
                         </tr>
                         <tr>
                             <td>Total au (ozt)</td>

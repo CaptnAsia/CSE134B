@@ -215,9 +215,10 @@ $(window).load(function() {
 			total_location.innerHTML = "<strong>"+total+"</strong>";
 			
 			if(update_gold) {
-				var ozt_u = document.getElementById("ozt_u").innerHTML;
+				var weight = document.getElementById("weight");
+				var selected_weight = weight.options[weight.selectedIndex].value;
 				var total_au = document.getElementById("total_au");
-				total_au.innerHTML = (ozt_u * quantity[0].value).toFixed(2);
+				total_au.textContent = (selected_weight * quantity[0].value).toFixed(2);
 			}
 		}
 		
