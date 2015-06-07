@@ -203,10 +203,36 @@ for (var i = 1, row; row = goldtable.rows[i]; i++) {
 
 bullionDetail['gold']['Australia Gold Nugget']
 */
+function eval_weight (selected_weight) {
+	var abc = selected_weight.trim().split(' ');
+	var b = eval(abc[0]);
+	return b;
+}
+
+//called on update_attributes
+/*function update_unit_price () {
+	var unit_price = document.getElementsByName("unit_price");
+	var weight = document.getElementById("weight");
+	var purity = Number(document.getElementById("purity").getAttribute("data-value"));
+	var selected_weight = Number(weight.options[weight.selectedIndex].value);
+	var spot_price = 1200;
+	
+	unit_price[0].value = ((selected_weight * purity) * spot_price).toFixed(2);
+}*/
 
 function update_types() {
 	var metal = document.getElementById("metal_type");
 	var selected_metal = String(metal.options[metal.selectedIndex].value);
+	var total_metal_header = document.getElementById("total_au_hdr");
+	if(selected_metal == "gold"){
+		total_metal_header.textContent = "Total Au (ozt)";
+	}
+	else if(selected_metal == "silver"){
+		total_metal_header.textContent = "Total Ag (ozt)";
+	}
+	else{
+		total_metal_header.textContent = "Total Pt (ozt)";
+	}
 	var coin_list = document.getElementById("coin_type");
 	for (i=coin_list.length-1; i >= 0 ; i--)
 	{
@@ -214,24 +240,25 @@ function update_types() {
 	}
 	
 	for(var key in bullionDetail[selected_metal]) {
-		console.log(key);
 		var option = document.createElement('option');
 		option.text = option.value = key;
 		coin_list.add(option,0);
 	}
+	
+	update_attributes();
+	//update_unit_price();
 }
 
 function update_attributes() {
-	var purity = document.getElementById("purity");
-
 	var metal = document.getElementById("metal_type");
 	var selected_metal = String(metal.options[metal.selectedIndex].value);
 	var coin_list = document.getElementById("coin_type");
 	var coin_type = String(coin_list.options[coin_list.selectedIndex].value);
 
 	var purity = document.getElementById("purity");
-	purity.innerHTML = bullionDetail[selected_metal][coin_type].purity+"%";
-	
+	var new_purity = bullionDetail[selected_metal][coin_type].purity;
+	purity.textContent = new_purity*100+"%";
+	purity.setAttribute("data-value", new_purity);
 	
 	var weight = bullionDetail[selected_metal][coin_type].weight;
 	var greg = weight.split(',');
@@ -242,22 +269,21 @@ function update_attributes() {
 	}
 	for(i=0; i < greg.length; i++) {
 		var option = document.createElement('option');
-		option.text = option.value = greg[i];
+		option.text = greg[i];
+		option.value = eval_weight(greg[i]);
 		weight_list.add(option,0);
 	}
+	
+	//update_unit_price();
 }
+
+
 
 function update_weight() {
 	var weight = document.getElementById("weight");
 	var selected_weight = weight.options[weight.selectedIndex].value;
 	var quantity = document.getElementsByName("quantity");
 	
-	var abc = selected_weight.trim().split(' ');
-	var b = eval(abc[0]);
-	
-	var ozt_u = document.getElementById("ozt_u");
-	ozt_u.innerHTML = Number(b);
-	
 	var total_au = document.getElementById("total_au");
-	total_au.innerHTML = (b * quantity[0].value).toFixed(2);
+	total_au.textContent = (selected_weight * quantity[0].value).toFixed(2);
 }

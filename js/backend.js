@@ -482,10 +482,10 @@ function saveBullion() {
 	
 	var purchaseDate = document.getElementsByName("purchase_date");
 	var save_date = new Date(purchaseDate[0].value);
-	alert(save_date)
 	
 	var save_input = document.getElementById("metal_type");
 	bullion.set("metal", save_input.options[save_input.selectedIndex].text);
+	
 	save_input = document.getElementById("coin_type");
 	bullion.set("name", save_input.options[save_input.selectedIndex].text);
 	
@@ -498,22 +498,28 @@ function saveBullion() {
 	save_input = document.getElementsByName("unit_price");
 	bullion.set("unitPrice", Number(save_input[0].value));
 	
+	save_input = document.getElementById("purity");
+	bullion.set("purity", Number(save_input.getAttribute("data-value")));
+	
+	save_input = document.getElementById("weight");
+	bullion.set("weight", Number(save_input.options[save_input.selectedIndex].value));
+	
 	bullion.set("origin", "US");
 	bullion.set("owner", Parse.User.current());
 	bullion.set("purchaseDate", save_date);
-	bullion.set("purity", .85);
-	bullion.set("weight", 1.234);
 
 	bullion.save(null, {
 	  success: function(bullion) {
+	  console.log("coin saved");
 		// Execute any logic that should take place after the object is saved.
-		alert('New object created with objectId: ' + bullion.id);
+		//alert('New object created with objectId: ' + bullion.id);
 	  },
 	  error: function(bullion, error) {
 		// Execute any logic that should take place if the save fails.
 		// error is a Parse.Error with an error code and message.
 	  }
 	});
+	//window.history.back();
 }
 
 $(function() {
