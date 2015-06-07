@@ -2,123 +2,19 @@ var pageLoaded = false;
 var path = window.location.pathname;
 var page = path.split("/").pop();
 var graphData = {'data': {}}
-var dataBind = {
-	'metal': getParameter('metal') || 'gold'
-}
+var dataBind = {'metal': getParameter('metal') || 'gold'}
 var marketPriceLoaded = false;
 var bidPrices = [0,0,0];
+var data;
+var coinChart;
 
 
+//Initialization functions: run immediately
 loadMyStackJson();
 loadQuandl();
 
-function loadTopNav(){
-	document.write("    <nav>");
-	document.write("        <svg class=\"icon-spinner2\">");
-	document.write("            <symbol id=\"icon-spinner2\" viewBox=\"0 0 1024 1024\">");
-	document.write("                <title>spinner2<\/title>");
-	document.write("                <path class=\"path1\" d=\"M1024 384h-384l143.53-143.53c-72.53-72.526-168.96-112.47-271.53-112.47s-199 39.944-271.53 112.47c-72.526 72.53-112.47 168.96-112.47 271.53s39.944 199 112.47 271.53c72.53 72.526 168.96 112.47 271.53 112.47s199-39.944 271.528-112.472c6.056-6.054 11.86-12.292 17.456-18.668l96.32 84.282c-93.846 107.166-231.664 174.858-385.304 174.858-282.77 0-512-229.23-512-512s229.23-512 512-512c141.386 0 269.368 57.326 362.016 149.984l149.984-149.984v384z\"><\/path>");
-	document.write("            <\/symbol>");
-	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
-	document.write("        <\/svg>");
-	document.write("        <a href=\"home.html\">ShinyStack<\/a>");
-	document.write("        <svg class=\"icon-cog\">");
-	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
-	document.write("                <title>cog<\/title>");
-	document.write("                <path class=\"path1\" d=\"M933.79 610.25c-53.726-93.054-21.416-212.304 72.152-266.488l-100.626-174.292c-28.75 16.854-62.176 26.518-97.846 26.518-107.536 0-194.708-87.746-194.708-195.99h-201.258c0.266 33.41-8.074 67.282-25.958 98.252-53.724 93.056-173.156 124.702-266.862 70.758l-100.624 174.292c28.97 16.472 54.050 40.588 71.886 71.478 53.638 92.908 21.512 211.92-71.708 266.224l100.626 174.292c28.65-16.696 61.916-26.254 97.4-26.254 107.196 0 194.144 87.192 194.7 194.958h201.254c-0.086-33.074 8.272-66.57 25.966-97.218 53.636-92.906 172.776-124.594 266.414-71.012l100.626-174.29c-28.78-16.466-53.692-40.498-71.434-71.228zM512 719.332c-114.508 0-207.336-92.824-207.336-207.334 0-114.508 92.826-207.334 207.336-207.334 114.508 0 207.332 92.826 207.332 207.334-0.002 114.51-92.824 207.334-207.332 207.334z\"><\/path>");
-	document.write("            <\/symbol>");
-	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
-	document.write("        <\/svg>");
-	document.write("	<aside>");
-	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
-	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
-	document.write("	<\/aside>");
-	document.write("<\/nav>");
-}
 
-function loadTopNavPersist(){
-	document.write("    <nav style='display: block; visibility: visible;'>");
-	document.write("        <svg class=\"icon-spinner2\">");
-	document.write("            <symbol id=\"icon-spinner2\" viewBox=\"0 0 1024 1024\">");
-	document.write("                <title>spinner2<\/title>");
-	document.write("                <path class=\"path1\" d=\"M1024 384h-384l143.53-143.53c-72.53-72.526-168.96-112.47-271.53-112.47s-199 39.944-271.53 112.47c-72.526 72.53-112.47 168.96-112.47 271.53s39.944 199 112.47 271.53c72.53 72.526 168.96 112.47 271.53 112.47s199-39.944 271.528-112.472c6.056-6.054 11.86-12.292 17.456-18.668l96.32 84.282c-93.846 107.166-231.664 174.858-385.304 174.858-282.77 0-512-229.23-512-512s229.23-512 512-512c141.386 0 269.368 57.326 362.016 149.984l149.984-149.984v384z\"><\/path>");
-	document.write("            <\/symbol>");
-	document.write("            <use xlink:href=\"#icon-spinner2\"><\/use>");
-	document.write("        <\/svg>");
-	document.write("        <a href=\"home.html\">ShinyStack<\/a>");
-	document.write("        <svg class=\"icon-cog\">");
-	document.write("            <symbol id=\"icon-cog\" viewBox=\"0 0 1024 1024\">");
-	document.write("                <title>cog<\/title>");
-	document.write("                <path class=\"path1\" d=\"M933.79 610.25c-53.726-93.054-21.416-212.304 72.152-266.488l-100.626-174.292c-28.75 16.854-62.176 26.518-97.846 26.518-107.536 0-194.708-87.746-194.708-195.99h-201.258c0.266 33.41-8.074 67.282-25.958 98.252-53.724 93.056-173.156 124.702-266.862 70.758l-100.624 174.292c28.97 16.472 54.050 40.588 71.886 71.478 53.638 92.908 21.512 211.92-71.708 266.224l100.626 174.292c28.65-16.696 61.916-26.254 97.4-26.254 107.196 0 194.144 87.192 194.7 194.958h201.254c-0.086-33.074 8.272-66.57 25.966-97.218 53.636-92.906 172.776-124.594 266.414-71.012l100.626-174.29c-28.78-16.466-53.692-40.498-71.434-71.228zM512 719.332c-114.508 0-207.336-92.824-207.336-207.334 0-114.508 92.826-207.334 207.336-207.334 114.508 0 207.332 92.826 207.332 207.334-0.002 114.51-92.824 207.334-207.332 207.334z\"><\/path>");
-	document.write("            <\/symbol>");
-	document.write("            <use xlink:href=\"#icon-cog\"><\/use>");
-	document.write("        <\/svg>");
-	document.write("	<aside>");
-	document.write("		<div id='settingsBox' style=\"visibility: hidden;\"><span id=\"currentUser\"><\/span>");
-	document.write("			<span id=\"log-in-button\">Log Out<\/span><\/div>");
-	document.write("	<\/aside>");
-	document.write("    <\/nav>");
-}
-
-function loadSideNav(selected){
-	var metal = getParameter('metal').toLowerCase();
-	document.write("    <aside>");
-	document.write("        <a href=\"home.html\">");
-	if(selected == 0)
-		document.write("        <figure class='nav-selected'>");
-	else
-		document.write("        <figure>");
-	document.write("            <br\/>");
-	document.write("              <svg class=\"icon-home2\">");
-	document.write("                    <symbol id=\"icon-home2\" viewBox=\"0 0 1024 1024\">");
-	document.write("                        <title>home2<\/title>");
-	document.write("                        <path class=\"path1\" d=\"M426.667 853.333v-256h170.667v256h213.333v-341.333h128l-426.667-384-426.667 384h128v341.333z\"><\/path>");
-	document.write("                    <\/symbol>");
-	document.write("                    <use xlink:href=\"#icon-home2\"><\/use>");
-	document.write("                <\/svg>");
-	document.write("");
-	document.write("            <figcaption>Home<\/figcaption>");
-	document.write("        <\/figure>       ");
-	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=Gold\">");
-	if((selected == 1 && !metal)|| metal == 'gold')
-		document.write("        <figure class='nav-selected'>");
-	else
-		document.write("        <figure>");
-	document.write("            Au");
-	document.write("            <figcaption>My Gold<\/figcaption>");
-	document.write("        <\/figure>       ");
-	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=Silver\">");
-	if(metal == 'silver')
-		document.write("        <figure class='nav-selected'>");
-	else
-		document.write("        <figure>");
-	document.write("            Ag");
-	document.write("            <figcaption>My Silver<\/figcaption>");
-	document.write("        <\/figure>       ");
-	document.write("        <\/a> ");
-	document.write("        <a href=\"inventory.html?metal=Platinum\">");
-	if(metal == 'platinum')
-		document.write("        <figure class='nav-selected'>");
-	else
-		document.write("        <figure>");
-	document.write("            Pt");
-	document.write("            <figcaption>My Platinum<\/figcaption>");
-	document.write("        <\/figure>");
-	document.write("        <\/a> ");
-	document.write("    <\/aside>");
-}
-
-function loadFooter(){
-	document.write("    <footer>");
-	document.write("        &copy; 2015 Team Bread");
-	document.write("    <\/footer> ");
-
-}
-var data;
 /* MIKE LU CODE START */
-
 var finishGraph = function() {
 	var options = {
 		///Boolean - Whether grid lines are shown across the chart
@@ -174,108 +70,13 @@ var finishGraph = function() {
 	};
 
 	var ctx = document.getElementById("total-chart").getContext("2d");
-	var coinChart = new Chart(ctx).Line(graphData.data,options);
+	coinChart = new Chart(ctx).Line(graphData.data,options);
 	coinChart.update();
 }
-/*
-var finishGraph = function (xAxis, yAxis, metal) {
-	metal = metal.toLowerCase();
-	var pointStroke = "rgba(255,255,255,0.6)";
-	var pointHighlightFill = "#fff";
-	var pointHighlightStroke = "#fff";
-	var graphColor;
-	if (metal == 'platinum') graphColor = '#BBF5FF';
-	else if (metal == 'silver') graphColor = '#C29FFF';
-	else graphColor = '#9FFF98';
-	data = {
-		labels: xAxis,
-		datasets: [
-			{
-				label: "Gold Total",
-				fillColor: "rgba(104, 206, 222, 0.05)",
-				strokeColor: "#FF6D67",
-				pointColor: "#FF6D67",
-				pointStrokeColor: pointStroke,
-				pointHighlightFill: pointHighlightFill,
-				pointHighlightStroke: pointHighlightStroke,
-				data: yAxis
-			},
-			 {
-			 label: "1ozt "+ metal,
-			 fillColor: "rgba(104, 206, 222, 0.05)",
-			 strokeColor: graphColor,
-			 pointColor: graphColor,
-			 pointStrokeColor: pointStroke,
-			 pointHighlightFill: pointHighlightFill,
-			 pointHighlightStroke: pointHighlightStroke,
-			 data: yAxis
-			 }
-		]
-	};
-
-	var options = {
-
-		///Boolean - Whether grid lines are shown across the chart
-		scaleShowGridLines : true,
-
-		//String - Colour of the grid lines
-		scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
-
-		//Number - Width of the grid lines
-		scaleGridLineWidth : 1,
-
-		//Boolean - Whether to show horizontal lines (except X axis)
-		scaleShowHorizontalLines: true,
-
-		//Boolean - Whether to show vertical lines (except Y axis)
-		scaleShowVerticalLines: true,
-
-		scaleLabel: function(label){return '$' + label.value},
-
-		//Boolean - Whether the line is curved between points
-		bezierCurve : true,
-
-		//Number - Tension of the bezier curve between points
-		bezierCurveTension : 0.4,
-
-		//Boolean - Whether to show a dot for each point
-		pointDot : true,
-
-		//Number - Radius of each point dot in pixels
-		pointDotRadius : 4,
-
-		//Number - Pixel width of point dot stroke
-		pointDotStrokeWidth : 1,
-
-		//Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-		pointHitDetectionRadius : 20,
-
-		//Boolean - Whether to show a stroke for datasets
-		datasetStroke : true,
-
-		//Number - Pixel width of dataset stroke
-		datasetStrokeWidth : 2,
-
-		//Boolean - Whether to fill the dataset with a colour
-		datasetFill : true,
-
-		//String - A legend template
-		legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-
-		responsive: true,
-
-		maintainAspectRatio: false,
-
-
-	};
-
-	var ctx = document.getElementById("total-chart").getContext("2d");
-	var coinChart = new Chart(ctx).Line(data,options);
-	coinChart.update();
-}*/
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
+	//console.log('called twice?');
 	//13:30 UTC = 9:30 EST
 	//20:00 UTC = 16:00 EST
 	var openHour = 13;
@@ -287,16 +88,23 @@ function isMarketOpen() {
 	var hour = date.getUTCMinutes() == 0 ? 0 : 1
 	var closes = '';
 	var textAppend = document.createElement('span');
+	/* closed if:
+		day is sat or sunday
+		time is greater than closing hours
+	 	less than opening hour
+		equal to opening hours but less than opening minutes
+	 */
 	if (date.getDay() == satDay || date.getDay() == sunDay ||
 		date.getUTCHours() >= closeHour ||
-		(date.getUTCHours() == openHour && date.getMinutes() <= openMin) ||
-		(date.getUTCHours() < openHour)){
+		(date.getUTCHours() < openHour) ||
+		(date.getUTCHours() == openHour && date.getMinutes() <= openMin)
+		){
 
 		textAppend.style.color = '#FF6A65';
 		textAppend.appendChild(document.createTextNode('closed'));
 		closes = 'opens in ';
-		if (date.getUTCDay() == satDay && date.getUTCHours() > 13) closes += '1d ';
-		else if (date.getUTCDay() == 5 && date.getUTCHours() > 13) closes += '2d '
+		if (date.getDay() == satDay) closes += '1d ';
+		else if (date.getDay() == 5) closes += '2d '
 		var hoursLeft = date.getUTCHours() >= closeHour ? date.getUTCHours()-20 : date.getUTCHours()+hour;
 		closes += (16 - hoursLeft) + 'h' + (60*hour-date.getUTCMinutes()) + 'min';
 	} else {
@@ -315,8 +123,6 @@ function toggleSettings() {
 }
 
 
-
-
 /* MIKE LU CODE END */
 function getParameter(name) {
 	name = name.replace(/[\[]/, "\\[").replace(/[\]]/, "\\]");
@@ -325,20 +131,63 @@ function getParameter(name) {
 	return results === null ? "" : decodeURIComponent(results[1].replace(/\+/g, " ")).toLowerCase();
 }
 
+function todayFormatted() {
+	var today = new Date();
+	var month = today.getMonth()+1;
+	var day = today.getDate();
+	if(month < 10) {
+		month = "0"+month;
+	}
+	if(day < 10) {
+		day = "0"+day;
+	}
+	var today_formatted = today.getFullYear()+"-"+month+"-"+day;
+	return today_formatted;
+}
 
+// purchase_date cannot be past today
+function update_purchase_date() {
+	var metal = document.getElementById("metal_type");
+	metal = metal.options[metal.selectedIndex].value;
+	var purchase_date = document.getElementsByName("purchase_date");
+	var pDateObj = new Date(purchase_date[0].value);
+	var today = new Date();
+	if(pDateObj >= today){
+		purchase_date[0].value = todayFormatted();
+	}
+	// quandl only goes back so far...
+	else if(purchase_date[0].value < "1990-04-02" && metal == "platinum") {
+		purchase_date[0].value = "1990-04-02";
+	}
+	else if(purchase_date[0].value < "1968-01-02") {
+		purchase_date[0].value = "1968-01-02";
+	}
+	update_unit_price();
+}
 
+function update_total() {
+	var quantity = document.getElementsByName("quantity");
+	var premium = document.getElementsByName("premium");
+	var unit_price = document.getElementById("unit_price");
+	if(quantity[0].value < 1) {
+		quantity[0].value = 1;
+	}
+	if(premium[0].value < 0.01) {
+		premium[0].value = 0.01;
+	}
+	
+	quantity[0].value = Math.floor(quantity[0].value);
+	premium[0].value = Number(premium[0].value).toFixed(2);
+	unit_price.textContent = Number(unit_price.textContent).toFixed(2);
+	var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price.textContent))).toFixed(2);
+	var total_location = document.getElementById("added_val");
+	total_location.innerHTML = "<strong>"+total+"</strong>";
+		}
+		
 $(window).load(function() {
-
-	// makes sure data is finished before loading the user's stack
-	if (jsonFinished) {
-		loadMyStack();
+	if (pageLoaded) {
+		return;
 	}
-	if (historicPrices == 1) {
-		finishGraph();
-	}
-	pageLoaded = true;
-
-	// Change {{metal}} to the metal value
 	for (var key in dataBind) {
 		if (dataBind.hasOwnProperty(key)) {
 			$('.metal').each(function(index) {
@@ -347,72 +196,58 @@ $(window).load(function() {
 			})
 		}
 	}
+	// makes sure data is finished before loading the user's stack
+	//console.log('window load: ' + jsonFinished);
+	if (jsonFinished) {
+		loadMyStack(getParameter('metal'));
+	}
+	// quandl data?
+	if (historicPrices == 1) {
+	}
+	pageLoaded = true;
+
+	// Change {{metal}} to the metal value
+
 
 	// change the lengend colors for inventory page
-	if (page =="inventory.html") {
+	if (page =='home.html') {
+		if (historicPrices == 3 && jsonFinished) {
+			finishGraph();
+		}
+	} else if (page =="inventory.html") {
 		var legendColor;
 		switch (getParameter('metal').toLowerCase()) {
-			case 'silver': legendColor = 3; break;
-			case 'platinum': legendColor = 2; break;
-			default: legendColor = 1;
+			case 'silver':
+				legendColor = 3;
+				break;
+			case 'platinum':
+				legendColor = 2;
+				break;
+			default:
+				legendColor = 1;
 		}
 		$('.legend-item-color').each(function (index) {
-			this.setAttribute('id', 'legend-'+(legendColor+(3*index)));
+			this.setAttribute('id', 'legend-' + (legendColor + (3 * index)));
 		})
 
 		if (historicPrices) {
-			loadMetalDaily(metal);
+			loadMetalDaily(getParameter('metal').toLowerCase());
+			if (jsonFinished) finishGraph();
 		}
-
-
-	}
-	
-	else if(page == "new.html") {
-		//change to current day
-		var today = new Date();
-		var month = today.getMonth()+1;
-		var day = today.getDate();
-		if(month < 10) {
-			month = "0"+month;
-		}
-		if(day < 10) {
-			day = "0"+day;
-		}
-		var todayFormatted = today.getFullYear()+"-"+month+"-"+day;
+	} else if(page == "new.html") {
+			//change to current day
+		var today_formatted = todayFormatted();
 		var purchaseDate = document.getElementsByName("purchase_date");
-		purchaseDate[0].value = todayFormatted;
+		purchaseDate[0].value = today_formatted;
+		update_unit_price();
 
-		function update_total(quantity, premium, unit_price, update_gold) {
-			if(quantity[0].value < 0) {
-				quantity[0].value = 0;
-			}
-			else if(premium[0].value < 0) {
-				premium[0].value = 0;
-			}
-			else if(unit_price[0].value < 0) {
-				unit_price[0].value = 0;
-			}
-			
-			quantity[0].value = Math.floor(quantity[0].value);
-			premium[0].value = Number(premium[0].value).toFixed(2);
-			unit_price[0].value = Number(unit_price[0].value).toFixed(2);
-			var total = (quantity[0].value * (Number(premium[0].value) + Number(unit_price[0].value))).toFixed(2);
-			var total_location = document.getElementById("added_val");
-			total_location.innerHTML = "<strong>"+total+"</strong>";
-			
-			if(update_gold) {
-				var ozt_u = document.getElementById("ozt_u").innerHTML;
-				var total_au = document.getElementById("total_au");
-				total_au.innerHTML = (ozt_u * quantity[0].value).toFixed(2);
-			}
-		}
-		
-		var quantity = document.getElementsByName("quantity");
-		var premium = document.getElementsByName("premium");
-		var unit_price = document.getElementsByName("unit_price");
-		quantity[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 1)}, false);
-		premium[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
-		unit_price[0].addEventListener("blur", function() {update_total(quantity, premium, unit_price, 0)}, false);
+	} else if(page == "view.html"){
+		var bull_id = getParameter('id');
+		//var metal = getParameter('metal');
+		loadBullion(bull_id);
+	} else if (page == 'user.html') {
+		var currUser = Parse.User.current();
+		document.getElementById('user_email').innerHTML = currUser.get('username');
 	}
 
 	// check if the market is open
@@ -434,7 +269,7 @@ $(window).load(function() {
 	if (document.getElementById('settingsBox')) {
 		document.getElementsByClassName("icon-cog")[0].addEventListener("click", toggleSettings, false);
 		document.getElementById('log-in-button').addEventListener("click", logOutPressed, false);
-
+		document.getElementById('sign-up-button').addEventListener('click', function() { window.location.href = './user.html'}, false);
 		// input the current user name
 		document.getElementById('currentUser').appendChild(document.createTextNode(Parse.User.current().get('username')));
 	}
@@ -446,159 +281,36 @@ $(window).load(function() {
 
 	/* MIKE LU CODE END */
 
-	 $('.icon-spinner2').click(function(){
-	 	location.reload();	
-	 });
-
-	 $('tr').click(function(){
-	 	$(this).find('a')[0].click();
-	 });
-
-	/* * * * * * * * * * * * * *
-	 *                         *
-	 *        GRAPHING         *
-	 *                         *
-	 * * * * * * * * * * * * * */
- 	// graph for wire2 page
-	/*
- 	var drawGraph = function(){
- 		var pointStroke = "rgba(255,255,255,0.6)";
- 		var pointHighlightFill = "#fff";
- 		var pointHighlightStroke = "#fff";
-
- 		if(page == "home.html") {
- 			var data = {
- 				labels: ["January", "February", "March", "April", "May", "June", "July"],
- 				datasets: [
- 				{
- 					label: "Gold Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#FF6D67",
- 					pointColor: "#FF6D67",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [700,820,700,800,730,950,900]
- 				},
- 				{
- 					label: "Platinum Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#FFA859",
- 					pointColor: "#FFA859",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [467, 555, 490, 550, 555, 560, 660]
- 				},
- 				{
- 					label: "Silver Total",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#F3FF88",
- 					pointColor: "#F3FF88",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [200, 350, 300, 389, 330, 400, 488]
- 				},
- 				{
- 					label: "1oz Gold",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#9FFF98",
- 					pointColor: "#9FFF98",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [100, 110, 120, 90, 102, 135, 115]
- 				},
- 				{
- 					label: "1oz Platinum",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#BBF5FF",
- 					pointColor: "#BBF5FF",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [56, 78, 67, 68, 73, 80, 76]
- 				},
- 				{
- 					label: "1oz Silver",
- 					fillColor: "rgba(104, 206, 222, 0.05)",
- 					strokeColor: "#C29FFF",
- 					pointColor: "#C29FFF",
- 					pointStrokeColor: pointStroke,
- 					pointHighlightFill: pointHighlightFill,
- 					pointHighlightStroke: pointHighlightStroke,
- 					data: [20, 22, 20, 32, 35, 50, 40]
- 				},
- 				]
- 			};
-
- 			var options = {
-
-			    ///Boolean - Whether grid lines are shown across the chart
-			    scaleShowGridLines : true,
-
-			    //String - Colour of the grid lines
-			    scaleGridLineColor : "rgba(104, 206, 222, 0.1)",
-
-			    //Number - Width of the grid lines
-			    scaleGridLineWidth : 1,
-
-			    //Boolean - Whether to show horizontal lines (except X axis)
-			    scaleShowHorizontalLines: true,
-
-			    //Boolean - Whether to show vertical lines (except Y axis)
-			    scaleShowVerticalLines: true,
-
-			    //Boolean - Whether the line is curved between points
-			    bezierCurve : true,
-
-			    //Number - Tension of the bezier curve between points
-			    bezierCurveTension : 0.4,
-
-			    //Boolean - Whether to show a dot for each point
-			    pointDot : true,
-
-			    //Number - Radius of each point dot in pixels
-			    pointDotRadius : 4,
-
-			    //Number - Pixel width of point dot stroke
-			    pointDotStrokeWidth : 1,
-
-			    //Number - amount extra to add to the radius to cater for hit detection outside the drawn point
-			    pointHitDetectionRadius : 20,
-
-			    //Boolean - Whether to show a stroke for datasets
-			    datasetStroke : true,
-
-			    //Number - Pixel width of dataset stroke
-			    datasetStrokeWidth : 2,
-
-			    //Boolean - Whether to fill the dataset with a colour
-			    datasetFill : true,
-
-			    //String - A legend template
-			    legendTemplate : "<ul class=\"<%=name.toLowerCase()%>-legend\"><% for (var i=0; i<datasets.length; i++){%><li><span style=\"background-color:<%=datasets[i].strokeColor%>\"></span><%if(datasets[i].label){%><%=datasets[i].label%><%}%></li><%}%></ul>",
-
-			    responsive: true,
-
-			    maintainAspectRatio: false,
+	$('.icon-spinner2').click(function(){
+		location.reload();	
+	});
+	if(page != "new.html")
+	{
+		$('tr').click(function(){
+			$(this).find('a')[0].click();
+		});
+	}
 
 
-			};
-
-			var ctx = document.getElementById("total-chart").getContext("2d");
-			var coinChart = new Chart(ctx).Line(data,options);
-			coinChart.update();
+ 	/* FRANKIE CODE: */
+ 	//Link view.html,new.html back to inventory.html 
+ 	var get_para = getParameter('metal');
+ 	if(get_para.length == 0) get_para = "gold";
+	var addr = "inventory.html?metal=" + get_para;
+	var links = document.getElementsByClassName("return_link");
+	if(links){
+		for(var i = 0; i < links.length; i++){
+			links[i].href = addr;
 		}
-		else if(page =="inventory.html"){
-			getData(getParameter('metal'));
+	}
+	//For links directing to new.html in inventory.html, add metal=gold/silver/platinum parameter
+	links = document.getElementsByClassName("add_new_coin");
+	if(links){
+		addr = "new.html?metal=" + get_para;
+		for(var i = 0; i < links.length; i++){
+				links[i].href = addr;
 		}
-	};*/
-
-
-
-
+	}
 
 	//drawGraph();
 

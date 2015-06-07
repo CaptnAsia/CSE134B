@@ -15,10 +15,12 @@
     <script src="./js/backend.js"></script>
     <script src="./js/main.js"></script>
     <script src="./js/get.js"></script>
+    <script src="./js/render.js"></script>
     <title class="metal">My {{metal}} - CoinFlip</title>
 </head>
 
 <body>
+<noscript>Please enable JavaScript in order to use this website.</noscript>
     <script type="text/javascript">
     loadTopNav();
     </script>
@@ -44,7 +46,7 @@
                     </svg>
                 </a>
                 My {{metal}}
-                <a href="new.html">
+                <a class="add_new_coin" href="#">
                     <svg class="icon icon-add">
                         <symbol id="icon-add" viewBox="0 0 1024 1024">
                             <title>add</title>
@@ -60,11 +62,11 @@
                     <table class="current_gold">
                         <tr>
                             <td>Daily</td>
-                            <td id="daily-change-percent">Loading...</td>
+                            <td id="daily-change-percent"></td>
                         </tr>
                         <tr>
                             <td>Overall</td>
-                            <td>+1.2%</td>
+                            <td id="overall_change_percent"></td>
                         </tr>
                     </table> 
                     <div class="total-label metal" id="my_gold_value">My {{metal}} Value</div>
@@ -97,9 +99,9 @@
                     <section class="market-item-stats">
                         <table id="price_table">
                             <tr>
-                                <td>1206.10</td>
-                                <td>1207.10</td>
-                                <td class="pos-change">+23.40</td>
+                                <td>loading</td>
+                                <td>loading</td>
+                                <td class="pos-change">loading</td>
                             </tr>
                             <tr>
                                 <td>Bid</td>
@@ -139,7 +141,7 @@
                             <h3 class="metal">My {{metal}}</h3>
                             <div class="stack_ctrl">
                                 <input type="search" placeholder="Search"/>
-                                <a href="new.html">
+                                <a class="add_new_coin" href="#">
                                     <svg enable-background="new 0 0 24 24" height="24px" id="Layer_1" version="1.1" viewBox="0 0 24 24" width="24px" xml:space="preserve" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                         <path clip-rule="evenodd" d="M22.5,14H14v8.5c0,0.276-0.224,0.5-0.5,0.5h-4C9.224,23,9,22.776,9,22.5V14H0.5  C0.224,14,0,13.776,0,13.5v-4C0,9.224,0.224,9,0.5,9H9V0.5C9,0.224,9.224,0,9.5,0h4C13.776,0,14,0.224,14,0.5V9h8.5  C22.776,9,23,9.224,23,9.5v4C23,13.776,22.776,14,22.5,14z" fill-rule="evenodd" fill="white" />
                                     </svg>

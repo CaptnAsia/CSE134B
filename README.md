@@ -21,6 +21,7 @@ Navigation:
 #   Cross-Platform Issues   #
 # # # # # # # # # # # # # # #
 
+(Provided documented issues by The Dream Team)
 Chrome:
 	We mainly developed on Chrome, so there were issues with compatibility in
 	that department. 
@@ -50,6 +51,7 @@ Safari:
 	that doesn't work for some strange reason, so we compensated with some
 	white-space: nowrap so that our mobile toggling selectors didn't overflow.
 
+(Our discovered issues by Team Bread)
 Internet Explorer:
 	Internet Explorer will not load the Parse data. More on that later in the
 	README.
@@ -103,7 +105,7 @@ are some notes about how we decided to implement certain features of the app.
 	   Explorer.
 
 	3) Retrieving the Bid/Ask/Change prices was one hell of a task. First we had
-		 to find a website that has this information, which too more than an hour!
+		 to find a website that has this information, which took more than an hour!
 		 Then, we need to figure out a way to parse all the information from the 
 		 website. Because of Chrome's same-origin policy, we cannot parse htmls
 		 directly in javascript. Therefore, I wrote a php script on my server to
@@ -114,7 +116,13 @@ are some notes about how we decided to implement certain features of the app.
 		 origin from anywhere, this allows any client side javascript to retrieve
 		 the information. Finally, all we had to do is to issue an ajax request 
 		 to that php file in our javascript. The returned json objects would contain
-		 the information.
+		 the bid/ask/change information.
+		 Note, Chrome is the only browser that denies cross-origin request. All other
+		 browsers like Safari and Firefox allow such requests to go through.
+		 The url we used to retrieve bid/ask/change prices is:
+		 http://www.frankieliu.com/ucsd/cse134b/prices.php
+		 The actual php script can be viewed here (view page source):
+		 http://www.frankieliu.com/ucsd/cse134b/prices.html
 
 	4) When getting the details (purity, weight, etc) of each type of bullion,
 	   we went to the bullion coin Wikipedia page for this data, and hardcoded
@@ -141,5 +149,19 @@ are some notes about how we decided to implement certain features of the app.
 	   events, and whichever task finished last will start loading all the data
 	   onto the web page in the form of either graphs, percentages, or lists of
 	   bullion a user owns.
+
+	8) We didn't prioritize adding an edit feature for view.html when we were
+	   looking at each individual bullion since we didn't see a whole lot of 
+	   functionality in implementing this feature. THe only situation would be
+	   if data was inputted incorrectly when the coin was first added, but in
+	   order to prevent clients from mis-editing it unnecessarily, we decided 
+	   not to implement this feature.
+
+	9) We added simple user management! This includes sign up, log in, log out
+		(sign out by clicking the settings cog in the top right corner of the app),
+        updating email/password.
+		Hence, the "My Stack" list of bullions corresponds to the user who added
+		them. However, we did not get a change to include Facebook integration.
+=======   
 
 

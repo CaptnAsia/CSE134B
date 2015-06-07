@@ -14,21 +14,24 @@
 	<script src="./js/bulliondetail.js"></script>
 	<script src="./js/backend.js"></script>
     <script src="./js/velocity.min.js"></script>
+    <script src="./js/render.js"></script>
     <script src="./js/main.js"></script>
     <title>New Item - ShinyStack</title>
 </head>
 
 <body>
+<noscript>Please enable JavaScript in order to use this website.</noscript>
     <script type="text/javascript">
     loadTopNav();
     </script>
     <script type="text/javascript">
     loadSideNav(1);
     </script>
+
     <section class="main-section">
         <section class="coin_wrapper">
             <div class="mobile-nav">
-                <a href="inventory.html">
+                <a class="return_link" href="#">
                     <svg class="icon icon-keyboard-arrow-left">
                         <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
                             <title>keyboard-arrow-left</title>
@@ -40,7 +43,7 @@
                 ADD ITEM
             </div>
             <div class="coin_main">
-                <a href="inventory.html">
+                <a class="return_link" href="#">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
                             <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
@@ -63,66 +66,73 @@
                             <td>Metal</td>
                             <td>
                                 <select id="metal_type" onchange="update_types()">
-                                    <option selected value="gold">Gold</option>
+                                    <option value="gold">Gold</option>
                                     <option value="silver">Silver</option>
-                                    <option value="platinum">Platinum</option>
+                                    <option selected value="platinum">Platinum</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Type</td>
                             <td>
-                                <select id="coin_type">
-                                    <option selected value="US Eagle">US Eagle</option>
+                                <select onchange="update_attributes()" id="coin_type">
+                                    <option selected value="Australia Platinum Koala">Australia Platinum Koala</option>
+									<option value="Australia Platinum Platypus">Australia Platinum Platypus</option>
+									<option value="Canada Platinum Maple Leaf">Canada Platinum Maple Leaf</option>
+									<option value="Isle of Man Noble">Isle of Man Noble</option>
+									<option value="Mexico Libertad">Mexico Libertad</option>
+									<option value="United States Platinum Eagle">United States Platinum Eagle</option>
+                                </select>
+                            </td>
+                        </tr>
+						<tr>
+                            <td>Weight/unit</td>
+                            <td>
+                                <select id="weight" onchange="update_weight();">
+                                    <option selected value=".05">1/20 ozt</option>
+									<option value=".1">1/10 ozt</option>
+									<option value=".25">1/4 ozt</option>
+									<option value=".5">1/2 ozt</option>
+									<option value="1">1 ozt</option>
                                 </select>
                             </td>
                         </tr>
                         <tr>
                             <td>Purchase Date</td>
                             <td>
-                                <input type="date" name="purchase_date" value="" />
+                                <input type="date" name="purchase_date" value="" onblur="update_purchase_date();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Qty.</td>
                             <td>
-                                <input type="number" name="quantity" value="1" />
+                                <input type="number" name="quantity" min="1" value="1"  onblur="update_weight(); update_total();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Premium</td>
                             <td>
-                                <input type="number" name="premium" value="0.00" />
+                                <input type="number" name="premium" min="0.01" value="0.01" onblur="update_total();"/>
                             </td>
                         </tr>
                         <tr>
                             <td>Unit Price</td>
-                            <td>
-                                <input type="number" name="unit_price" value="0.00" />
-                            </td>
+							<td id="unit_price" onblur="update_total();">50.37</td>
                         </tr>
                         <tr>
                             <td>Purity</td>
-                            <td>91.67%</td>
+                            <td id="purity" data-value=".9995">99.95%</td>
                         </tr>
                         <tr>
-                            <td>Weight/unit (g)</td>
-                            <td>1.244</td>
-                        </tr>
-                        <tr>
-                            <td>Gold ozt/u</td>
-                            <td id="ozt_u">0.0400</td>
-                        </tr>
-                        <tr>
-                            <td>Total au (ozt)</td>
-                            <td id="total_au">0.0400</td>
+                            <td id="total_au_hdr">Total Pt (ozt)</td>
+                            <td id="total_au">0.05</td>
                         </tr>
                         <tr>
                             <td><strong>TOTAL</strong></td>
-                            <td id="added_val"><strong>0.00</strong></td>
+                            <td id="added_val"><strong>50.37</strong></td>
                         </tr>
                     </table>
-                    <p onclick="saveBullion()" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
+                    <p onclick="saveBullion();" style="cursor:pointer;"><span id="save">Save to My Stack</span></p>
                     <a href="inventory.html"><span id="cancel">Cancel</span></a>
                 </section>
             </div>

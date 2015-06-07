@@ -66,7 +66,7 @@ var bullionDetail = {
         },
         "United Kingdom Sovereign": {
             "purity": ".9167",
-            "weight": "7.3224 g = 0.2354 ozt",
+            "weight": "0.2354 ozt",
             "year": "1887 - 1932\n1949 - 1952 (dated 1925)\n1957 - 1959\n1962 - 1968\n1974, 1976, 1978 - 1982\n2000–present"
         },
         "United Kingdom Britannia": {"purity": ".9999", "weight": "1 ozt", "year": "2013-"},
@@ -153,7 +153,7 @@ var bullionDetail = {
         "Tokelau Crocodile": {"purity": ".999", "weight": "1 ozt", "year": "2013"},
         "Turkey Street Stray Animals": {"purity": ".925", "weight": "1 ozt", "year": "-"},
         "Ukraine Archangel Michael": {"purity": ".9999", "weight": "1 ozt", "year": "2011–present"},
-        "United Kingdom The George and the Dragon": {"purity": ".999", "weight": "15.71 g", "year": "2013"},
+        "United Kingdom The George and the Dragon": {"purity": ".999", "weight": "1/2 ozt", "year": "2013"},
         "United Kingdom Britannia": {"purity": ".999", "weight": "1 ozt", "year": "2013-"},
         "United States America the Beautiful": {"purity": ".999", "weight": "5 ozt", "year": "2010–present"},
         "United States Silver Eagle": {"purity": ".999", "weight": "1 ozt", "year": "1986–present"}
@@ -203,11 +203,88 @@ for (var i = 1, row; row = goldtable.rows[i]; i++) {
 
 bullionDetail['gold']['Australia Gold Nugget']
 */
+function eval_weight (selected_weight) {
+	var abc = selected_weight.trim().split(' ');
+	var b = eval(abc[0]);
+	return b;
+}
+
+//called on update_attributes
+/*function update_unit_price () {
+	var unit_price = document.getElementsByName("unit_price");
+	var weight = document.getElementById("weight");
+	var purity = Number(document.getElementById("purity").getAttribute("data-value"));
+	var selected_weight = Number(weight.options[weight.selectedIndex].value);
+	var spot_price = 1200;
+	
+	unit_price[0].value = ((selected_weight * purity) * spot_price).toFixed(2);
+}*/
 
 function update_types() {
-	//var len = Object.keys(bullionDetail.gold).length
-	//for 
-	//alert( Object.keys(bullionDetail.platinum["Mexico Libertad"]).length );
-	alert( bullionDetail.platinum["Mexico Libertad"] );
+	var metal = document.getElementById("metal_type");
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
+	var total_metal_header = document.getElementById("total_au_hdr");
+	if(selected_metal == "gold"){
+		total_metal_header.textContent = "Total Au (ozt)";
+	}
+	else if(selected_metal == "silver"){
+		total_metal_header.textContent = "Total Ag (ozt)";
+	}
+	else{
+		total_metal_header.textContent = "Total Pt (ozt)";
+	}
+	var coin_list = document.getElementById("coin_type");
+	for (i=coin_list.length-1; i >= 0 ; i--)
+	{
+		coin_list.remove(i);
+	}
+	
+	for(var key in bullionDetail[selected_metal]) {
+		var option = document.createElement('option');
+		option.text = option.value = key;
+		coin_list.add(option,0);
+	}
+	
+	update_attributes();
+}
 
+function update_attributes() {
+	var metal = document.getElementById("metal_type");
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
+	var coin_list = document.getElementById("coin_type");
+	var coin_type = String(coin_list.options[coin_list.selectedIndex].value);
+
+	var purity = document.getElementById("purity");
+	var new_purity = bullionDetail[selected_metal][coin_type].purity;
+	purity.textContent = new_purity*100+"%";
+	purity.setAttribute("data-value", new_purity);
+	
+	var weight = bullionDetail[selected_metal][coin_type].weight;
+	var greg = weight.split(',');
+	var weight_list = document.getElementById("weight");
+	for (i=weight_list.length-1; i >= 0 ; i--)
+	{
+		weight_list.remove(i);
+	}
+	for(i=0; i < greg.length; i++) {
+		var option = document.createElement('option');
+		option.text = greg[i];
+		option.value = eval_weight(greg[i]);
+		weight_list.add(option,0);
+	}
+	
+	update_weight();
+}
+
+
+
+function update_weight() {
+	var weight = document.getElementById("weight");
+	var selected_weight = weight.options[weight.selectedIndex].value;
+	var quantity = document.getElementsByName("quantity");
+	
+	var total_au = document.getElementById("total_au");
+	total_au.textContent = (selected_weight * quantity[0].value).toFixed(2);
+	update_unit_price();
+	update_total();
 }

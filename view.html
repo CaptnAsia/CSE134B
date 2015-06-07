@@ -9,23 +9,28 @@
     <meta name=viewport content="width=device-width, initial-scale=.8, minimum-scale = .8, user-scalable=yes">
     <link rel="icon" href="favicon.ico" type="image/x-icon" />
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+    <script src="./js/parse-1.4.2.js"></script>
     <script src="./js/jquery-1.11.2.min.js"></script>
+    <script src="./js/backend.js"></script>
     <script src="./js/velocity.min.js"></script>
+    <script src="./js/render.js"></script>
     <script src="./js/main.js"></script>
     <title>Gold Item - ShinyStack</title>
 </head>
 
 <body>
+<noscript>Please enable JavaScript in order to use this website.</noscript>
     <script type="text/javascript">
     loadTopNav();
     </script>
     <script type="text/javascript">
     loadSideNav(1);
     </script>
+
     <section class="main-section">
         <section class="coin_wrapper">
             <div class="mobile-nav">
-                <a href="inventory.html">
+                <a class="return_link" href="#">
                     <svg class="icon icon-keyboard-arrow-left">
                         <symbol id="icon-keyboard-arrow-left" viewBox="0 0 1024 1024">
                             <title>keyboard-arrow-left</title>
@@ -37,7 +42,7 @@
                 ITEM DETAIL
             </div>
             <div class="coin_main">
-                <a href="inventory.html">
+                <a class="return_link" href="#">
                     <div class="breadcrumb">
                         <svg class="icon icon-play-arrow-rev">
                             <symbol id="icon-play-arrow" viewBox="0 0 1024 1024">
@@ -56,6 +61,7 @@
                 </section>
                 <section class="coin_detail">
                     <table>
+                    <!--
                         <tr>
                             <td>Metal</td>
                             <td>Gold</td>
@@ -104,7 +110,10 @@
                             <td><strong>TOTAL</strong></td>
                             <td><strong>1199.10</strong></td>
                         </tr>
+                        */
+                        -->
                     </table>
+                    <p onclick= "deleteBullion()" style="cursor:pointer;"><span id="save">Delete from my stack</span></p>
                 </section>
             </div>
         </section>

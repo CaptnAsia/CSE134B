@@ -8,4 +8,5 @@
 *~.nib
 *.pyc
 *.class
+*.orig
 style.css.map
