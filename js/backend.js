@@ -25,7 +25,7 @@ function loadMyStackJson() {
             for (var i = 0; i < results.length; i++) {
                 var bullion = results[i];
                 var metal = bullion.get('metal').toLowerCase();
-                console.log("Adding metal: " + metal);
+                //console.log("Adding metal: " + metal);
 
                 myStackJson[metal].push({
                     'id': bullion.id,
@@ -59,7 +59,7 @@ function loadMyStackJson() {
                 loadPurityHeader(metal);
                 loadMyStack(metal);
                 if (historicPrices) {
-                    console.log('test');
+                    //console.log('test');
                     makeMyGraph(metal);
                     finishGraph();
                 }
@@ -78,7 +78,7 @@ function makeMyGraph(metal) {
     if (myStackJson[metal].length == 0) {
         return;
     }
-    console.log('adding my ' + metal + 'values to graph');
+    //console.log('adding my ' + metal + 'values to graph');
     //value check and default to gold
     if(metal.length == 0) metal = "gold";
     /*weight*goldprice*purity*/
@@ -101,7 +101,7 @@ function makeMyGraph(metal) {
             }
         }
         while (j < (myGraphData[metal].length)) {
-            console.log(j);
+            //console.log(j);
             if (!myGraphData[metal][j]) {
                 myGraphData[metal][j] = 0;
             }
@@ -163,7 +163,7 @@ function loadMyStack(metal) {
     var myTable = document.getElementsByClassName('my_stack')[0].firstElementChild  //document.getElementById('my-stack-inventory');
 
     var bullionStack = myStackJson[metal];
-    console.log(bullionStack);
+    //console.log(bullionStack);
     if (bullionStack.length == 0) {
         var newRow = tbody.insertRow(tbody.rows.length);
         var newCell = newRow.insertCell(newRow.cells.length);
@@ -598,7 +598,7 @@ function saveBullion() {
 
 	bullion.save(null, {
 	  success: function(bullion) {
-	  console.log("coin saved");
+	  //console.log("coin saved");
 		// Execute any logic that should take place after the object is saved.
 		//alert('New object created with objectId: ' + bullion.id);
 	  },

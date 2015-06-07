@@ -76,7 +76,7 @@ var finishGraph = function() {
 
 // simple check if market is open. Only checks if outside 930-1600 and if on weekends
 function isMarketOpen() {
-	console.log('called twice?');
+	//console.log('called twice?');
 	//13:30 UTC = 9:30 EST
 	//20:00 UTC = 16:00 EST
 	var openHour = 13;
@@ -197,7 +197,7 @@ $(window).load(function() {
 		}
 	}
 	// makes sure data is finished before loading the user's stack
-	console.log('window load: ' + jsonFinished);
+	//console.log('window load: ' + jsonFinished);
 	if (jsonFinished) {
 		loadMyStack(getParameter('metal'));
 	}

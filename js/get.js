@@ -81,7 +81,7 @@ function retrieveGetParameters(){
 function loadStackValue(target_metal, metals, homepage){
 
   var size = myStackJson['gold'].length;
-  console.log("myStackJson has " + size + " gold coins");
+  //console.log("myStackJson has " + size + " gold coins");
 
   //Guard, make sure myStackJson is ready
   if(!jsonFinished) loadMyStackJson();
