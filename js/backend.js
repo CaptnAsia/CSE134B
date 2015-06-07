@@ -509,6 +509,60 @@ function getData(metal) {
     }})
 }
 
+//called on update_attributes
+function update_unit_price() {
+	var spot_price;
+	var unit_price = document.getElementById("unit_price");
+	var weight = document.getElementById("weight");
+	var purity = Number(document.getElementById("purity").getAttribute("data-value"));
+	var selected_weight = Number(weight.options[weight.selectedIndex].value);
+	
+	//use quandl to get spot_price
+	var metal = document.getElementById("metal_type");
+	var selected_metal = String(metal.options[metal.selectedIndex].value);
+		
+    var authtoken = 'C5xqJubuHk82paW6ryzH';
+    var dbLink;
+	var purchase_date = document.getElementsByName("purchase_date");
+	purchase_date = new Date(purchase_date[0].value);
+	purchase_date.setDate(purchase_date.getDate()+1);
+	
+	var start_date = new Date(purchase_date);
+	for(i=0;i<7;i++) {
+	start_date.setDate(start_date.getDate()-2);
+	}
+	
+	
+	
+	/*var today = new Date();
+	today.setDate(today.getDate()-2);
+	// quandl might not have today or yesterday's data yet
+	if(purchase_date > today) {
+		purchase_date = today;
+	}*/
+	
+	var start_date = start_date.getFullYear()+"-"+(start_date.getMonth()+1)+"-"+start_date.getDate();
+	var end_date = purchase_date.getFullYear()+"-"+(purchase_date.getMonth()+1)+"-"+purchase_date.getDate();
+
+	if (selected_metal == 'platinum') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+    } else if (selected_metal == 'silver') {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+    } else {
+        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+    }
+	dbLink += "?trim_start="+start_date+"&trim_end="+end_date+"&auth_token="+authtoken;
+	 $.ajax({url: dbLink, success: function(result) {
+		if(result.data[0][1] != null) {
+			spot_price = result.data[0][1];
+		}
+		else {
+			spot_price = result.data[0][2];
+		}
+		unit_price.textContent = ((selected_weight * purity) * spot_price).toFixed(2);
+	 }})	
+	 update_total();
+}
 
 function saveBullion() {
 	var Bullion = Parse.Object.extend("Bullion");
@@ -529,8 +583,8 @@ function saveBullion() {
 	save_input = document.getElementsByName("quantity");
 	bullion.set("quantity", Number(save_input[0].value));
 	
-	save_input = document.getElementsByName("unit_price");
-	bullion.set("unitPrice", Number(save_input[0].value));
+	save_input = document.getElementById("unit_price");
+	bullion.set("unitPrice", Number(save_input.textContent));
 	
 	save_input = document.getElementById("purity");
 	bullion.set("purity", Number(save_input.getAttribute("data-value")));
@@ -553,7 +607,7 @@ function saveBullion() {
 		// error is a Parse.Error with an error code and message.
 	  }
 	});
-	//window.history.back();
+	window.history.back();
 }
 
 $(function() {
