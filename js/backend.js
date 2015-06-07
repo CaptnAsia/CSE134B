@@ -68,13 +68,16 @@ function loadMyStackJson() {
         jsonFinished = true;
       },
       error: function(error) {
-        alert("Error: " + error.code + " " + error.message);
+        //alert("Error: " + error.code + " " + error.message);
       }
     });
 }
 
 /* TODO: fix on next release */
 function makeMyGraph(metal) {
+    if (myStackJson[metal].length == 0) {
+        return;
+    }
     console.log('adding my ' + metal + 'values to graph');
     //value check and default to gold
     if(metal.length == 0) metal = "gold";
@@ -88,16 +91,14 @@ function makeMyGraph(metal) {
         var j = 0;
         var eDate = new Date(graphData.data.labels[0]);
         if (pDate > eDate) {
-            console.log(formatDate(pDate));
             j = graphData.data.labels.indexOf(formatDate(pDate));
-            console.log('hello: ' + j);
         }
         while (j < myGraphData[metal].length) {
             if (!myGraphData[metal][j]) {
                 myGraphData[metal][j] = 0;
             }
-            var k;
-            for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets; k++) {
+            var k, d;
+            for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets.length; k++) {
                 if (d[k].label == ('1ozt'+metal)) {
                     break;
                 }
@@ -312,7 +313,7 @@ function loadBullion(bullion_id){
         bullTable.appendChild(tbody);   
        },
         error: function(error) {
-            alert("Error: " + error.code + " " + error.message);
+            //alert("Error: " + error.code + " " + error.message);
         }
     });
 }
@@ -355,7 +356,7 @@ function signupPressed(event) {
                 alert(user.getEmail() + "signed up");
             },
             error: function (user, error) {
-                alert("Error: " + error.code + " " + error.message);
+                //alert("Error: " + error.code + " " + error.message);
             }
         });
     }
@@ -379,7 +380,7 @@ function loginPressed(event) {
                 window.location.href = "./home.html";
             },
             error: function(user, error) {
-                alert("Error: " + error.code + " " + error.message);
+                //alert("Error: " + error.code + " " + error.message);
             }
         });
     }
@@ -511,7 +512,6 @@ function saveBullion() {
 	  error: function(bullion, error) {
 		// Execute any logic that should take place if the save fails.
 		// error is a Parse.Error with an error code and message.
-		alert('Failed to create new object, with error code: ' + error.message);
 	  }
 	});
 }

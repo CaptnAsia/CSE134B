@@ -230,8 +230,6 @@ $(window).load(function() {
 	} else if(page == "view.html"){
 		var bull_id = getParameter('id');
 		//var metal = getParameter('metal');
-		//alert(metal + 'from if');
-		//alert(metalforView + 'from if');
 		loadBullion(bull_id);
 	}
 
