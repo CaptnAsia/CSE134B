@@ -223,6 +223,16 @@ function eval_weight (selected_weight) {
 function update_types() {
 	var metal = document.getElementById("metal_type");
 	var selected_metal = String(metal.options[metal.selectedIndex].value);
+	var total_metal_header = document.getElementById("total_au_hdr");
+	if(selected_metal == "gold"){
+		total_metal_header.textContent = "Total Au (ozt)";
+	}
+	else if(selected_metal == "silver"){
+		total_metal_header.textContent = "Total Ag (ozt)";
+	}
+	else{
+		total_metal_header.textContent = "Total Pt (ozt)";
+	}
 	var coin_list = document.getElementById("coin_type");
 	for (i=coin_list.length-1; i >= 0 ; i--)
 	{
