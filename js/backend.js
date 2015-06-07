@@ -532,15 +532,6 @@ function update_unit_price() {
 	start_date.setDate(start_date.getDate()-2);
 	}
 	
-	
-	
-	/*var today = new Date();
-	today.setDate(today.getDate()-2);
-	// quandl might not have today or yesterday's data yet
-	if(purchase_date > today) {
-		purchase_date = today;
-	}*/
-	
 	var start_date = start_date.getFullYear()+"-"+(start_date.getMonth()+1)+"-"+start_date.getDate();
 	var end_date = purchase_date.getFullYear()+"-"+(purchase_date.getMonth()+1)+"-"+purchase_date.getDate();
 
@@ -560,8 +551,8 @@ function update_unit_price() {
 			spot_price = result.data[0][2];
 		}
 		unit_price.textContent = ((selected_weight * purity) * spot_price).toFixed(2);
+		update_total();
 	 }})	
-	 update_total();
 }
 
 function saveBullion() {
