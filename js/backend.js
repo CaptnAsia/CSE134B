@@ -73,7 +73,7 @@ function loadMyStackJson() {
     });
 }
 
-/* TODO: fix on next release */
+
 function makeMyGraph(metal) {
     if (myStackJson[metal].length == 0) {
         return;
@@ -92,21 +92,24 @@ function makeMyGraph(metal) {
         var eDate = new Date(graphData.data.labels[0]);
         if (pDate > eDate) {
             j = graphData.data.labels.indexOf(formatDate(pDate));
+            if (j == -1) continue;
         }
-        while (j < myGraphData[metal].length) {
+        var k, d;
+        for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets.length; k++) {
+            if (d[k].label == ('1ozt'+metal)) {
+                break;
+            }
+        }
+        while (j < (myGraphData[metal].length)) {
+            console.log(j);
             if (!myGraphData[metal][j]) {
                 myGraphData[metal][j] = 0;
-            }
-            var k, d;
-            for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets.length; k++) {
-                if (d[k].label == ('1ozt'+metal)) {
-                    break;
-                }
             }
             var value = myStackJson[metal][i].quantity*
                     myStackJson[metal][i].weight*
                     graphData.data.datasets[k].data[j];
-            myGraphData[metal][j] += value.toFixed(2);
+            value += myGraphData[metal][j];
+            myGraphData[metal][j] = value.toFixed(2);
             j++;
         }
     }
@@ -356,7 +359,7 @@ function signupPressed(event) {
                 alert(user.getEmail() + "signed up");
             },
             error: function (user, error) {
-                //alert("Error: " + error.code + " " + error.message);
+                alert("Error: " + error.code + " " + error.message);
             }
         });
     }
@@ -391,6 +394,37 @@ function logOutPressed(event) {
     window.location.href = "./index.html";
 }
 
+function changeUserSettings() {
+
+    var pass = document.getElementById('user_pass').value;
+    var user = Parse.User.current();
+    if (user) {
+        email = document.getElementById('new_email').value;
+        if (email) {
+            user.set('email', email);
+            user.set('username', email);
+        }
+
+        pass = document.getElementById('new_pass').value;
+        if (pass) {
+            user.set('password', pass);
+        }
+        user.save(null, {
+            success: function(user) {
+                var message = document.getElementById('error_messages');
+                var email = document.getElementById('user_email').innerHTML = Parse.User.current().get('username');
+                message.innerHTML = 'Successfully updated the user.';
+                message.style.visibility = 'visible';
+
+            },
+            error: function(user, error) {
+                message.innerHTML = 'error: ' + error.code + ' ' + error.message;
+                message.style.visiblity = 'visible';
+            }
+        });
+    }
+}
+
 function loadQuandl() {
     if (page == 'home.html') {
         getData('gold');
@@ -410,11 +444,11 @@ function getData(metal) {
     today.setDate(today.getDate()-30);
     var startDate = today.getFullYear()+"-"+(today.getMonth()+1)+"-"+today.getDate();
     if (metal == 'platinum') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LPPM/PLAT.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/PL_MKT.json';
     } else if (metal == 'silver') {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/SILVER.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/AG_EIB.json';
     } else {
-        dbLink = 'http://www.quandl.com/api/v1/datasets/LBMA/GOLD.json';
+        dbLink = 'http://www.quandl.com/api/v1/datasets/WSJ/AU_EIB.json';
     }
     dbLink += "?trim_start="+startDate+"&trim_end="+endDate+"&auth_token="+authtoken;
     $.ajax({url: dbLink, success: function(result) {

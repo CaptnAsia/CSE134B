@@ -232,6 +232,9 @@ $(window).load(function() {
 		var bull_id = getParameter('id');
 		//var metal = getParameter('metal');
 		loadBullion(bull_id);
+	} else if (page == 'user.html') {
+		var currUser = Parse.User.current();
+		document.getElementById('user_email').innerHTML = currUser.get('username');
 	}
 
 	// check if the market is open
@@ -253,7 +256,7 @@ $(window).load(function() {
 	if (document.getElementById('settingsBox')) {
 		document.getElementsByClassName("icon-cog")[0].addEventListener("click", toggleSettings, false);
 		document.getElementById('log-in-button').addEventListener("click", logOutPressed, false);
-
+		document.getElementById('sign-up-button').addEventListener('click', function() { window.location.href = './user.html'}, false);
 		// input the current user name
 		document.getElementById('currentUser').appendChild(document.createTextNode(Parse.User.current().get('username')));
 	}
