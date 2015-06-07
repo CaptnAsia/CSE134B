@@ -150,23 +150,16 @@ are some notes about how we decided to implement certain features of the app.
 	   onto the web page in the form of either graphs, percentages, or lists of
 	   bullion a user owns.
 
-
-	8) Unfortunately, we did not have time to plot the graph for our "My Stack"
-	   totals. Considering how many users that would potentially use this application,
-	   we felt that it would be impractical to store all of the historic data for the
-	   total value of each of the user's bullions. In other words, we couldn't
-	   (didn't have enough time) figure out an efficient method/formula to store &
-	   calculate the historic price of each of the user's bullions (we tried though!).
-
-	9) We didn't prioritize adding an edit feature for view.html when we were
+	8) We didn't prioritize adding an edit feature for view.html when we were
 	   looking at each individual bullion since we didn't see a whole lot of 
 	   functionality in implementing this feature. THe only situation would be
 	   if data was inputted incorrectly when the coin was first added, but in
 	   order to prevent clients from mis-editing it unnecessarily, we decided 
 	   not to implement this feature.
 
-	10) We added simple user management! This includes sign up, log in, log out
-		(sign out by clicking the settings cog in the top right corner of the app).
+	9) We added simple user management! This includes sign up, log in, log out
+		(sign out by clicking the settings cog in the top right corner of the app),
+        updating email/password.
 		Hence, the "My Stack" list of bullions corresponds to the user who added
 		them. However, we did not get a change to include Facebook integration.
 =======   
