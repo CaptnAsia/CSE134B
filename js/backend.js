@@ -18,9 +18,7 @@ function loadMyStackJson() {
     query.containedIn('owner', [Parse.User.current()])
     query.find({
       success: function(results) {
-        //alert("Successfully retrieved " + results.length + " bullions.");
         if (results.length === 0) {
-            // alert('My Stack is empty!');
         }
         else {
             totalBullionValue = 0;
@@ -47,10 +45,12 @@ function loadMyStackJson() {
                 makeMyGraph('gold');
                 makeMyGraph('silver');
                 makeMyGraph('platinum');
+                finishGraph();
             }
 
             // If the page has already loaded then call the loadMyStack function
             if (page === 'inventory.html' && pageLoaded) {
+
                 var metal = getParameter('metal');
                 if (metal === '') {
                     metal = 'gold';
@@ -59,7 +59,9 @@ function loadMyStackJson() {
                 loadPurityHeader(metal);
                 loadMyStack(metal);
                 if (historicPrices) {
+                    console.log('test');
                     makeMyGraph(metal);
+                    finishGraph();
                 }
             }
         }
@@ -73,10 +75,14 @@ function loadMyStackJson() {
 
 /* TODO: fix on next release */
 function makeMyGraph(metal) {
+    console.log('adding my ' + metal + 'values to graph');
     //value check and default to gold
     if(metal.length == 0) metal = "gold";
     /*weight*goldprice*purity*/
     myGraphData[metal] = new Array(graphData.data.labels.length);
+    for (var i = 0; i < myGraphData[metal].length; i++) {
+        myGraphData[metal][i] = null;
+    }
     for (var i = 0; i < myStackJson[metal].length; i++) {
         var pDate = myStackJson[metal][i].purchaseDate;
         var j = 0;
@@ -84,17 +90,44 @@ function makeMyGraph(metal) {
         if (pDate > eDate) {
             console.log(formatDate(pDate));
             j = graphData.data.labels.indexOf(formatDate(pDate));
-
-            while (j < myGraphData[metal].length) {
-                j++;
-                /*var value = myStackJson[metal][i].quantity*
-                            myStackJson[metal][i].weight*
-                            graphData.data.datasets.
-                myGraphData[metal][j] += myStackJson[metal[i].]*/
-            }
             console.log('hello: ' + j);
         }
+        while (j < myGraphData[metal].length) {
+            if (!myGraphData[metal][j]) {
+                myGraphData[metal][j] = 0;
+            }
+            var k;
+            for (k = 0, d = graphData.data.datasets; k < graphData.data.datasets; k++) {
+                if (d[k].label == ('1ozt'+metal)) {
+                    break;
+                }
+            }
+            var value = myStackJson[metal][i].quantity*
+                    myStackJson[metal][i].weight*
+                    graphData.data.datasets[k].data[j];
+            myGraphData[metal][j] += value.toFixed(2);
+            j++;
+        }
     }
+    var graphColor;
+
+    switch (metal) {
+        case 'platinum': graphColor = '#FFA859'; break;
+        case 'silver': graphColor = '#F3FF88'; break;
+        default: graphColor = '#FF6D67'; break;
+
+    }
+    graphData.data.datasets.push( {
+        label: 'my ' + metal,
+        fillColor: "rgba(104, 206, 222, 0.05)",
+        strokeColor: graphColor,
+        pointColor: graphColor,
+        pointStrokeColor: "rgba(255,255,255,0.6)",
+        pointHighlightFill: "#fff",
+        pointHighlightStroke: "#fff",
+        data: myGraphData[metal]
+    });
+
 }
 
 
@@ -392,18 +425,20 @@ function getData(metal) {
         for (var i = result.data.length-1; i >= 0; i--) {
             var chartDate = new Date(result.data[i][0]);
             while (date < chartDate) {
+                date.setDate(date.getDate()+1);
                 var dateString = date.getFullYear() + '-' +
                     (date.getMonth() < 9 ? '0' + (date.getMonth()+1) : (date.getMonth()+1)) + '-' +
                     (date.getDate() < 10 ? '0' + date.getDate() : date.getDate());
                 xAxis[offset] = dateString;
                 yAxis[offset] = yAxis[offset] ? yAxis[offset] : yAxis[offset-1];
-                date.setDate(date.getDate()+1);
                 offset++;
+
             }
             xAxis[offset] = result.data[i][0];
-            yAxis[offset] = result.data[i][1];
+            yAxis[offset] = result.data[i][1].toFixed(2);
             date.setDate(date.getDate()+1);
             offset++;
+
         }
         if (!graphData.data.labels) graphData.data.labels = xAxis;
         var graphColor;
@@ -424,9 +459,16 @@ function getData(metal) {
         historicPrices++;
         if (pageLoaded && ((page == 'inventory.html' && historicPrices == 1) ||
             (page == 'home.html' && historicPrices == 3))) {
-            finishGraph();
+
             if (jsonFinished) {
-                makeMyGraph(getParameter('metal'));
+                if (historicPrices == 3) {
+                    makeMyGraph('gold');
+                    makeMyGraph('silver');
+                    makeMyGraph('platinum');
+                } else {
+                    makeMyGraph(getParameter('metal'));
+                }
+                finishGraph();
             }
         }
     }})

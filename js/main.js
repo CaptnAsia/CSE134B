@@ -6,6 +6,7 @@ var dataBind = {'metal': getParameter('metal') || 'gold'}
 var marketPriceLoaded = false;
 var bidPrices = [0,0,0];
 var data;
+var coinChart;
 
 
 //Initialization functions: run immediately
@@ -69,7 +70,7 @@ var finishGraph = function() {
 	};
 
 	var ctx = document.getElementById("total-chart").getContext("2d");
-	var coinChart = new Chart(ctx).Line(graphData.data,options);
+	coinChart = new Chart(ctx).Line(graphData.data,options);
 	coinChart.update();
 }
 
@@ -87,16 +88,23 @@ function isMarketOpen() {
 	var hour = date.getUTCMinutes() == 0 ? 0 : 1
 	var closes = '';
 	var textAppend = document.createElement('span');
+	/* closed if:
+		day is sat or sunday
+		time is greater than closing hours
+	 	less than opening hour
+		equal to opening hours but less than opening minutes
+	 */
 	if (date.getDay() == satDay || date.getDay() == sunDay ||
 		date.getUTCHours() >= closeHour ||
-		(date.getUTCHours() == openHour && date.getMinutes() <= openMin) ||
-		(date.getUTCHours() < openHour)){
+		(date.getUTCHours() < openHour) ||
+		(date.getUTCHours() == openHour && date.getMinutes() <= openMin)
+		){
 
 		textAppend.style.color = '#FF6A65';
 		textAppend.appendChild(document.createTextNode('closed'));
 		closes = 'opens in ';
-		if (date.getUTCDay() == satDay && date.getUTCHours() > 13) closes += '1d ';
-		else if (date.getUTCDay() == 5 && date.getUTCHours() > 13) closes += '2d '
+		if (date.getDay() == satDay) closes += '1d ';
+		else if (date.getDay() == 5) closes += '2d '
 		var hoursLeft = date.getUTCHours() >= closeHour ? date.getUTCHours()-20 : date.getUTCHours()+hour;
 		closes += (16 - hoursLeft) + 'h' + (60*hour-date.getUTCMinutes()) + 'min';
 	} else {
@@ -150,7 +158,7 @@ $(window).load(function() {
 
 	// change the lengend colors for inventory page
 	if (page =='home.html') {
-		if (historicPrices == 3) {
+		if (historicPrices == 3 && jsonFinished) {
 			finishGraph();
 		}
 	} else if (page =="inventory.html") {
@@ -171,7 +179,7 @@ $(window).load(function() {
 
 		if (historicPrices) {
 			loadMetalDaily(getParameter('metal').toLowerCase());
-			finishGraph();
+			if (jsonFinished) finishGraph();
 		}
 	} else if(page == "new.html") {
 			//change to current day
